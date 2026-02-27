@@ -17,63 +17,24 @@ export default function CoursesPage() {
   const [openEnroll, setOpenEnroll] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // ✅ FIX: Map images with multiple slug + title variations (so no blank images)
+  // ✅ FIXED: slug mapping exactly as coursesData.jsx
   const courseImageMap = useMemo(() => {
     return {
-      // ===== Slug variants (covers most cases) =====
+      // exact slugs from coursesData.jsx
       dmlt: dmltImg,
-      "dmlt-course": dmltImg,
-      "medical-lab-technology": dmltImg,
-      "medical-laboratory-technology": dmltImg,
-
-      ott: ottImg,
-      "ot": ottImg,
       "ot-technician": ottImg,
-      "ott-technician": ottImg,
-      "operation-theatre-technician": ottImg,
-      "operation-theatre-technology": ottImg,
-
-      radiology: radiologyImg,
-      "radiology-technician": radiologyImg,
       "radiology-imaging": radiologyImg,
-      "radiology-imaging-technology": radiologyImg,
-      "radiology-technology": radiologyImg,
-
-      ecg: ecgImg,
       "ecg-technician": ecgImg,
-      "ecg-technology": ecgImg,
-
-      dialysis: dialysisImg,
       "dialysis-technician": dialysisImg,
-      "dialysis-technology": dialysisImg,
-
-      dental: dentalImg,
       "dental-technician": dentalImg,
-      "dental-technology": dentalImg,
 
-      // ===== Title fallback variants (exact match OR close variations) =====
-      "Diploma in Medical Lab Technology (DMLT)": dmltImg,
+      // optional title fallback (only if you use titles somewhere else)
       "Diploma in Medical Laboratory Technology": dmltImg,
-      "Diploma in Medical Lab Technology": dmltImg,
-
-      "Diploma in Operation Theatre Technician (OTT)": ottImg,
-      "Diploma in Operation Theatre Technician": ottImg,
       "Diploma in OT Technician": ottImg,
-      "Diploma in OT Technician (OTT)": ottImg,
-
-      "Diploma in Radiology Technician": radiologyImg,
-      "Diploma in Radiology Imaging Technology": radiologyImg,
       "Diploma in Radiology imaging Technology": radiologyImg,
-      "Diploma in Radiology Technology": radiologyImg,
-
       "Diploma in ECG Technician": ecgImg,
-      "Diploma in ECG Technology": ecgImg,
-
       "Diploma in Dialysis Technician": dialysisImg,
-      "Diploma in Dialysis Technology": dialysisImg,
-
       "Diploma in Dental Technician": dentalImg,
-      "Diploma in Dental Technology": dentalImg,
     };
   }, []);
 
@@ -82,16 +43,7 @@ export default function CoursesPage() {
       ...c,
       category: c.category || "General",
       popular: Boolean(c.popular),
-
-      // ✅ FIX: attach image reliably (slug + title + normalized slug)
-      image:
-        courseImageMap[c.slug] ||
-        courseImageMap[(c.slug || "").toLowerCase()] ||
-        courseImageMap[(c.slug || "").toLowerCase().replace(/\s+/g, "-")] ||
-        courseImageMap[(c.slug || "").toLowerCase().replace(/_/g, "-")] ||
-        courseImageMap[c.title] ||
-        courseImageMap[(c.title || "").trim()] ||
-        null,
+      image: courseImageMap[c.slug] || courseImageMap[c.title] || null,
     }));
   }, [courseImageMap]);
 
@@ -107,9 +59,7 @@ export default function CoursesPage() {
       const matchQ =
         query.length === 0
           ? true
-          : `${c.title} ${c.overview || ""} ${c.duration || ""} ${
-              c.eligibility || ""
-            }`
+          : `${c.title} ${c.overview || ""} ${c.duration || ""} ${c.eligibility || ""}`
               .toLowerCase()
               .includes(query);
       return matchCat && matchQ;
@@ -126,9 +76,7 @@ export default function CoursesPage() {
       course?.title || ""
     )}%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(
       phone
-    )}%0ACity: ${encodeURIComponent(
-      city || ""
-    )}%0A%0APlease share fees, batch timing & admission process.`;
+    )}%0ACity: ${encodeURIComponent(city || "")}%0A%0APlease share fees, batch timing & admission process.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }
 
@@ -142,9 +90,7 @@ export default function CoursesPage() {
               <span className="h-2 w-2 rounded-full bg-sky-500" />
               Programs
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold">
-              Our Paramedical Courses
-            </h1>
+            <h1 className="mt-4 text-4xl font-extrabold">Our Paramedical Courses</h1>
             <p className="mt-2 text-slate-600">
               Search & filter courses. Click “View Details” or directly “Enroll”.
             </p>
@@ -163,9 +109,7 @@ export default function CoursesPage() {
           <div className="grid gap-3 md:grid-cols-3">
             {/* Search */}
             <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">
-                Search Course
-              </label>
+              <label className="text-xs font-semibold text-slate-700">Search Course</label>
               <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
                 <span className="text-slate-400">🔎</span>
                 <input
@@ -187,9 +131,7 @@ export default function CoursesPage() {
 
             {/* Category */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">
-                Category
-              </label>
+              <label className="text-xs font-semibold text-slate-700">Category</label>
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}
@@ -206,58 +148,40 @@ export default function CoursesPage() {
 
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
             <div>
-              Showing{" "}
-              <span className="font-semibold text-slate-900">
-                {filtered.length}
-              </span>{" "}
-              courses
+              Showing <span className="font-semibold text-slate-900">{filtered.length}</span> courses
               {cat !== "All" && (
                 <>
                   {" "}
-                  in{" "}
-                  <span className="font-semibold text-slate-900">{cat}</span>
+                  in <span className="font-semibold text-slate-900">{cat}</span>
                 </>
               )}
             </div>
-
-            <div className="flex flex-wrap gap-2">{/* chips (optional) */}</div>
           </div>
         </div>
 
         {/* Courses Grid */}
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => (
-            <CourseCard
-              key={course.slug}
-              course={course}
-              onEnroll={() => openEnrollModal(course)}
-            />
+            <CourseCard key={course.slug} course={course} onEnroll={() => openEnrollModal(course)} />
           ))}
         </div>
 
-        {/* Empty state */}
         {filtered.length === 0 && (
           <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-700">
             <div className="text-lg font-extrabold">No courses found</div>
-            <div className="mt-2 text-sm text-slate-600">
-              Try changing search keywords or category.
-            </div>
+            <div className="mt-2 text-sm text-slate-600">Try changing search keywords or category.</div>
           </div>
         )}
       </div>
 
-      {/* Enroll Modal */}
       {openEnroll && (
         <EnrollModal
           course={selectedCourse}
           onClose={() => setOpenEnroll(false)}
-          onWhatsApp={(name, phone, city) =>
-            whatsappEnroll(selectedCourse, name, phone, city)
-          }
+          onWhatsApp={(name, phone, city) => whatsappEnroll(selectedCourse, name, phone, city)}
         />
       )}
 
-      {/* WhatsApp Floating Button */}
       <WhatsAppFloat />
     </div>
   );
@@ -268,7 +192,7 @@ export default function CoursesPage() {
 function CourseCard({ course, onEnroll }) {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_26px_rgba(15,23,42,0.06)] hover:shadow-[0_14px_34px_rgba(2,132,199,0.14)] transition">
-      {/* ✅ Image (added) */}
+      {/* ✅ Image */}
       {course.image ? (
         <div className="h-44 w-full overflow-hidden bg-slate-50">
           <img
@@ -283,21 +207,17 @@ function CourseCard({ course, onEnroll }) {
       )}
 
       <div className="p-6">
-        {/* Popular badge */}
         {course.popular && (
           <div className="absolute right-4 top-4 rounded-full bg-amber-100 px-3 py-1 text-xs font-extrabold text-amber-900">
             ⭐ Most Popular
           </div>
         )}
 
-        {/* Category pill */}
         <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
           {course.category || "General"}
         </div>
 
-        <h3 className="mt-3 text-lg font-extrabold text-slate-900">
-          {course.title}
-        </h3>
+        <h3 className="mt-3 text-lg font-extrabold text-slate-900">{course.title}</h3>
 
         <p className="mt-2 text-sm text-slate-600 line-clamp-2">
           {course.overview || "Course overview will be available on details page."}
@@ -320,7 +240,6 @@ function CourseCard({ course, onEnroll }) {
             View Details →
           </Link>
 
-          {/* Direct Enroll */}
           <button
             onClick={onEnroll}
             className="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
@@ -346,9 +265,7 @@ function EnrollModal({ course, onClose, onWhatsApp }) {
         <div className="flex items-start justify-between gap-4">
           <div>
             <div className="text-xs font-semibold text-sky-700">Enroll Request</div>
-            <div className="mt-1 text-xl font-extrabold text-slate-900">
-              {course?.title}
-            </div>
+            <div className="mt-1 text-xl font-extrabold text-slate-900">{course?.title}</div>
             <div className="mt-2 text-sm text-slate-600">
               Share details — we’ll contact you for fees, batches & admission process.
             </div>
@@ -408,9 +325,7 @@ function EnrollModal({ course, onClose, onWhatsApp }) {
 }
 
 function WhatsAppFloat() {
-  const msg = encodeURIComponent(
-    "Hello LIPMT, I want admission details (fees, batches & process)."
-  );
+  const msg = encodeURIComponent("Hello LIPMT, I want admission details (fees, batches & process).");
   return (
     <a
       href={`https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`}
