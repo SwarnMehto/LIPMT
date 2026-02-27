@@ -15,6 +15,14 @@ import slide3 from "../assets/slide3.png";
 import slide4 from "../assets/slide4.png";
 import slide5 from "../assets/slide5.png";
 
+// ✅ Course images (make sure these exist in src/assets/courses/)
+import dmltImg from "../assets/courses/dmlt.png";
+import ottImg from "../assets/courses/ott.png";
+import radiologyImg from "../assets/courses/radiology.png";
+import ecgImg from "../assets/courses/ecg.png";
+import dialysisImg from "../assets/courses/dialysis.png";
+import dentalImg from "../assets/courses/dental.png";
+
 function cx(...a) {
   return a.filter(Boolean).join(" ");
 }
@@ -213,13 +221,14 @@ export default function HomePage() {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  // ✅ Programs + Image
   const programs = [
-    { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years" },
-    { name: "Diploma in Operation Theatre Technician (OTT)", duration: "2 Years" },
-    { name: "Diploma in Radiology Technician", duration: "2 Years" },
-    { name: "Diploma in ECG Technician", duration: "1 Year" },
-    { name: "Diploma in Dialysis Technician", duration: "2 Years" },
-    { name: "Diploma in Dental Technician", duration: "2 Years" },
+    { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years", image: dmltImg },
+    { name: "Diploma in Operation Theatre Technician (OTT)", duration: "2 Years", image: ottImg },
+    { name: "Diploma in Radiology Technician", duration: "2 Years", image: radiologyImg },
+    { name: "Diploma in ECG Technician", duration: "1 Year", image: ecgImg },
+    { name: "Diploma in Dialysis Technician", duration: "2 Years", image: dialysisImg },
+    { name: "Diploma in Dental Technician", duration: "2 Years", image: dentalImg },
   ];
 
   const features = [
@@ -473,7 +482,14 @@ export default function HomePage() {
                   }}
                 >
                   <Card className="h-full overflow-hidden">
-                    <div className="h-32 bg-gradient-to-br from-sky-50 to-slate-50" />
+                    <div className="h-40 overflow-hidden">
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                      />
+                    </div>
+
                     <div className="p-5">
                       <div className="text-sm font-extrabold text-slate-900">
                         {p.name}

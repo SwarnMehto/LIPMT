@@ -2,6 +2,13 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { courses } from "../data/coursesData";
 
+import dmltImg from "../assets/courses/dmlt.png";
+import ottImg from "../assets/courses/ott.png";
+import radiologyImg from "../assets/courses/radiology.png";
+import ecgImg from "../assets/courses/ecg.png";
+import dialysisImg from "../assets/courses/dialysis.png";
+import dentalImg from "../assets/courses/dental.png";
+
 const WHATSAPP_NUMBER = "919811343520"; // ✅ change if needed (without +)
 
 export default function CoursesPage() {
@@ -10,13 +17,83 @@ export default function CoursesPage() {
   const [openEnroll, setOpenEnroll] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
+  // ✅ FIX: Map images with multiple slug + title variations (so no blank images)
+  const courseImageMap = useMemo(() => {
+    return {
+      // ===== Slug variants (covers most cases) =====
+      dmlt: dmltImg,
+      "dmlt-course": dmltImg,
+      "medical-lab-technology": dmltImg,
+      "medical-laboratory-technology": dmltImg,
+
+      ott: ottImg,
+      "ot": ottImg,
+      "ot-technician": ottImg,
+      "ott-technician": ottImg,
+      "operation-theatre-technician": ottImg,
+      "operation-theatre-technology": ottImg,
+
+      radiology: radiologyImg,
+      "radiology-technician": radiologyImg,
+      "radiology-imaging": radiologyImg,
+      "radiology-imaging-technology": radiologyImg,
+      "radiology-technology": radiologyImg,
+
+      ecg: ecgImg,
+      "ecg-technician": ecgImg,
+      "ecg-technology": ecgImg,
+
+      dialysis: dialysisImg,
+      "dialysis-technician": dialysisImg,
+      "dialysis-technology": dialysisImg,
+
+      dental: dentalImg,
+      "dental-technician": dentalImg,
+      "dental-technology": dentalImg,
+
+      // ===== Title fallback variants (exact match OR close variations) =====
+      "Diploma in Medical Lab Technology (DMLT)": dmltImg,
+      "Diploma in Medical Laboratory Technology": dmltImg,
+      "Diploma in Medical Lab Technology": dmltImg,
+
+      "Diploma in Operation Theatre Technician (OTT)": ottImg,
+      "Diploma in Operation Theatre Technician": ottImg,
+      "Diploma in OT Technician": ottImg,
+      "Diploma in OT Technician (OTT)": ottImg,
+
+      "Diploma in Radiology Technician": radiologyImg,
+      "Diploma in Radiology Imaging Technology": radiologyImg,
+      "Diploma in Radiology imaging Technology": radiologyImg,
+      "Diploma in Radiology Technology": radiologyImg,
+
+      "Diploma in ECG Technician": ecgImg,
+      "Diploma in ECG Technology": ecgImg,
+
+      "Diploma in Dialysis Technician": dialysisImg,
+      "Diploma in Dialysis Technology": dialysisImg,
+
+      "Diploma in Dental Technician": dentalImg,
+      "Diploma in Dental Technology": dentalImg,
+    };
+  }, []);
+
   const normalizedCourses = useMemo(() => {
     return (courses || []).map((c) => ({
       ...c,
       category: c.category || "General",
       popular: Boolean(c.popular),
+
+      // ✅ FIX: attach image reliably (slug + title + normalized slug)
+      image:
+        courseImageMap[c.slug] ||
+        courseImageMap[(c.slug || "").toLowerCase()] ||
+        courseImageMap[(c.slug || "").toLowerCase().replace(/\s+/g, "-")] ||
+        courseImageMap[(c.slug || "").toLowerCase().replace(/_/g, "-")] ||
+        courseImageMap[c.title] ||
+        courseImageMap[(c.title || "").trim()] ||
+        null,
     }));
-  }, []);
+  }, [courseImageMap]);
 
   const categories = useMemo(() => {
     const set = new Set(normalizedCourses.map((c) => c.category));
@@ -30,7 +107,9 @@ export default function CoursesPage() {
       const matchQ =
         query.length === 0
           ? true
-          : `${c.title} ${c.overview || ""} ${c.duration || ""} ${c.eligibility || ""}`
+          : `${c.title} ${c.overview || ""} ${c.duration || ""} ${
+              c.eligibility || ""
+            }`
               .toLowerCase()
               .includes(query);
       return matchCat && matchQ;
@@ -47,7 +126,9 @@ export default function CoursesPage() {
       course?.title || ""
     )}%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(
       phone
-    )}%0ACity: ${encodeURIComponent(city || "")}%0A%0APlease share fees, batch timing & admission process.`;
+    )}%0ACity: ${encodeURIComponent(
+      city || ""
+    )}%0A%0APlease share fees, batch timing & admission process.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }
 
@@ -61,7 +142,9 @@ export default function CoursesPage() {
               <span className="h-2 w-2 rounded-full bg-sky-500" />
               Programs
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold">Our Paramedical Courses</h1>
+            <h1 className="mt-4 text-4xl font-extrabold">
+              Our Paramedical Courses
+            </h1>
             <p className="mt-2 text-slate-600">
               Search & filter courses. Click “View Details” or directly “Enroll”.
             </p>
@@ -80,7 +163,9 @@ export default function CoursesPage() {
           <div className="grid gap-3 md:grid-cols-3">
             {/* Search */}
             <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">Search Course</label>
+              <label className="text-xs font-semibold text-slate-700">
+                Search Course
+              </label>
               <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
                 <span className="text-slate-400">🔎</span>
                 <input
@@ -102,7 +187,9 @@ export default function CoursesPage() {
 
             {/* Category */}
             <div>
-              <label className="text-xs font-semibold text-slate-700">Category</label>
+              <label className="text-xs font-semibold text-slate-700">
+                Category
+              </label>
               <select
                 value={cat}
                 onChange={(e) => setCat(e.target.value)}
@@ -119,24 +206,21 @@ export default function CoursesPage() {
 
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
             <div>
-              Showing <span className="font-semibold text-slate-900">{filtered.length}</span>{" "}
+              Showing{" "}
+              <span className="font-semibold text-slate-900">
+                {filtered.length}
+              </span>{" "}
               courses
               {cat !== "All" && (
                 <>
                   {" "}
-                  in <span className="font-semibold text-slate-900">{cat}</span>
+                  in{" "}
+                  <span className="font-semibold text-slate-900">{cat}</span>
                 </>
               )}
             </div>
 
-            <div className="flex flex-wrap gap-2">
-              {/* <span className="rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-sky-800">
-                Hospital vibe UI ✅
-              </span>
-              <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-teal-800">
-                Quick enroll ✅
-              </span> */}
-            </div>
+            <div className="flex flex-wrap gap-2">{/* chips (optional) */}</div>
           </div>
         </div>
 
@@ -183,49 +267,67 @@ export default function CoursesPage() {
 
 function CourseCard({ course, onEnroll }) {
   return (
-    <div className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_10px_26px_rgba(15,23,42,0.06)] hover:shadow-[0_14px_34px_rgba(2,132,199,0.14)] transition">
-      {/* Popular badge */}
-      {course.popular && (
-        <div className="absolute right-4 top-4 rounded-full bg-amber-100 px-3 py-1 text-xs font-extrabold text-amber-900">
-          ⭐ Most Popular
+    <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-[0_10px_26px_rgba(15,23,42,0.06)] hover:shadow-[0_14px_34px_rgba(2,132,199,0.14)] transition">
+      {/* ✅ Image (added) */}
+      {course.image ? (
+        <div className="h-44 w-full overflow-hidden bg-slate-50">
+          <img
+            src={course.image}
+            alt={course.title}
+            className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy"
+          />
         </div>
+      ) : (
+        <div className="h-44 w-full bg-gradient-to-br from-sky-50 to-slate-50" />
       )}
 
-      {/* Category pill */}
-      <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
-        {course.category || "General"}
-      </div>
+      <div className="p-6">
+        {/* Popular badge */}
+        {course.popular && (
+          <div className="absolute right-4 top-4 rounded-full bg-amber-100 px-3 py-1 text-xs font-extrabold text-amber-900">
+            ⭐ Most Popular
+          </div>
+        )}
 
-      <h3 className="mt-3 text-lg font-extrabold text-slate-900">{course.title}</h3>
+        {/* Category pill */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+          {course.category || "General"}
+        </div>
 
-      <p className="mt-2 text-sm text-slate-600 line-clamp-2">
-        {course.overview || "Course overview will be available on details page."}
-      </p>
+        <h3 className="mt-3 text-lg font-extrabold text-slate-900">
+          {course.title}
+        </h3>
 
-      <div className="mt-4 flex flex-wrap gap-2">
-        <span className="rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs text-sky-800">
-          {course.duration}
-        </span>
-        <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs text-teal-800">
-          {course.eligibility}
-        </span>
-      </div>
+        <p className="mt-2 text-sm text-slate-600 line-clamp-2">
+          {course.overview || "Course overview will be available on details page."}
+        </p>
 
-      <div className="mt-6 grid gap-3">
-        <Link
-          to={`/courses/${course.slug}`}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-sky-600 text-white px-4 py-3 text-sm font-semibold hover:bg-sky-700 transition"
-        >
-          View Details →
-        </Link>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <span className="rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs text-sky-800">
+            {course.duration}
+          </span>
+          <span className="rounded-full border border-teal-100 bg-teal-50 px-3 py-1 text-xs text-teal-800">
+            {course.eligibility}
+          </span>
+        </div>
 
-        {/* Direct Enroll */}
-        <button
-          onClick={onEnroll}
-          className="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
-        >
-          📞 Enroll Now
-        </button>
+        <div className="mt-6 grid gap-3">
+          <Link
+            to={`/courses/${course.slug}`}
+            className="inline-flex w-full items-center justify-center rounded-xl bg-sky-600 text-white px-4 py-3 text-sm font-semibold hover:bg-sky-700 transition"
+          >
+            View Details →
+          </Link>
+
+          {/* Direct Enroll */}
+          <button
+            onClick={onEnroll}
+            className="inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+          >
+            📞 Enroll Now
+          </button>
+        </div>
       </div>
     </div>
   );
