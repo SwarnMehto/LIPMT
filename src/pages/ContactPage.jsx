@@ -17,12 +17,12 @@ export default function ContactPage() {
         <img
           src={logo}
           alt="Watermark"
-          className="absolute left-1/2 top-1/2 w-[900px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.08] blur-[0.8px]"
+          className="absolute left-1/2 top-1/2 w-[900px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.10] blur-[0.6px]"
         />
         <img
           src={logo}
           alt=""
-          className="absolute -left-40 -top-40 w-[520px] max-w-none opacity-[0.02] blur-[1px]"
+          className="absolute -left-40 -top-40 w-[520px] max-w-none opacity-[0.08] blur-[1px]"
         />
         <img
           src={logo}

@@ -5,6 +5,7 @@
 // ✅ Google map embed included (works without pb code)
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 
 // ✅ Assets
@@ -88,17 +89,13 @@ function Card({ children, className = "" }) {
 
 function SectionTitle({ kicker, title, desc, align = "left" }) {
   return (
-    <div
-      className={cx("max-w-2xl", align === "center" ? "mx-auto text-center" : "")}
-    >
+    <div className={cx("max-w-2xl", align === "center" ? "mx-auto text-center" : "")}>
       {kicker ? <Badge>{kicker}</Badge> : null}
       <h2 className="mt-3 text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
         {title}
       </h2>
       {desc ? (
-        <p className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base">
-          {desc}
-        </p>
+        <p className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base">{desc}</p>
       ) : null}
     </div>
   );
@@ -142,10 +139,7 @@ function Modal({ open, onClose, title, children }) {
 
   return (
     <div className="fixed inset-0 z-[100]">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, y: 14, scale: 0.98 }}
@@ -179,31 +173,11 @@ export default function HomePage() {
 
   const heroSlides = useMemo(
     () => [
-      {
-        src: slide1,
-        title: "Career Support",
-        subtitle: "Placement assistance, interview prep, and professional guidance.",
-      },
-      {
-        src: slide2,
-        title: "Modern Laboratories",
-        subtitle: "Hands-on training with updated equipment & practical learning.",
-      },
-      {
-        src: slide3,
-        title: "Clinical Exposure",
-        subtitle: "Hospital training & real-world skills for job readiness.",
-      },
-      {
-        src: slide4,
-        title: "Expert Faculty",
-        subtitle: "Guidance from experienced teachers focused on results.",
-      },
-      {
-        src: slide5,
-        title: "Admissions Open",
-        subtitle: "Apply now for the new session — limited seats available.",
-      },
+      { src: slide1, title: "Career Support", subtitle: "Placement assistance, interview prep, and professional guidance." },
+      { src: slide2, title: "Modern Laboratories", subtitle: "Hands-on training with updated equipment & practical learning." },
+      { src: slide3, title: "Clinical Exposure", subtitle: "Hospital training & real-world skills for job readiness." },
+      { src: slide4, title: "Expert Faculty", subtitle: "Guidance from experienced teachers focused on results." },
+      { src: slide5, title: "Admissions Open", subtitle: "Apply now for the new session — limited seats available." },
     ],
     []
   );
@@ -222,7 +196,7 @@ export default function HomePage() {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // ✅ Programs + Image (11 courses)
+  // ✅ Programs + Image (ONLY main 6 courses)
   const programs = [
     { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years", image: dmltImg },
     { name: "Diploma in Operation Theatre Technician (OTT)", duration: "2 Years", image: ottImg },
@@ -230,13 +204,6 @@ export default function HomePage() {
     { name: "Diploma in ECG Technician", duration: "1 Year", image: ecgImg },
     { name: "Diploma in Dialysis Technician", duration: "2 Years", image: dialysisImg },
     { name: "Diploma in Dental Technician", duration: "2 Years", image: dentalImg },
-
-    // ✅ Added 5 more (images reused so build error na aaye)
-    { name: "Diploma in ICU Technician", duration: "1 Year", image: slide3 },
-    { name: "Diploma in Physiotherapy Technician", duration: "2 Years", image: slide4 },
-    { name: "Diploma in Optometry Technician", duration: "2 Years", image: slide5 },
-    { name: "Diploma in Medical Record Technology (MRT)", duration: "1 Year", image: slide2 },
-    { name: "Diploma in OT Assistant", duration: "1 Year", image: slide1 },
   ];
 
   const features = [
@@ -261,7 +228,7 @@ export default function HomePage() {
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    city: "", // ✅ ADDED
+    city: "",
     course: "",
     otherCourse: "",
     message: "",
@@ -516,6 +483,33 @@ export default function HomePage() {
                   </Card>
                 </motion.div>
               ))}
+
+              {/* ✅ NORMAL style button card like you want */}
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.35, ease: "easeOut", delay: programs.length * 0.03 }}
+              >
+                <Card className="h-full overflow-hidden">
+                  <div className="h-40 bg-gradient-to-br from-sky-50 to-slate-50" />
+                  <div className="p-5">
+                    <div className="text-sm font-extrabold text-slate-900">More Programs</div>
+                    <div className="mt-2 text-sm text-slate-600">
+                      View all courses with details, duration, eligibility & fees guidance.
+                    </div>
+
+                    <div className="mt-5">
+                      <Link
+                        to="/courses"
+                        className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                      >
+                        View All Courses →
+                      </Link>
+                    </div>
+                  </div>
+                </Card>
+              </motion.div>
             </div>
 
             <div className="rounded-3xl bg-gradient-to-r from-sky-600 to-cyan-500 p-6 text-white md:p-10">
@@ -659,8 +653,7 @@ export default function HomePage() {
           onSubmit={async (e) => {
             e.preventDefault();
 
-            const selectedCourse =
-              form.course === "Other" ? form.otherCourse.trim() : form.course;
+            const selectedCourse = form.course === "Other" ? form.otherCourse.trim() : form.course;
 
             if (!selectedCourse) {
               alert("Please select course ✅");
@@ -677,7 +670,7 @@ export default function HomePage() {
                   page: window.location.href,
                   name: form.name,
                   phone: form.phone,
-                  city: form.city, // ✅ ADDED
+                  city: form.city,
                   course: selectedCourse,
                   message: form.message,
                 }),
@@ -698,7 +691,7 @@ export default function HomePage() {
                 setForm({
                   name: "",
                   phone: "",
-                  city: "", // ✅ ADDED reset
+                  city: "",
                   course: "",
                   otherCourse: "",
                   message: "",
@@ -734,7 +727,6 @@ export default function HomePage() {
             />
           </div>
 
-          {/* ✅ ADDED: City field */}
           <div className="grid gap-1">
             <label className="text-sm font-semibold text-slate-700">City</label>
             <input

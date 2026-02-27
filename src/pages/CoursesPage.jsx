@@ -1,13 +1,22 @@
+// src/pages/CoursesPage.jsx
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { courses } from "../data/coursesData";
 
+// ✅ Existing images
 import dmltImg from "../assets/courses/dmlt.png";
 import ottImg from "../assets/courses/ott.png";
 import radiologyImg from "../assets/courses/radiology.png";
 import ecgImg from "../assets/courses/ecg.png";
 import dialysisImg from "../assets/courses/dialysis.png";
 import dentalImg from "../assets/courses/dental.png";
+
+// ✅ New images (as per your folder screenshot)
+import cardioImg from "../assets/courses/Cardio.png";
+import neuroImg from "../assets/courses/Neurophysiology.png";
+import ophthalmicImg from "../assets/courses/Ophthalmic.png";
+import physioImg from "../assets/courses/Physiotherapy.png";
+import respiratoryImg from "../assets/courses/Respiratory.png";
 
 const WHATSAPP_NUMBER = "919811343520"; // ✅ change if needed (without +)
 
@@ -17,10 +26,11 @@ export default function CoursesPage() {
   const [openEnroll, setOpenEnroll] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // ✅ FIXED: slug mapping exactly as coursesData.jsx
+  // ✅ Image map (slug -> image)
+  // IMPORTANT: slugs must match your coursesData.jsx
   const courseImageMap = useMemo(() => {
     return {
-      // exact slugs from coursesData.jsx
+      // existing slugs
       dmlt: dmltImg,
       "ot-technician": ottImg,
       "radiology-imaging": radiologyImg,
@@ -28,13 +38,20 @@ export default function CoursesPage() {
       "dialysis-technician": dialysisImg,
       "dental-technician": dentalImg,
 
-      // optional title fallback (only if you use titles somewhere else)
-      "Diploma in Medical Laboratory Technology": dmltImg,
-      "Diploma in OT Technician": ottImg,
-      "Diploma in Radiology imaging Technology": radiologyImg,
-      "Diploma in ECG Technician": ecgImg,
-      "Diploma in Dialysis Technician": dialysisImg,
-      "Diploma in Dental Technician": dentalImg,
+      // ✅ new slugs (make sure these match coursesData.jsx)
+      // ✅ correct slugs (must match coursesData.jsx)
+"cardio-technician": cardioImg,
+"neurophysiology-technician": neuroImg,
+"ophthalmic-technician": ophthalmicImg,
+physiotherapy: physioImg,
+"respiratory-technician": respiratoryImg,
+
+      // optional title fallback (if any course doesn't have slug in some place)
+      "Diploma in Cardio Technology": cardioImg,
+      "Diploma in Neurophysiology": neuroImg,
+      "Diploma in Ophthalmic Technology": ophthalmicImg,
+      "Diploma in Physiotherapy": physioImg,
+      "Diploma in Respiratory Technology": respiratoryImg,
     };
   }, []);
 
@@ -169,7 +186,9 @@ export default function CoursesPage() {
         {filtered.length === 0 && (
           <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-700">
             <div className="text-lg font-extrabold">No courses found</div>
-            <div className="mt-2 text-sm text-slate-600">Try changing search keywords or category.</div>
+            <div className="mt-2 text-sm text-slate-600">
+              Try changing search keywords or category.
+            </div>
           </div>
         )}
       </div>
