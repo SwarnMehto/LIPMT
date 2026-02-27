@@ -173,6 +173,10 @@ function Modal({ open, onClose, title, children }) {
 export default function HomePage() {
   const instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY";
 
+  // ✅ Apps Script Web App URL
+  const WEB_APP_URL =
+    "https://script.google.com/macros/s/AKfycbzglTlOE7xVwMmbzEuj8AcMUYYu9ZfRR_xwhczcvx-Rame0u5macQZzhfE3CSlOsH2i/exec";
+
   const heroSlides = useMemo(
     () => [
       {
@@ -206,10 +210,7 @@ export default function HomePage() {
 
   const [slide, setSlide] = useState(0);
   useEffect(() => {
-    const t = setInterval(
-      () => setSlide((s) => (s + 1) % heroSlides.length),
-      5000
-    );
+    const t = setInterval(() => setSlide((s) => (s + 1) % heroSlides.length), 5000);
     return () => clearInterval(t);
   }, [heroSlides.length]);
 
@@ -221,7 +222,7 @@ export default function HomePage() {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // ✅ Programs + Image
+  // ✅ Programs + Image (11 courses)
   const programs = [
     { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years", image: dmltImg },
     { name: "Diploma in Operation Theatre Technician (OTT)", duration: "2 Years", image: ottImg },
@@ -229,6 +230,13 @@ export default function HomePage() {
     { name: "Diploma in ECG Technician", duration: "1 Year", image: ecgImg },
     { name: "Diploma in Dialysis Technician", duration: "2 Years", image: dialysisImg },
     { name: "Diploma in Dental Technician", duration: "2 Years", image: dentalImg },
+
+    // ✅ Added 5 more (images reused so build error na aaye)
+    { name: "Diploma in ICU Technician", duration: "1 Year", image: slide3 },
+    { name: "Diploma in Physiotherapy Technician", duration: "2 Years", image: slide4 },
+    { name: "Diploma in Optometry Technician", duration: "2 Years", image: slide5 },
+    { name: "Diploma in Medical Record Technology (MRT)", duration: "1 Year", image: slide2 },
+    { name: "Diploma in OT Assistant", duration: "1 Year", image: slide1 },
   ];
 
   const features = [
@@ -248,6 +256,16 @@ export default function HomePage() {
     "https://www.google.com/maps?q=LAL%20INSTITUTE%20OF%20PARA%20MEDICAL%20TECHNOLOGY&output=embed";
 
   const slideData = heroSlides[slide];
+
+  // ✅ Form state (✅ ADDED: city)
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    city: "", // ✅ ADDED
+    course: "",
+    otherCourse: "",
+    message: "",
+  });
 
   return (
     <div className="bg-slate-50 text-slate-900">
@@ -291,9 +309,7 @@ export default function HomePage() {
                 </p>
 
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>
-                    Enroll / Apply
-                  </PrimaryBtn>
+                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Apply</PrimaryBtn>
                   <GhostBtn onClick={() => go("courses")}>Explore Courses</GhostBtn>
                   <GhostBtn onClick={() => go("contact")}>Get Callback</GhostBtn>
                 </div>
@@ -345,9 +361,7 @@ export default function HomePage() {
               </div>
               <div className="flex gap-2">
                 <button
-                  onClick={() =>
-                    setSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)
-                  }
+                  onClick={() => setSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)}
                   className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
                 >
                   ←
@@ -390,9 +404,7 @@ export default function HomePage() {
                       {f.icon}
                     </div>
                     <div>
-                      <div className="text-sm font-extrabold text-slate-900">
-                        {f.title}
-                      </div>
+                      <div className="text-sm font-extrabold text-slate-900">{f.title}</div>
                       <div className="mt-1 text-sm text-slate-600">{f.desc}</div>
                     </div>
                   </div>
@@ -419,17 +431,13 @@ export default function HomePage() {
                       <div className="text-xl font-extrabold text-slate-900">
                         <CountUp to={500} suffix="+" />
                       </div>
-                      <div className="mt-1 text-xs text-slate-600">
-                        Students Trained
-                      </div>
+                      <div className="mt-1 text-xs text-slate-600">Students Trained</div>
                     </div>
                     <div className="rounded-2xl bg-slate-50 p-4">
                       <div className="text-xl font-extrabold text-slate-900">
                         <CountUp to={50} suffix="+" />
                       </div>
-                      <div className="mt-1 text-xs text-slate-600">
-                        Hospital Tie-ups
-                      </div>
+                      <div className="mt-1 text-xs text-slate-600">Hospital Tie-ups</div>
                     </div>
                     <div className="rounded-2xl bg-slate-50 p-4">
                       <div className="text-xl font-extrabold text-slate-900">
@@ -440,9 +448,7 @@ export default function HomePage() {
                   </div>
 
                   <div className="mt-5 flex flex-wrap gap-3">
-                    <PrimaryBtn onClick={() => setEnrollOpen(true)}>
-                      Start Admission
-                    </PrimaryBtn>
+                    <PrimaryBtn onClick={() => setEnrollOpen(true)}>Start Admission</PrimaryBtn>
                     <button
                       onClick={() => go("facilities")}
                       className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
@@ -475,11 +481,7 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 14 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
-                  transition={{
-                    duration: 0.35,
-                    ease: "easeOut",
-                    delay: idx * 0.03,
-                  }}
+                  transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.03 }}
                 >
                   <Card className="h-full overflow-hidden">
                     <div className="h-40 overflow-hidden">
@@ -491,12 +493,9 @@ export default function HomePage() {
                     </div>
 
                     <div className="p-5">
-                      <div className="text-sm font-extrabold text-slate-900">
-                        {p.name}
-                      </div>
+                      <div className="text-sm font-extrabold text-slate-900">{p.name}</div>
                       <div className="mt-2 text-sm text-slate-600">
-                        Duration:{" "}
-                        <span className="font-semibold">{p.duration}</span>
+                        Duration: <span className="font-semibold">{p.duration}</span>
                       </div>
 
                       <div className="mt-4 flex gap-2">
@@ -522,9 +521,7 @@ export default function HomePage() {
             <div className="rounded-3xl bg-gradient-to-r from-sky-600 to-cyan-500 p-6 text-white md:p-10">
               <div className="grid gap-6 md:grid-cols-[1.3fr_.7fr] md:items-center">
                 <div>
-                  <div className="text-sm font-semibold text-white/90">
-                    Seats Limited • New Session
-                  </div>
+                  <div className="text-sm font-semibold text-white/90">Seats Limited • New Session</div>
                   <div className="mt-2 text-2xl font-extrabold md:text-3xl">
                     Admissions Open — Get a callback
                   </div>
@@ -591,9 +588,7 @@ export default function HomePage() {
               >
                 <Card className="h-full p-6">
                   <div className="text-sm font-semibold text-slate-600">{t.role}</div>
-                  <div className="mt-3 text-sm leading-relaxed text-slate-800">
-                    “{t.quote}”
-                  </div>
+                  <div className="mt-3 text-sm leading-relaxed text-slate-800">“{t.quote}”</div>
                   <div className="mt-5 flex items-center gap-3">
                     <div className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-50 text-sky-700">
                       ★
@@ -628,9 +623,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="flex flex-wrap gap-3">
-                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>
-                    Enroll / Callback
-                  </PrimaryBtn>
+                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Callback</PrimaryBtn>
 
                   <a
                     href="mailto:info@lipmt.in?subject=Admission%20Enquiry%20-%20LIPMT&body=Hello%20LIPMT%20Team,%0A%0AI%20want%20details%20about%20admission%20(Fees,%20Batch%20Timing,%20Eligibility,%20Documents).%0A%0ACourse:%20%0AName:%20%0AMobile:%20%0ACity:%20%0A%0AThanks"
@@ -663,10 +656,59 @@ export default function HomePage() {
       {/* ===== Enroll Modal ===== */}
       <Modal open={enrollOpen} onClose={() => setEnrollOpen(false)} title="Admission / Enquiry Form">
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            alert("Form submitted ✅");
-            setEnrollOpen(false);
+
+            const selectedCourse =
+              form.course === "Other" ? form.otherCourse.trim() : form.course;
+
+            if (!selectedCourse) {
+              alert("Please select course ✅");
+              return;
+            }
+
+            try {
+              const res = await fetch(WEB_APP_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                  secret: "LIPMT_2026_SECRET",
+                  source: "Website",
+                  page: window.location.href,
+                  name: form.name,
+                  phone: form.phone,
+                  city: form.city, // ✅ ADDED
+                  course: selectedCourse,
+                  message: form.message,
+                }),
+              });
+
+              const text = await res.text();
+              let data;
+              try {
+                data = JSON.parse(text);
+              } catch (err) {
+                throw new Error("Non-JSON response: " + text);
+              }
+
+              if (data.ok) {
+                alert("Form submitted ✅");
+                setEnrollOpen(false);
+
+                setForm({
+                  name: "",
+                  phone: "",
+                  city: "", // ✅ ADDED reset
+                  course: "",
+                  otherCourse: "",
+                  message: "",
+                });
+              } else {
+                alert("Error: " + (data.error || "Unknown"));
+              }
+            } catch (err) {
+              alert("Submission failed ❌\n" + String(err));
+            }
           }}
           className="grid gap-4"
         >
@@ -674,6 +716,8 @@ export default function HomePage() {
             <label className="text-sm font-semibold text-slate-700">Full Name</label>
             <input
               required
+              value={form.name}
+              onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
               className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="Your name"
             />
@@ -683,25 +727,65 @@ export default function HomePage() {
             <label className="text-sm font-semibold text-slate-700">Phone</label>
             <input
               required
+              value={form.phone}
+              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
               className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="WhatsApp number"
             />
           </div>
 
+          {/* ✅ ADDED: City field */}
+          <div className="grid gap-1">
+            <label className="text-sm font-semibold text-slate-700">City</label>
+            <input
+              required
+              value={form.city}
+              onChange={(e) => setForm((s) => ({ ...s, city: e.target.value }))}
+              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              placeholder="Your city"
+            />
+          </div>
+
           <div className="grid gap-1">
             <label className="text-sm font-semibold text-slate-700">Course</label>
-            <select className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400">
-              <option>Choose a course</option>
+            <select
+              required
+              value={form.course}
+              onChange={(e) =>
+                setForm((s) => ({
+                  ...s,
+                  course: e.target.value,
+                  otherCourse: e.target.value === "Other" ? s.otherCourse : "",
+                }))
+              }
+              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+            >
+              <option value="">Choose a course</option>
               {programs.map((p) => (
-                <option key={p.name}>{p.name}</option>
+                <option key={p.name} value={p.name}>
+                  {p.name}
+                </option>
               ))}
+              <option value="Other">Other</option>
             </select>
+
+            {form.course === "Other" && (
+              <input
+                required
+                value={form.otherCourse}
+                onChange={(e) => setForm((s) => ({ ...s, otherCourse: e.target.value }))}
+                className="mt-2 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+                placeholder="Type your course name"
+              />
+            )}
           </div>
 
           <div className="grid gap-1">
             <label className="text-sm font-semibold text-slate-700">Message</label>
             <textarea
               rows={3}
+              value={form.message}
+              onChange={(e) => setForm((s) => ({ ...s, message: e.target.value }))}
               className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="Fees / Eligibility / Documents..."
             />
