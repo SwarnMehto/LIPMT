@@ -259,7 +259,8 @@ export default function App() {
 
       {/* ================= TOP SOCIAL BAR ================= */}
       <div className="w-full bg-slate-900">
-        <div className="mx-auto flex max-w-7xl items-center justify-end gap-2 px-6 py-2">
+        {/* ✅ Added: flex-wrap + center on mobile */}
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center sm:justify-end gap-2 px-6 py-2">
           <a
             href="#"
             className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
@@ -339,7 +340,8 @@ export default function App() {
 
         <div className="border-t border-slate-200 bg-amber-500/95">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
-            <nav className="flex items-center gap-4 text-[13px] font-bold text-slate-900 overflow-x-auto whitespace-nowrap max-w-[70%] sm:max-w-none">
+            {/* ✅ Added: hidden on mobile (so duplicate nav wont show with hamburger) */}
+            <nav className="hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 overflow-x-auto whitespace-nowrap max-w-[70%] sm:max-w-none">
               {nav.map((item) => (
                 <button
                   key={item.path}
@@ -355,9 +357,10 @@ export default function App() {
             </nav>
 
             <div className="flex items-center gap-2">
+              {/* ✅ Added: mobile-friendly size (no big circle) */}
               <button
                 onClick={() => go("/contact")}
-                className="rounded-full bg-white px-4 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90"
+                className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
               >
                 Apply Now →
               </button>
@@ -419,7 +422,10 @@ export default function App() {
         <Route path="/facilities" element={<FacilitiesPage />} />
         <Route path="/testimonials" element={<TestimonialsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="*" element={<div style={{ padding: 40 }}>Page Not Found</div>} />
+        <Route
+          path="*"
+          element={<div style={{ padding: 40 }}>Page Not Found</div>}
+        />
       </Routes>
 
       {/* ================= FOOTER ================= */}

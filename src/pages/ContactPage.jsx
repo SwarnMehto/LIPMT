@@ -1,6 +1,7 @@
 // src/pages/ContactPage.jsx
 import { useState } from "react";
 import EnrollModal from "../components/EnrollModal";
+import logo from "../assets/logo.png"; // ✅ Added
 
 export default function ContactPage() {
   const [enrollOpen, setEnrollOpen] = useState(false);
@@ -9,8 +10,28 @@ export default function ContactPage() {
     "https://www.google.com/maps?q=LAL%20INSTITUTE%20OF%20PARA%20MEDICAL%20TECHNOLOGY&output=embed";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-white">
-      <div className="mx-auto max-w-6xl px-5 py-14">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-sky-50 via-white to-white">
+      
+      {/* ✅ FULL PAGE WATERMARK (Added Only) */}
+      <div className="pointer-events-none absolute inset-0 z-0">
+        <img
+          src={logo}
+          alt="Watermark"
+          className="absolute left-1/2 top-1/2 w-[900px] max-w-none -translate-x-1/2 -translate-y-1/2 opacity-[0.08] blur-[0.8px]"
+        />
+        <img
+          src={logo}
+          alt=""
+          className="absolute -left-40 -top-40 w-[520px] max-w-none opacity-[0.02] blur-[1px]"
+        />
+        <img
+          src={logo}
+          alt=""
+          className="absolute -right-40 -bottom-40 w-[520px] max-w-none opacity-[0.02] blur-[1px]"
+        />
+      </div>
+
+      <div className="relative z-10 mx-auto max-w-6xl px-5 py-14">
         {/* Header */}
         <div className="max-w-2xl">
           <div className="inline-flex items-center rounded-full border border-sky-200 bg-white px-3 py-1 text-xs font-semibold text-sky-700">
@@ -27,21 +48,27 @@ export default function ContactPage() {
         {/* Main Grid */}
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           {/* Left: Contact Card */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+          <div className="relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <div className="flex items-start justify-between gap-4">
               <div>
-                <div className="text-sm font-semibold text-slate-600">Institute</div>
+                <div className="text-sm font-semibold text-slate-600">
+                  Institute
+                </div>
                 <div className="mt-1 text-lg font-extrabold text-slate-900">
                   Lal Institute of Paramedical Technology (LIPMT)
                 </div>
                 <div className="mt-2 text-sm text-slate-600">
                   Centre 2759, Hansa Puri Road, Tri Nagar, Delhi-110035
-                  <div className="text-slate-500">(Near Punjab National Bank)</div>
+                  <div className="text-slate-500">
+                    (Near Punjab National Bank)
+                  </div>
                 </div>
               </div>
 
               <div className="rounded-2xl bg-sky-50 px-4 py-3 text-center">
-                <div className="text-xs font-semibold text-slate-600">Helpline</div>
+                <div className="text-xs font-semibold text-slate-600">
+                  Helpline
+                </div>
                 <div className="mt-1 text-sm font-extrabold text-slate-900">
                   +91 9811343520
                 </div>
@@ -50,7 +77,10 @@ export default function ContactPage() {
 
             {/* Info Rows */}
             <div className="mt-6 grid gap-3">
-              <InfoRow label="Phone" value="+91 9811343520 / +91 9355342520" />
+              <InfoRow
+                label="Phone"
+                value="+91 9811343520 / +91 9355342520"
+              />
               <InfoRow label="Email" value="info@lipmt.in" />
               <InfoRow label="Landline" value="011-41415029" />
               <InfoRow label="Hours" value="Mon–Sat • 10:00 AM – 6:00 PM" />
@@ -101,7 +131,9 @@ export default function ContactPage() {
           {/* Right: Map Card */}
           <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-200 p-5">
-              <div className="text-sm font-semibold text-slate-700">Location</div>
+              <div className="text-sm font-semibold text-slate-700">
+                Location
+              </div>
               <div className="mt-1 text-sm text-slate-600">
                 Find us on Google Maps — Tri Nagar, Delhi
               </div>
