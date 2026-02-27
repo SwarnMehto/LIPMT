@@ -165,7 +165,6 @@ function Modal({ open, onClose, title, children }) {
 export default function HomePage() {
   const instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY";
 
-  // ✅ Slides from assets (5 sec auto)
   const heroSlides = useMemo(
     () => [
       {
@@ -236,7 +235,6 @@ export default function HomePage() {
     { name: "Student", role: "Radiology", quote: "Faculty is supportive and structured." },
   ];
 
-  // ✅ Map embed (works without pb)
   const mapSrc =
     "https://www.google.com/maps?q=LAL%20INSTITUTE%20OF%20PARA%20MEDICAL%20TECHNOLOGY&output=embed";
 
@@ -521,7 +519,7 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3 md:items-end">
                   <PrimaryBtn
                     onClick={() => setEnrollOpen(true)}
-                    className="bg-white text-sky-700 hover:bg-white/90"
+                    className="bg-sky-600 text-white hover:bg-sky-700"
                   >
                     Apply / Enroll Now
                   </PrimaryBtn>
@@ -613,15 +611,16 @@ export default function HomePage() {
                   <div className="mt-1 text-sm text-slate-600">{instituteName}</div>
                 </div>
 
-                <div className="flex gap-3">
-                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Callback</PrimaryBtn>
+                <div className="flex flex-wrap gap-3">
+                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>
+                    Enroll / Callback
+                  </PrimaryBtn>
+
                   <a
-                    href="https://lipmt.in/?ref=logo"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    href="mailto:info@lipmt.in?subject=Admission%20Enquiry%20-%20LIPMT&body=Hello%20LIPMT%20Team,%0A%0AI%20want%20details%20about%20admission%20(Fees,%20Batch%20Timing,%20Eligibility,%20Documents).%0A%0ACourse:%20%0AName:%20%0AMobile:%20%0ACity:%20%0A%0AThanks"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
                   >
-                    Visit Website
+                    ✉ Email
                   </a>
                 </div>
               </div>

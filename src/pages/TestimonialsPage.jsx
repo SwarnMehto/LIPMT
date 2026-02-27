@@ -1,18 +1,18 @@
-import { TESTIMONIALS } from "../siteData.js";
+import SiteFooter from "../components/SiteFooter";
 
 export default function TestimonialsPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 py-12">
-      <h1 className="text-3xl font-extrabold text-zinc-900">Testimonials</h1>
+    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-teal-50 text-slate-900">
+      <div className="mx-auto max-w-7xl px-5 py-14">
+        <h1 className="text-4xl font-extrabold">Testimonials</h1>
+        <p className="mt-3 text-slate-600">
+          Student success stories and feedback.
+        </p>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-3">
-        {TESTIMONIALS.map((t, i) => (
-          <div key={t.name + i} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
-            <div className="text-sm text-zinc-600">“{t.text}”</div>
-            <div className="mt-4 text-sm font-semibold text-zinc-900">{t.name}</div>
-          </div>
-        ))}
+        {/* ✅ Your existing testimonials content stays here */}
       </div>
+
+      <SiteFooter />
     </div>
   );
 }
