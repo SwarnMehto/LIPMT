@@ -1,6 +1,5 @@
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-
 import {
   Menu,
   X,
@@ -16,13 +15,14 @@ import {
 } from "lucide-react";
 
 import HomePage from "./pages/HomePage.jsx";
+import ServicesPage from "./pages/ServicesPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
 import CoursesPage from "./pages/CoursesPage.jsx";
 import FacilitiesPage from "./pages/FacilitiesPage.jsx";
 import TestimonialsPage from "./pages/TestimonialsPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
 
-import CourseDetailPage from "./pages/CourseDetailPage.jsx"; // ✅ only once
+import CourseDetailPage from "./pages/CourseDetailPage.jsx";
 import logo from "./assets/logo.png";
 
 function cx(...a) {
@@ -36,7 +36,7 @@ export default function App() {
   const [menu, setMenu] = useState(false);
 
   // ✅ WhatsApp (CHANGE NUMBER HERE)
-  const WHATSAPP_NUMBER = "918700116436"; // 91 + number (no +)
+  const WHATSAPP_NUMBER = "918700116436";
   const whatsappText = encodeURIComponent(
     "Hi Lal Institute of Paramedical Technology, I want details about admission."
   );
@@ -90,25 +90,68 @@ export default function App() {
     if (timerRef.current) window.clearTimeout(timerRef.current);
   };
 
+  // ✅ Nav (Courses dropdown on hover)
   const nav = [
     { label: "HOME", path: "/" },
     { label: "ABOUT", path: "/about" },
-    { label: "COURSES", path: "/courses" },
+    { label: "COURSES", path: "/courses", isDropdown: true }, // ✅ dropdown
+    { label: "SERVICES", path: "/services" },
     { label: "FACILITIES", path: "/facilities" },
     { label: "TESTIMONIALS", path: "/testimonials" },
     { label: "CONTACT", path: "/contact" },
   ];
 
+  // ✅ Dropdown items (as you asked)
+  const courseMenu = [
+    { label: "Certificate Courses", path: "/courses/certificate" },
+    { label: "Diploma Courses", path: "/courses/diploma" },
+    { label: "Degree Courses", path: "/courses/degree" },
+  ];
+
+  // ✅ Desktop dropdown state
+  const [openCourses, setOpenCourses] = useState(false);
+  const coursesRef = useRef(null);
+
+  // ✅ Mobile submenu state
+  const [openCoursesMobile, setOpenCoursesMobile] = useState(false);
+
+  // ✅ outside click close (desktop)
+  useEffect(() => {
+    function handleOutside(e) {
+      if (coursesRef.current && !coursesRef.current.contains(e.target)) {
+        setOpenCourses(false);
+      }
+    }
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, []);
+
+  // ✅ route change close dropdown
+  useEffect(() => {
+    setOpenCourses(false);
+    setOpenCoursesMobile(false);
+  }, [location.pathname]);
+
   const go = (path) => {
     setMenu(false);
+    setOpenCourses(false);
+    setOpenCoursesMobile(false);
     navigate(path);
   };
 
   const isActive = (path) => location.pathname === path;
 
+  const isCoursesActive = () => location.pathname.startsWith("/courses");
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      {/* ================= WHATSAPP FLOATING (stable corner) ================= */}
+      {/* ✅ Hide navbar scrollbar (white bar) */}
+      <style>{`
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      `}</style>
+
+      {/* ================= WHATSAPP FLOATING ================= */}
       <a
         href={whatsappLink}
         target="_blank"
@@ -120,7 +163,7 @@ export default function App() {
         <MessageCircle className="h-7 w-7 text-white" />
       </a>
 
-      {/* ================= POPUP (Job -> Free Enquiry after 5 sec) ================= */}
+      {/* ================= POPUP ================= */}
       {showPopup && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
           <div className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
@@ -259,7 +302,6 @@ export default function App() {
 
       {/* ================= TOP SOCIAL BAR ================= */}
       <div className="w-full bg-slate-900">
-        {/* ✅ Added: flex-wrap + center on mobile */}
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center sm:justify-end gap-2 px-6 py-2">
           <a
             href="#"
@@ -340,24 +382,63 @@ export default function App() {
 
         <div className="border-t border-slate-200 bg-amber-500/95">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
-            {/* ✅ Added: hidden on mobile (so duplicate nav wont show with hamburger) */}
-            <nav className="hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 overflow-x-auto whitespace-nowrap max-w-[70%] sm:max-w-none">
-              {nav.map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => go(item.path)}
-                  className={cx(
-                    "px-2 py-1 transition hover:opacity-90",
-                    isActive(item.path) ? "underline underline-offset-8" : ""
-                  )}
-                >
-                  {item.label}
-                </button>
-              ))}
+            {/* ✅ Desktop Nav (COURSES hover dropdown) */}
+            <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 overflow-x-auto overflow-y-visible whitespace-nowrap max-w-[70%] sm:max-w-none">
+              {nav.map((item) => {
+                if (item.isDropdown) {
+                  return (
+                    <div
+                      key={item.path}
+                      ref={coursesRef}
+                      className="relative"
+                      onMouseEnter={() => setOpenCourses(true)}
+                      onMouseLeave={() => setOpenCourses(false)}
+                    >
+                      <button
+                        onClick={() => go(item.path)} // click -> /courses
+                        className={cx(
+                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-1",
+                          isCoursesActive() ? "underline underline-offset-8" : ""
+                        )}
+                        aria-haspopup="menu"
+                        aria-expanded={openCourses}
+                      >
+                        COURSES <span className="text-[12px] font-extrabold">+</span>
+                      </button>
+
+                      {openCourses && (
+                        <div className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-slate-200 bg-white shadow-xl overflow-hidden z-[9999]">
+                          {courseMenu.map((c) => (
+                            <button
+                              key={c.path}
+                              onClick={() => go(c.path)}
+                              className="w-full text-left px-5 py-3 text-[13px] font-semibold text-slate-800 hover:bg-slate-50"
+                            >
+                              {c.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => go(item.path)}
+                    className={cx(
+                      "px-2 py-1 transition hover:opacity-90",
+                      isActive(item.path) ? "underline underline-offset-8" : ""
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
             </nav>
 
             <div className="flex items-center gap-2">
-              {/* ✅ Added: mobile-friendly size (no big circle) */}
               <button
                 onClick={() => go("/contact")}
                 className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
@@ -389,18 +470,53 @@ export default function App() {
             </div>
 
             <div className="mt-6 flex flex-col gap-3">
-              {nav.map((item) => (
-                <button
-                  key={item.path}
-                  onClick={() => go(item.path)}
-                  className={cx(
-                    "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50",
-                    isActive(item.path) ? "bg-slate-50" : ""
-                  )}
-                >
-                  {item.label}
-                </button>
-              ))}
+              {nav.map((item) => {
+                if (item.isDropdown) {
+                  return (
+                    <div key={item.path} className="flex flex-col gap-2">
+                      <button
+                        onClick={() => setOpenCoursesMobile((v) => !v)}
+                        className={cx(
+                          "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
+                          isCoursesActive() ? "bg-slate-50" : ""
+                        )}
+                      >
+                        <span>COURSES</span>
+                        <span className="text-sm">
+                          {openCoursesMobile ? "−" : "+"}
+                        </span>
+                      </button>
+
+                      {openCoursesMobile && (
+                        <div className="ml-3 flex flex-col gap-2">
+                          {courseMenu.map((c) => (
+                            <button
+                              key={c.path}
+                              onClick={() => go(c.path)}
+                              className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                            >
+                              {c.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                return (
+                  <button
+                    key={item.path}
+                    onClick={() => go(item.path)}
+                    className={cx(
+                      "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50",
+                      isActive(item.path) ? "bg-slate-50" : ""
+                    )}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
 
               <button
                 onClick={() => go("/contact")}
@@ -413,12 +529,21 @@ export default function App() {
         </div>
       )}
 
-      {/* ================= ROUTES (✅ dynamic route included) ================= */}
+      {/* ================= ROUTES ================= */}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
+
+        {/* Base courses */}
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/courses/:slug" element={<CourseDetailPage />} />
+
+        {/* Dropdown routes (same CoursesPage for now) */}
+        <Route path="/courses/certificate" element={<CoursesPage />} />
+        <Route path="/courses/diploma" element={<CoursesPage />} />
+        <Route path="/courses/degree" element={<CoursesPage />} />
+
+        <Route path="/services" element={<ServicesPage />} />
         <Route path="/facilities" element={<FacilitiesPage />} />
         <Route path="/testimonials" element={<TestimonialsPage />} />
         <Route path="/contact" element={<ContactPage />} />
