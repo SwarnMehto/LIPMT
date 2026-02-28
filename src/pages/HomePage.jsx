@@ -101,9 +101,10 @@ function SectionTitle({ kicker, title, desc, align = "left" }) {
   );
 }
 
+/* ✅ FIX: Mobile par 0 na dikhaye — inView reliable + fallback start */
 function CountUp({ to = 100, suffix = "+", duration = 1.4 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, amount: 0.2 }); // ✅ mobile friendly
   const mv = useMotionValue(0);
   const [val, setVal] = useState(0);
 
@@ -113,10 +114,25 @@ function CountUp({ to = 100, suffix = "+", duration = 1.4 }) {
   }, [mv]);
 
   useEffect(() => {
-    if (!inView) return;
-    const controls = animate(mv, to, { duration, ease: "easeOut" });
-    return () => controls.stop();
-  }, [inView, mv, to, duration]);
+    let controls;
+
+    const start = () => {
+      controls = animate(mv, to, { duration, ease: "easeOut" });
+    };
+
+    if (inView) start();
+
+    // ✅ fallback: if observer doesn't trigger on some mobiles
+    const t = setTimeout(() => {
+      if (!inView && val === 0) start();
+    }, 600);
+
+    return () => {
+      clearTimeout(t);
+      controls?.stop?.();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView, mv, to, duration]); // (val intentionally not dependency)
 
   return (
     <span ref={ref} className="tabular-nums">
@@ -173,11 +189,31 @@ export default function HomePage() {
 
   const heroSlides = useMemo(
     () => [
-      { src: slide1, title: "Career Support", subtitle: "Placement assistance, interview prep, and professional guidance." },
-      { src: slide2, title: "Modern Laboratories", subtitle: "Hands-on training with updated equipment & practical learning." },
-      { src: slide3, title: "Clinical Exposure", subtitle: "Hospital training & real-world skills for job readiness." },
-      { src: slide4, title: "Expert Faculty", subtitle: "Guidance from experienced teachers focused on results." },
-      { src: slide5, title: "Admissions Open", subtitle: "Apply now for the new session — limited seats available." },
+      {
+        src: slide1,
+        title: "Career Support",
+        subtitle: "Placement assistance, interview prep, and professional guidance.",
+      },
+      {
+        src: slide2,
+        title: "Modern Laboratories",
+        subtitle: "Hands-on training with updated equipment & practical learning.",
+      },
+      {
+        src: slide3,
+        title: "Clinical Exposure",
+        subtitle: "Hospital training & real-world skills for job readiness.",
+      },
+      {
+        src: slide4,
+        title: "Expert Faculty",
+        subtitle: "Guidance from experienced teachers focused on results.",
+      },
+      {
+        src: slide5,
+        title: "Admissions Open",
+        subtitle: "Apply now for the new session — limited seats available.",
+      },
     ],
     []
   );
@@ -224,7 +260,7 @@ export default function HomePage() {
 
   const slideData = heroSlides[slide];
 
-  // ✅ Form state (✅ ADDED: city)
+  // ✅ Form state
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -484,7 +520,7 @@ export default function HomePage() {
                 </motion.div>
               ))}
 
-              {/* ✅ NORMAL style button card like you want */}
+              {/* ✅ NORMAL style button card */}
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
