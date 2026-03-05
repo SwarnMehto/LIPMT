@@ -1,3 +1,4 @@
+// src/App.jsx
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -127,6 +128,10 @@ export default function App() {
   const [openCourses, setOpenCourses] = useState(false);
   const [openServices, setOpenServices] = useState(false);
 
+  // ✅ refs for click-outside close
+  const coursesWrapRef = useRef(null);
+  const servicesWrapRef = useRef(null);
+
   // ✅ Mobile submenu state
   const [openCoursesMobile, setOpenCoursesMobile] = useState(false);
   const [openServicesMobile, setOpenServicesMobile] = useState(false);
@@ -138,6 +143,19 @@ export default function App() {
     setOpenCoursesMobile(false);
     setOpenServicesMobile(false);
   }, [location.pathname]);
+
+  // ✅ close dropdown when click outside (desktop)
+  useEffect(() => {
+    const onDown = (e) => {
+      const t = e.target;
+      if (coursesWrapRef.current && coursesWrapRef.current.contains(t)) return;
+      if (servicesWrapRef.current && servicesWrapRef.current.contains(t)) return;
+      setOpenCourses(false);
+      setOpenServices(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, []);
 
   const go = (path) => {
     setMenu(false);
@@ -159,7 +177,7 @@ export default function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* NOTE: nav-btn kept for future use, but not used on dropdown buttons now */
+        /* ✅ make ALL nav items same height/position */
         .nav-btn{
           border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.22);
@@ -167,6 +185,9 @@ export default function App() {
           padding: 10px 14px;
           font-weight: 800;
           line-height: 1;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
         }
         .nav-btn:hover{
           background: rgba(15,23,42,0.12);
@@ -395,27 +416,30 @@ export default function App() {
           </div>
         </div>
 
-      {/* Nav bar */}
+        {/* Nav bar */}
         <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 overflow-visible">
             {/* ✅ Desktop Nav */}
             <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
               {nav.map((item) => {
-                // ✅ COURSES dropdown (now same look as others)
+                // ✅ COURSES dropdown (hover + click open)
                 if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div
                       key={item.path}
+                      ref={coursesWrapRef}
                       className="relative"
                       onMouseEnter={() => setOpenCourses(true)}
                       onMouseLeave={() => setOpenCourses(false)}
                     >
                       <button
-                        onClick={() => go(item.path)}
-                        className={cx(
-                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-2",
-                          isCoursesActive() ? "underline underline-offset-8" : ""
-                        )}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenCourses((v) => !v);
+                          setOpenServices(false);
+                        }}
+                        className={cx("nav-btn", isCoursesActive() ? "ring-2 ring-white/40" : "")}
                         aria-haspopup="menu"
                         aria-expanded={openCourses}
                         type="button"
@@ -427,6 +451,10 @@ export default function App() {
                       {openCourses && (
                         <div className="absolute left-0 top-full z-[999999] mt-2">
                           <div className="dd w-64 flex flex-col py-1">
+                            {/* ✅ Optional: All Courses */}
+                            <button onClick={() => go("/courses")} className="dd-item" type="button">
+                              All Courses
+                            </button>
                             {courseMenu.map((c) => (
                               <button key={c.path} onClick={() => go(c.path)} className="dd-item" type="button">
                                 {c.label}
@@ -439,21 +467,24 @@ export default function App() {
                   );
                 }
 
-                // ✅ SERVICES dropdown (now same look as others)
+                // ✅ SERVICES dropdown (hover + click open)
                 if (item.isDropdown && item.dropdownKey === "services") {
                   return (
                     <div
                       key={item.path}
+                      ref={servicesWrapRef}
                       className="relative"
                       onMouseEnter={() => setOpenServices(true)}
                       onMouseLeave={() => setOpenServices(false)}
                     >
                       <button
-                        onClick={() => go(item.path)}
-                        className={cx(
-                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-2",
-                          isServicesActive() ? "underline underline-offset-8" : ""
-                        )}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setOpenServices((v) => !v);
+                          setOpenCourses(false);
+                        }}
+                        className={cx("nav-btn", isServicesActive() ? "ring-2 ring-white/40" : "")}
                         aria-haspopup="menu"
                         aria-expanded={openServices}
                         type="button"
@@ -465,6 +496,10 @@ export default function App() {
                       {openServices && (
                         <div className="absolute left-0 top-full z-[999999] mt-2">
                           <div className="dd w-72 flex flex-col py-1">
+                            {/* ✅ Optional: All Services */}
+                            <button onClick={() => go("/services")} className="dd-item" type="button">
+                              All Services
+                            </button>
                             {servicesMenu.map((s) => (
                               <button key={s.path} onClick={() => go(s.path)} className="dd-item" type="button">
                                 {s.label}
@@ -477,14 +512,14 @@ export default function App() {
                   );
                 }
 
-                // ✅ normal links
+                // ✅ normal links (use same nav-btn => alignment fixed)
                 return (
                   <button
                     key={item.path}
                     onClick={() => go(item.path)}
                     className={cx(
-                      "px-2 py-1 transition hover:opacity-90",
-                      isActive(item.path) ? "underline underline-offset-8" : ""
+                      "nav-btn",
+                      isActive(item.path) ? "ring-2 ring-white/40" : ""
                     )}
                     type="button"
                   >
@@ -546,6 +581,13 @@ export default function App() {
 
                       {openCoursesMobile && (
                         <div className="ml-3 flex flex-col gap-2">
+                          <button
+                            onClick={() => go("/courses")}
+                            className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                            type="button"
+                          >
+                            All Courses
+                          </button>
                           {courseMenu.map((c) => (
                             <button
                               key={c.path}
@@ -579,6 +621,13 @@ export default function App() {
 
                       {openServicesMobile && (
                         <div className="ml-3 flex flex-col gap-2">
+                          <button
+                            onClick={() => go("/services")}
+                            className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                            type="button"
+                          >
+                            All Services
+                          </button>
                           {servicesMenu.map((s) => (
                             <button
                               key={s.path}
@@ -639,6 +688,10 @@ export default function App() {
         <Route path="/services/gallery" element={<GalleryPage />} />
         <Route path="/services/practical" element={<PracticalPage />} />
         <Route path="/services/classroom" element={<ClassroomPage />} />
+
+        {/* ✅ IMPORTANT: placement route should open a page.
+            If you don't have PlacementPage yet, this will still open ServicesPage.
+            (When you create PlacementPage later, just replace element.) */}
         <Route path="/services/placement" element={<ServicesPage />} />
 
         {/* Others */}
