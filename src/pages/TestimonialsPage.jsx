@@ -238,8 +238,10 @@ export default function TestimonialsPage() {
       setErrorMsg("❌ Name minimum 2 characters hona chahiye.");
       return;
     }
-    if (!text || text.length < 20) {
-      setErrorMsg("❌ Review minimum 20 characters hona chahiye.");
+
+    // ✅ NO minimum length now (sirf empty block nahi hona chahiye)
+    if (!text) {
+      setErrorMsg("❌ Please write your review.");
       return;
     }
 
@@ -248,7 +250,7 @@ export default function TestimonialsPage() {
       type: reviewType,
       rating: clampRating(reviewRating),
       review: text,
-      createdAt: Date.now(), // ✅ for sorting + persistence
+      createdAt: Date.now(),
     };
 
     setTestimonials((prev) => [newReview, ...prev]);
@@ -382,7 +384,7 @@ export default function TestimonialsPage() {
                   <textarea
                     value={reviewText}
                     onChange={(e) => setReviewText(e.target.value)}
-                    placeholder="Write your experience... (minimum 10 characters)"
+                    placeholder="Write your experience..."
                     className="mt-2 min-h-[130px] w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none focus:border-sky-400"
                     required
                   />
@@ -552,7 +554,6 @@ export default function TestimonialsPage() {
                 Find Lal Institute of Para Medical Technology on Google Maps
               </div>
 
-              {/* ✅ Added line */}
               <div className="mt-2 text-sm font-semibold text-slate-800">
                 Review us on Google Map —{" "}
                 <span className="text-sky-700">Best Paramedical Institute in India</span>
