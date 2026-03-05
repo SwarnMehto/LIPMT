@@ -1,5 +1,9 @@
 // src/data/coursesData.jsx
 
+import certificateecg from "../assets/courses/certificate-ecg.png";
+import certificatelanassi from "../assets/courses/certificate-lab-assistant.png";
+import bscdmlt from "../assets/courses/bsc-mlt.png";
+import bscradiology from "../assets/courses/bsc-radiology.png";
 export const courses = [
   {
     level: "Diploma",
@@ -47,7 +51,7 @@ export const courses = [
   {
     level: "Diploma",
     slug: "radiology-imaging",
-    title: "Diploma in Radiology imaging Technology",
+    title: "Diploma in X-ray Technology",
     category: "Imaging",
     popular: true,
     duration: "2 Years",
@@ -424,6 +428,148 @@ export const courses = [
       "Practical patient monitoring skills",
       "Good growth path in cardiac care",
       "Stable healthcare career option",
+    ],
+  },
+
+  // ===================== CERTIFICATE COURSES (ADDED) =====================
+
+  {
+    level: "Certificate",
+    slug: "certificate-ecg",
+    title: "Certificate in ECG Technology",
+    category: "Cardiology",
+    image: certificateecg,
+    popular: false,
+    duration: "6 Months",
+    eligibility: "10th / 10+2",
+    overview:
+      "Short-term course focused on ECG recording basics and patient preparation. Students learn ECG machine handling and basic diagnostic workflow.",
+    whatYouStudy: [
+      "Basic heart anatomy",
+      "ECG machine handling basics",
+      "Lead placement & procedure steps",
+      "Patient preparation & safety",
+      "Basic documentation",
+    ],
+    jobs: [
+      "ECG Assistant",
+      "Diagnostic Assistant (Cardiology)",
+      "Hospital OPD Support Staff",
+    ],
+    workAreas: [
+      "Hospitals (OPD / Cardiology)",
+      "Diagnostic centers",
+      "Clinics",
+    ],
+    benefits: [
+      "Short duration course",
+      "Quick entry into healthcare jobs",
+      "Good base for Diploma/advanced cardiac training",
+    ],
+  },
+
+  {
+    level: "Certificate",
+    slug: "certificate-lab-assistant",
+    title: "Certificate in Lab Assistant",
+    category: "Lab",
+    image: certificatelanassi,
+    popular: false,
+    duration: "6 Months",
+    eligibility: "10th / 10+2",
+    overview:
+      "Entry-level lab course for assisting technicians in sample collection, labeling and basic lab workflow.",
+    whatYouStudy: [
+      "Sample collection basics",
+      "Labeling & record keeping",
+      "Lab hygiene & safety",
+      "Basic lab workflow support",
+    ],
+    jobs: [
+      "Lab Assistant",
+      "Sample Collection Assistant",
+      "Lab Support Staff",
+    ],
+    workAreas: [
+      "Diagnostic Laboratories",
+      "Hospitals (Lab Department)",
+      "Clinics",
+    ],
+    benefits: [
+      "Fast entry-level job options",
+      "Good foundation for DMLT",
+      "Practical skill-based training",
+    ],
+  },
+
+  // ===================== DEGREE COURSES (ADDED) =====================
+
+  {
+    level: "Degree",
+    slug: "bmlt",
+    title: "B.Sc. Medical Laboratory Technology",
+    category: "Lab",
+    image: bscdmlt,
+    popular: true,
+    duration: "3 Years",
+    eligibility: "10+2 (Science)",
+    overview:
+      "BMLT degree focuses on advanced laboratory diagnostics including pathology, microbiology and clinical biochemistry with stronger academic + practical training.",
+    whatYouStudy: [
+      "Advanced pathology",
+      "Clinical biochemistry",
+      "Microbiology",
+      "Hematology & diagnostics",
+      "Lab management basics",
+    ],
+    jobs: [
+      "Medical Lab Technologist",
+      "Lab Supervisor (Junior)",
+      "Quality Control Executive (Lab)",
+    ],
+    workAreas: [
+      "Hospitals",
+      "Diagnostic Laboratories",
+      "Research & testing labs",
+    ],
+    benefits: [
+      "Higher qualification than Diploma",
+      "Better salary & growth opportunities",
+      "Good base for specialization / higher studies",
+    ],
+  },
+
+  {
+    level: "Degree",
+    slug: "bsc-radiology",
+    title: "B.Sc. Radiology & Imaging Technology",
+    category: "Imaging",
+    image: bscradiology,
+    popular: true,
+    duration: "3 Years",
+    eligibility: "10+2 (Science)",
+    overview:
+      "Degree program focused on advanced imaging workflow and safety, including modern imaging modalities like CT and MRI at concept level.",
+    whatYouStudy: [
+      "Radiology imaging fundamentals",
+      "CT / MRI basics (concept level)",
+      "Radiation safety & protection",
+      "Patient handling & positioning",
+      "Imaging workflow & documentation",
+    ],
+    jobs: [
+      "Radiology Technologist",
+      "Imaging Technician",
+      "Diagnostic Imaging Support Staff",
+    ],
+    workAreas: [
+      "Hospitals (Radiology Department)",
+      "Diagnostic imaging centers",
+    ],
+    benefits: [
+      "Advanced career path in imaging",
+      "High demand in hospitals & imaging centers",
+      "Better long-term growth opportunities",
     ],
   },
 ];

@@ -1,8 +1,9 @@
 // src/pages/HomePage.jsx
-// ✅ Premium animated homepage (blue theme)
-// ✅ Uses local assets: src/assets/slide1.png ... slide5.png + logo.png
-// ✅ IMPORTANT: Header/Footer removed (App.jsx header+footer already there)
-// ✅ Google map embed included (works without pb code)
+// ✅ Premium animated homepage (blue theme) + TRUST sections + MOBILE friendly
+// ✅ No header/footer here (App.jsx handles it)
+// ✅ Added: sticky mobile bottom bar (Call / WhatsApp / Apply)
+// ✅ Added: Trust proof strip, Google reviews CTA, Placement partners, FAQs
+// ✅ Kept your existing logic & sections (no breaking)
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -18,7 +19,7 @@ import slide5 from "../assets/slide5.png";
 
 // ✅ NEW assets (as per your folder)
 import bestMedical from "../assets/best_medical.png";
-import coverImg from "../assets/cover.png"; // ✅ using this for the REGD banner image
+import coverImg from "../assets/cover.png"; // ✅ REGD banner image
 import heroImg from "../assets/hero.png";
 import heroImg1 from "../assets/hero1.png";
 import heroImg2 from "../assets/hero2.png";
@@ -61,7 +62,7 @@ function PrimaryBtn({ children, onClick, className = "", type = "button" }) {
       type={type}
       onClick={onClick}
       className={cx(
-        "rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-sky-600/20 transition hover:bg-sky-700 active:scale-[0.99]",
+        "min-h-[44px] rounded-xl bg-sky-600 px-5 py-3 text-sm font-semibold text-white shadow-sm shadow-sky-600/20 transition hover:bg-sky-700 active:scale-[0.99]",
         className
       )}
     >
@@ -76,7 +77,7 @@ function GhostBtn({ children, onClick, className = "" }) {
       type="button"
       onClick={onClick}
       className={cx(
-        "rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]",
+        "min-h-[44px] rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]",
         className
       )}
     >
@@ -143,7 +144,7 @@ function CountUp({ to = 100, suffix = "+", duration = 1.4 }) {
       controls?.stop?.();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inView, mv, to, duration]); // (val intentionally not dependency)
+  }, [inView, mv, to, duration]);
 
   return (
     <span ref={ref} className="tabular-nums">
@@ -186,6 +187,64 @@ function Modal({ open, onClose, title, children }) {
           </div>
           <div className="p-5">{children}</div>
         </motion.div>
+      </div>
+    </div>
+  );
+}
+
+/* ✅ NEW: FAQ (trust booster) */
+function FAQ({ items }) {
+  const [open, setOpen] = useState(0);
+  return (
+    <div className="mt-8 grid gap-3">
+      {items.map((it, idx) => {
+        const isOpen = open === idx;
+        return (
+          <button
+            key={it.q}
+            type="button"
+            onClick={() => setOpen(isOpen ? -1 : idx)}
+            className="text-left rounded-2xl border border-slate-200 bg-white p-4 hover:bg-slate-50 transition"
+          >
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-sm font-extrabold text-slate-900">{it.q}</div>
+              <div className="text-slate-500">{isOpen ? "−" : "+"}</div>
+            </div>
+            {isOpen && <div className="mt-2 text-sm text-slate-600">{it.a}</div>}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ✅ NEW: Mobile bottom sticky bar */
+function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520" }) {
+  const msg = encodeURIComponent("Hello LIPMT, I want admission details (fees, batches & process).");
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur md:hidden">
+      <div className="mx-auto flex max-w-6xl gap-2 px-3 py-2">
+        <a
+          href={`tel:${phone}`}
+          className="flex-1 min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 flex items-center justify-center"
+        >
+          📞 Call
+        </a>
+        <a
+          href={`https://wa.me/${wa}?text=${msg}`}
+          target="_blank"
+          rel="noreferrer"
+          className="flex-1 min-h-[44px] rounded-xl bg-green-600 px-3 py-2 text-sm font-extrabold text-white flex items-center justify-center"
+        >
+          💬 WhatsApp
+        </a>
+        <button
+          type="button"
+          onClick={onApply}
+          className="flex-1 min-h-[44px] rounded-xl bg-sky-600 px-3 py-2 text-sm font-extrabold text-white"
+        >
+          ✅ Apply
+        </button>
       </div>
     </div>
   );
@@ -281,7 +340,7 @@ export default function HomePage() {
     message: "",
   });
 
-  // ✅ Hero quick highlights (ONLY ADD)
+  // ✅ Hero quick highlights
   const heroHighlights = [
     "100% Practical Training",
     "Experienced Faculty",
@@ -289,7 +348,7 @@ export default function HomePage() {
     "Placement Guidance Support",
   ];
 
-  // ✅ Why Choose Us (ONLY ADD)
+  // ✅ Why Choose Us
   const whyChoose = [
     {
       title: "Practical Skill Training",
@@ -313,7 +372,7 @@ export default function HomePage() {
     },
   ];
 
-  // ✅ Placement section list (ONLY ADD)
+  // ✅ Placement section list
   const placementPoints = [
     "Hospital / Diagnostic center internship guidance",
     "Resume + interview preparation support",
@@ -321,8 +380,39 @@ export default function HomePage() {
     "Continuous student support & mentorship",
   ];
 
+  // ✅ Trust proof strip (ADD)
+  const trustProofs = [
+    { k: "REGD / ISO", v: "Verified institute details" },
+    { k: "Practical Labs", v: "Hands-on training" },
+    { k: "Guidance", v: "Admission + career support" },
+    { k: "Support", v: "Quick response on WhatsApp" },
+  ];
+
+  // ✅ FAQs (ADD)
+  const faqs = [
+    {
+      q: "क्या fees / eligibility details WhatsApp पर मिल जाएगी?",
+      a: "Yes. Enquiry form submit करने के बाद आप WhatsApp पर भी details ले सकते हैं (fees, batches, documents).",
+    },
+    {
+      q: "Internship / hospital training मिलेगा?",
+      a: "We provide clinical exposure guidance + practical workflow training. Internship support availability batch-wise depend कर सकती है.",
+    },
+    {
+      q: "Documents कौन-कौन से लगेंगे?",
+      a: "10th/12th marksheet, ID proof, photos, and admission form. Exact list admissions team confirm करेगी.",
+    },
+    {
+      q: "Classes कब से start होंगी?",
+      a: "Batch timing seat availability के हिसाब से. Apply/Callback पर team आपको next batch date बता देगी.",
+    },
+  ];
+
   return (
-    <div className="bg-slate-50 text-slate-900">
+    <div className="bg-slate-50 text-slate-900 pb-16 md:pb-0">
+      {/* ✅ Mobile sticky bar */}
+      <MobileStickyBar onApply={() => setEnrollOpen(true)} />
+
       {/* ===== HERO ===== */}
       <section id="home" className="relative overflow-hidden">
         <div className="relative h-[78vh] min-h-[560px] w-full">
@@ -384,7 +474,7 @@ export default function HomePage() {
                     href="/brochure.pdf"
                     target="_blank"
                     rel="noreferrer"
-                    className="rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
+                    className="min-h-[44px] rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
                   >
                     Download Brochure
                   </a>
@@ -415,6 +505,19 @@ export default function HomePage() {
                     </div>
                     <div className="mt-1 text-xs text-white/70">Guidance Support</div>
                   </div>
+                </div>
+
+                {/* ✅ TRUST STRIP (below stats) */}
+                <div className="mt-6 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
+                  {trustProofs.map((t) => (
+                    <div
+                      key={t.k}
+                      className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur"
+                    >
+                      <div className="text-xs font-extrabold text-white">{t.k}</div>
+                      <div className="mt-1 text-xs text-white/80">{t.v}</div>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
             </div>
@@ -470,7 +573,7 @@ export default function HomePage() {
                 desc="We focus on practical skill-building, strong fundamentals, and clinical exposure. Our training model helps students become job-ready for hospitals, labs, and healthcare centers."
               />
 
-              {/* ✅ ADD: REGD banner under institute name */}
+              {/* ✅ REGD banner */}
               <div className="mt-4">
                 <img
                   src={coverImg}
@@ -495,6 +598,24 @@ export default function HomePage() {
                   </div>
                 ))}
               </div>
+
+              {/* ✅ TRUST buttons */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                <a
+                  href="tel:+919811343520"
+                  className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  📞 Call Now
+                </a>
+                <a
+                  href="https://wa.me/919811343520"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700"
+                >
+                  💬 WhatsApp
+                </a>
+              </div>
             </motion.div>
 
             <motion.div
@@ -511,7 +632,7 @@ export default function HomePage() {
                 </div>
 
                 <div className="p-6">
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
                     <div className="rounded-2xl bg-slate-50 p-4">
                       <div className="text-xl font-extrabold text-slate-900">
                         <CountUp to={500} suffix="+" />
@@ -536,7 +657,7 @@ export default function HomePage() {
                     <PrimaryBtn onClick={() => setEnrollOpen(true)}>Start Admission</PrimaryBtn>
                     <button
                       onClick={() => go("facilities")}
-                      className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                      className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
                     >
                       View Facilities
                     </button>
@@ -559,7 +680,7 @@ export default function HomePage() {
               align="center"
             />
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {programs.map((p, idx) => (
                 <motion.div
                   key={p.name}
@@ -569,11 +690,12 @@ export default function HomePage() {
                   transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.03 }}
                 >
                   <Card className="h-full overflow-hidden">
-                    <div className="h-40 overflow-hidden">
+                    <div className="h-40 overflow-hidden bg-slate-50">
                       <img
                         src={p.image}
                         alt={p.name}
                         className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
+                        loading="lazy"
                       />
                     </div>
 
@@ -583,16 +705,16 @@ export default function HomePage() {
                         Duration: <span className="font-semibold">{p.duration}</span>
                       </div>
 
-                      <div className="mt-4 flex gap-2">
+                      <div className="mt-4 flex flex-wrap gap-2">
                         <button
                           onClick={() => setEnrollOpen(true)}
-                          className="rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700"
+                          className="min-h-[44px] rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700"
                         >
                           Enroll
                         </button>
                         <button
                           onClick={() => go("contact")}
-                          className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                          className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
                         >
                           Ask Details
                         </button>
@@ -619,7 +741,7 @@ export default function HomePage() {
                     <div className="mt-5">
                       <Link
                         to="/courses"
-                        className="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                        className="min-h-[44px] inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
                       >
                         View All Courses →
                       </Link>
@@ -643,7 +765,7 @@ export default function HomePage() {
                 <div className="flex flex-col gap-3 md:items-end">
                   <PrimaryBtn
                     onClick={() => setEnrollOpen(true)}
-                    className="bg-sky-600 text-white hover:bg-sky-700"
+                    className="bg-slate-900 text-white hover:bg-slate-800"
                   >
                     Apply / Enroll Now
                   </PrimaryBtn>
@@ -737,7 +859,7 @@ export default function HomePage() {
                     <PrimaryBtn onClick={() => setEnrollOpen(true)}>Apply Now</PrimaryBtn>
                     <button
                       onClick={() => go("contact")}
-                      className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                      className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
                     >
                       Contact Us
                     </button>
@@ -783,7 +905,7 @@ export default function HomePage() {
                 <PrimaryBtn onClick={() => setEnrollOpen(true)}>Get Placement Guidance</PrimaryBtn>
                 <button
                   onClick={() => go("courses")}
-                  className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
                 >
                   View Courses
                 </button>
@@ -811,10 +933,28 @@ export default function HomePage() {
               </Card>
             </motion.div>
           </div>
+
+          {/* ✅ Placement partners strip (trust booster) */}
+          <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
+            <div className="text-sm font-extrabold text-slate-900">Placement / Training Support</div>
+            <div className="mt-1 text-sm text-slate-600">
+              Hospitals, diagnostic labs & healthcare centers (as per availability).
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {["Hospital", "Diagnostic Lab", "Imaging Center", "Clinic"].map((p) => (
+                <div
+                  key={p}
+                  className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-center text-xs font-extrabold text-slate-700"
+                >
+                  {p}
+                </div>
+              ))}
+            </div>
+          </div>
         </Container>
       </section>
 
-      {/* ✅ CAMPUS / GALLERY (trust images) */}
+      {/* ✅ CAMPUS / GALLERY */}
       <section id="gallery" className="py-14 md:py-20">
         <Container>
           <SectionTitle
@@ -828,7 +968,7 @@ export default function HomePage() {
             <div className="grid gap-3 p-4 md:grid-cols-3">
               {[trust1, trust2, trust3].map((src, i) => (
                 <div key={i} className="relative overflow-hidden rounded-2xl">
-                  <img src={src} alt="Campus" className="h-[220px] w-full object-cover" />
+                  <img src={src} alt="Campus" className="h-[220px] w-full object-cover" loading="lazy" />
                   <div className="absolute bottom-3 left-3 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 backdrop-blur">
                     Practical Training
                   </div>
@@ -852,7 +992,7 @@ export default function HomePage() {
             <div className="grid gap-3 p-4 md:grid-cols-3">
               {[slide3, slide4, slide5].map((src, i) => (
                 <div key={i} className="relative overflow-hidden rounded-2xl">
-                  <img src={src} alt="Facility" className="h-[220px] w-full object-cover" />
+                  <img src={src} alt="Facility" className="h-[220px] w-full object-cover" loading="lazy" />
                   <div className="absolute bottom-3 left-3 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 backdrop-blur">
                     Practical Area
                   </div>
@@ -873,31 +1013,64 @@ export default function HomePage() {
             align="center"
           />
 
-        <div className="mt-10 grid gap-4 md:grid-cols-3">
-          {testimonials.map((t, idx) => (
-            <motion.div
-              key={t.role}
-              initial={{ opacity: 0, y: 14 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.04 }}
-            >
-              <Card className="h-full p-6">
-                <div className="text-sm font-semibold text-slate-600">{t.role}</div>
-                <div className="mt-3 text-sm leading-relaxed text-slate-800">“{t.quote}”</div>
-                <div className="mt-5 flex items-center gap-3">
-                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-50 text-sky-700">
-                    ★
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            {testimonials.map((t, idx) => (
+              <motion.div
+                key={t.role}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.04 }}
+              >
+                <Card className="h-full p-6">
+                  <div className="text-sm font-semibold text-slate-600">{t.role}</div>
+                  <div className="mt-3 text-sm leading-relaxed text-slate-800">“{t.quote}”</div>
+                  <div className="mt-5 flex items-center gap-3">
+                    <div className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-50 text-sky-700">
+                      ★
+                    </div>
+                    <div>
+                      <div className="text-sm font-extrabold text-slate-900">{t.name}</div>
+                      <div className="text-xs text-slate-500">Verified Student</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-sm font-extrabold text-slate-900">{t.name}</div>
-                    <div className="text-xs text-slate-500">Verified Student</div>
-                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* ✅ Google reviews CTA (trust booster) */}
+          <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <div className="text-sm font-extrabold text-slate-900">Google Reviews</div>
+                <div className="mt-1 text-sm text-slate-600">
+                  Read real feedback from students & parents (open in Google).
                 </div>
-              </Card>
-            </motion.div>
-          ))}
-        </div>
+              </div>
+              <a
+                className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                href="https://www.google.com/search?q=LAL%20INSTITUTE%20OF%20PARA%20MEDICAL%20TECHNOLOGY%20reviews"
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Reviews →
+              </a>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ FAQ (Trust) */}
+      <section id="faq" className="py-14 md:py-20">
+        <Container>
+          <SectionTitle
+            kicker="FAQs"
+            title="Admissions, fees & training — quick answers"
+            desc="Students usually ask these questions before taking admission."
+            align="center"
+          />
+          <FAQ items={faqs} />
         </Container>
       </section>
 
@@ -923,7 +1096,7 @@ export default function HomePage() {
 
                   <a
                     href="mailto:info@lipmt.in?subject=Admission%20Enquiry%20-%20LIPMT&body=Hello%20LIPMT%20Team,%0A%0AI%20want%20details%20about%20admission%20(Fees,%20Batch%20Timing,%20Eligibility,%20Documents).%0A%0ACourse:%20%0AName:%20%0AMobile:%20%0ACity:%20%0A%0AThanks"
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
                   >
                     ✉ Email
                   </a>
@@ -1013,7 +1186,7 @@ export default function HomePage() {
               required
               value={form.name}
               onChange={(e) => setForm((s) => ({ ...s, name: e.target.value }))}
-              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              className="min-h-[44px] rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="Your name"
             />
           </div>
@@ -1024,7 +1197,7 @@ export default function HomePage() {
               required
               value={form.phone}
               onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              className="min-h-[44px] rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="WhatsApp number"
             />
           </div>
@@ -1035,7 +1208,7 @@ export default function HomePage() {
               required
               value={form.city}
               onChange={(e) => setForm((s) => ({ ...s, city: e.target.value }))}
-              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              className="min-h-[44px] rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
               placeholder="Your city"
             />
           </div>
@@ -1052,7 +1225,7 @@ export default function HomePage() {
                   otherCourse: e.target.value === "Other" ? s.otherCourse : "",
                 }))
               }
-              className="rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              className="min-h-[44px] rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
             >
               <option value="">Choose a course</option>
               {programs.map((p) => (
@@ -1068,7 +1241,7 @@ export default function HomePage() {
                 required
                 value={form.otherCourse}
                 onChange={(e) => setForm((s) => ({ ...s, otherCourse: e.target.value }))}
-                className="mt-2 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+                className="mt-2 min-h-[44px] rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
                 placeholder="Type your course name"
               />
             )}
@@ -1092,10 +1265,14 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => setEnrollOpen(false)}
-              className="w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+              className="min-h-[44px] w-full rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
             >
               Cancel
             </button>
+          </div>
+
+          <div className="text-xs text-slate-500">
+            ✅ Your details are safe. We use your info only for admission enquiry.
           </div>
         </form>
       </Modal>

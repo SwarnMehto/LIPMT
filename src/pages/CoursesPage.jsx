@@ -11,12 +11,18 @@ import ecgImg from "../assets/courses/ecg.png";
 import dialysisImg from "../assets/courses/dialysis.png";
 import dentalImg from "../assets/courses/dental.png";
 
-// ✅ New images
+// ✅ New images (already in your project)
 import cardioImg from "../assets/courses/Cardio.png";
 import neuroImg from "../assets/courses/Neurophysiology.png";
 import ophthalmicImg from "../assets/courses/Ophthalmic.png";
 import physioImg from "../assets/courses/Physiotherapy.png";
 import respiratoryImg from "../assets/courses/Respiratory.png";
+
+// ✅ Certificate + Degree images (your green files)
+import certificateEcgImg from "../assets/courses/certificate-ecg.png";
+import certificateLabImg from "../assets/courses/certificate-lab-assistant.png";
+import bscMltImg from "../assets/courses/bsc-mlt.png";
+import bscRadiologyImg from "../assets/courses/bsc-radiology.png";
 
 const WHATSAPP_NUMBER = "919811343520"; // ✅ change if needed (without +)
 
@@ -55,6 +61,14 @@ export default function CoursesPage() {
       physiotherapy: physioImg,
       "respiratory-Technology": respiratoryImg,
 
+      // ✅ Certificate slugs (match coursesData.jsx)
+      "certificate-ecg": certificateEcgImg,
+      "certificate-lab-assistant": certificateLabImg,
+
+      // ✅ Degree slugs (match coursesData.jsx)
+      bmlt: bscMltImg,
+      "bsc-radiology": bscRadiologyImg,
+
       // fallback by title (optional)
       "Diploma in Cardio Technology": cardioImg,
       "Diploma in Neurophysiology": neuroImg,
@@ -86,7 +100,12 @@ export default function CoursesPage() {
     const t = String(course?.title || "").toLowerCase();
     if (t.includes("certificate")) return "Certificate";
     if (t.includes("diploma")) return "Diploma";
-    if (t.includes("degree") || t.includes("b.sc") || t.includes("bpt") || t.includes("bachelor"))
+    if (
+      t.includes("degree") ||
+      t.includes("b.sc") ||
+      t.includes("bpt") ||
+      t.includes("bachelor")
+    )
       return "Degree";
 
     // If still unknown, keep as "General"
@@ -99,7 +118,8 @@ export default function CoursesPage() {
       category: c.category || "General",
       popular: Boolean(c.popular),
       levelNormalized: normalizeLevel(c),
-      image: courseImageMap[c.slug] || courseImageMap[c.title] || null,
+      // ✅ IMPORTANT: use image from map; if not found, use c.image if you set it in data
+      image: courseImageMap[c.slug] || courseImageMap[c.title] || c.image || null,
     }));
   }, [courseImageMap]);
 
@@ -140,12 +160,13 @@ export default function CoursesPage() {
       course?.title || ""
     )}%0AName: ${encodeURIComponent(name)}%0APhone: ${encodeURIComponent(
       phone
-    )}%0ACity: ${encodeURIComponent(city || "")}%0A%0APlease share fees, batch timing & admission process.`;
+    )}%0ACity: ${encodeURIComponent(
+      city || ""
+    )}%0A%0APlease share fees, batch timing & admission process.`;
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }
 
-  const heading =
-    pageLevel === "All" ? "Our Paramedical Courses" : `${pageLevel} Courses`;
+  const heading = pageLevel === "All" ? "Our Paramedical Courses" : `${pageLevel} Courses`;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-teal-50 text-slate-900">
@@ -235,20 +256,14 @@ export default function CoursesPage() {
         {/* Courses Grid */}
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => (
-            <CourseCard
-              key={course.slug}
-              course={course}
-              onEnroll={() => openEnrollModal(course)}
-            />
+            <CourseCard key={course.slug} course={course} onEnroll={() => openEnrollModal(course)} />
           ))}
         </div>
 
         {filtered.length === 0 && (
           <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-700">
             <div className="text-lg font-extrabold">No courses found</div>
-            <div className="mt-2 text-sm text-slate-600">
-              Try changing search keywords or category.
-            </div>
+            <div className="mt-2 text-sm text-slate-600">Try changing search keywords or category.</div>
           </div>
         )}
       </div>

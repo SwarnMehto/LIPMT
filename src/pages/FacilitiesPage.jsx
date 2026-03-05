@@ -12,7 +12,7 @@ export default function FacilitiesPage() {
         "Safety, hygiene & lab discipline focus",
         "Record keeping & reporting basics",
       ],
-      forWhom: "Best for: DMLT / ECG / Radiology / Dialysis students",
+      forWhom: "Best for: DMLT / ECG / X-ray / Dialysis students",
     },
     {
       title: "Clinical & Hospital Exposure",

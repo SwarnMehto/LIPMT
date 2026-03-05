@@ -29,7 +29,7 @@ export const HERO_SLIDES = [
 
 export const COURSES = [
   { title: "DMLT", desc: "Lab Technology course with practical training", duration: "1–2 Years" },
-  { title: "X-Ray Technology", desc: "Radiology basics & machine handling", duration: "1–2 Years" },
+  { title: "X-Ray Technology", desc: "X-ray basics & machine handling", duration: "1–2 Years" },
   { title: "OT Technology", desc: "Operation theatre assisting & protocols", duration: "1 Year" },
   { title: "Nursing Assistant", desc: "Clinical support & patient care", duration: "6–12 Months" },
 ];

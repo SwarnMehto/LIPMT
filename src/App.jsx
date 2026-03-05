@@ -34,6 +34,15 @@ function cx(...a) {
   return a.filter(Boolean).join(" ");
 }
 
+/* ✅ Scroll to top on route change */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [pathname]);
+  return null;
+}
+
 export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -170,8 +179,15 @@ export default function App() {
   const isCoursesActive = () => location.pathname.startsWith("/courses");
   const isServicesActive = () => location.pathname.startsWith("/services");
 
+  // ✅ Footer only hide on these pages
+  const hideFooterOn = ["/facilities", "/testimonials"];
+  const isFooterHidden = hideFooterOn.includes(location.pathname);
+
   return (
     <div className="min-h-screen bg-white text-slate-900">
+      {/* ✅ Scroll Top Fix */}
+      <ScrollToTop />
+
       {/* ✅ Styles */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -422,7 +438,7 @@ export default function App() {
             {/* ✅ Desktop Nav */}
             <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
               {nav.map((item) => {
-                // ✅ COURSES dropdown (hover + click open)
+                // ✅ COURSES dropdown
                 if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div
@@ -448,15 +464,21 @@ export default function App() {
                         <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
                       </button>
 
+                      <div className="absolute left-0 top-full h-3 w-full" />
+
                       {openCourses && (
-                        <div className="absolute left-0 top-full z-[999999] mt-2">
+                        <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
                           <div className="dd w-64 flex flex-col py-1">
-                            {/* ✅ Optional: All Courses */}
                             <button onClick={() => go("/courses")} className="dd-item" type="button">
                               All Courses
                             </button>
                             {courseMenu.map((c) => (
-                              <button key={c.path} onClick={() => go(c.path)} className="dd-item" type="button">
+                              <button
+                                key={c.path}
+                                onClick={() => go(c.path)}
+                                className="dd-item"
+                                type="button"
+                              >
                                 {c.label}
                               </button>
                             ))}
@@ -467,7 +489,7 @@ export default function App() {
                   );
                 }
 
-                // ✅ SERVICES dropdown (hover + click open)
+                // ✅ SERVICES dropdown
                 if (item.isDropdown && item.dropdownKey === "services") {
                   return (
                     <div
@@ -493,15 +515,21 @@ export default function App() {
                         <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
                       </button>
 
+                      <div className="absolute left-0 top-full h-3 w-full" />
+
                       {openServices && (
-                        <div className="absolute left-0 top-full z-[999999] mt-2">
+                        <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
                           <div className="dd w-72 flex flex-col py-1">
-                            {/* ✅ Optional: All Services */}
                             <button onClick={() => go("/services")} className="dd-item" type="button">
                               All Services
                             </button>
                             {servicesMenu.map((s) => (
-                              <button key={s.path} onClick={() => go(s.path)} className="dd-item" type="button">
+                              <button
+                                key={s.path}
+                                onClick={() => go(s.path)}
+                                className="dd-item"
+                                type="button"
+                              >
                                 {s.label}
                               </button>
                             ))}
@@ -512,15 +540,12 @@ export default function App() {
                   );
                 }
 
-                // ✅ normal links (use same nav-btn => alignment fixed)
+                // ✅ normal links
                 return (
                   <button
                     key={item.path}
                     onClick={() => go(item.path)}
-                    className={cx(
-                      "nav-btn",
-                      isActive(item.path) ? "ring-2 ring-white/40" : ""
-                    )}
+                    className={cx("nav-btn", isActive(item.path) ? "ring-2 ring-white/40" : "")}
                     type="button"
                   >
                     {item.label}
@@ -688,10 +713,6 @@ export default function App() {
         <Route path="/services/gallery" element={<GalleryPage />} />
         <Route path="/services/practical" element={<PracticalPage />} />
         <Route path="/services/classroom" element={<ClassroomPage />} />
-
-        {/* ✅ IMPORTANT: placement route should open a page.
-            If you don't have PlacementPage yet, this will still open ServicesPage.
-            (When you create PlacementPage later, just replace element.) */}
         <Route path="/services/placement" element={<ServicesPage />} />
 
         {/* Others */}
@@ -702,12 +723,14 @@ export default function App() {
         <Route path="*" element={<div style={{ padding: 40 }}>Page Not Found</div>} />
       </Routes>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-600">
-          © {new Date().getFullYear()} Lal Institute of Paramedical Technology. All rights reserved.
-        </div>
-      </footer>
+      {/* ================= FOOTER (ONLY hide on Facilities + Testimonials) ================= */}
+      {!isFooterHidden && (
+        <footer className="border-t border-slate-200 bg-white">
+          <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-600">
+            © {new Date().getFullYear()} Lal Institute of Paramedical Technology. All rights reserved.
+          </div>
+        </footer>
+      )}
     </div>
   );
 }
