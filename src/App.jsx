@@ -25,7 +25,6 @@ import BrochurePage from "./pages/BrochurePage.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import PracticalPage from "./pages/PracticalPage.jsx";
 import ClassroomPage from "./pages/ClassroomPage.jsx";
-import PlacementPage from "./pages/PlacementPage.jsx"; // ✅ ADDED
 
 import CourseDetailPage from "./pages/CourseDetailPage.jsx";
 import logo from "./assets/logo.png";
@@ -116,38 +115,21 @@ export default function App() {
     { label: "Degree Courses", path: "/courses/degree" },
   ];
 
-  // ✅ Dropdown items: Services (✅ Placement ADDED)
+  // ✅ Dropdown items: Services
   const servicesMenu = [
     { label: "Gallery & Lab Photos", path: "/services/gallery" },
     { label: "Students Practical", path: "/services/practical" },
     { label: "Classroom", path: "/services/classroom" },
-    { label: "Placement", path: "/services/placement" }, // ✅ FIXED
+    { label: "Placement", path: "/services/placement" },
   ];
 
   // ✅ Desktop dropdown state
   const [openCourses, setOpenCourses] = useState(false);
-  const coursesRef = useRef(null);
-
   const [openServices, setOpenServices] = useState(false);
-  const servicesRef = useRef(null);
 
   // ✅ Mobile submenu state
   const [openCoursesMobile, setOpenCoursesMobile] = useState(false);
   const [openServicesMobile, setOpenServicesMobile] = useState(false);
-
-  // ✅ outside click close (desktop)
-  useEffect(() => {
-    function handleOutside(e) {
-      if (coursesRef.current && !coursesRef.current.contains(e.target)) {
-        setOpenCourses(false);
-      }
-      if (servicesRef.current && !servicesRef.current.contains(e.target)) {
-        setOpenServices(false);
-      }
-    }
-    document.addEventListener("mousedown", handleOutside);
-    return () => document.removeEventListener("mousedown", handleOutside);
-  }, []);
 
   // ✅ route change close dropdown
   useEffect(() => {
@@ -198,6 +180,7 @@ export default function App() {
         }
         .dd-item{
           width: 100%;
+          display: block;
           text-align: left;
           padding: 12px 14px;
           font-weight: 700;
@@ -283,6 +266,7 @@ export default function App() {
                     <button
                       onClick={() => go("/courses")}
                       className="w-full rounded-xl bg-sky-600 px-4 py-3 text-sm font-extrabold text-white hover:bg-sky-700"
+                      type="button"
                     >
                       View Courses
                     </button>
@@ -337,6 +321,7 @@ export default function App() {
                         go("/contact");
                       }}
                       className="text-sm font-semibold text-sky-700 hover:underline"
+                      type="button"
                     >
                       Go to Contact Page →
                     </button>
@@ -372,14 +357,14 @@ export default function App() {
       {/* ================= HEADER (sticky) ================= */}
       <header
         className={cx(
-          "sticky top-0 z-[9999] border-b transition overflow-visible",
+          "sticky top-0 z-[999999] border-b transition overflow-visible",
           scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
         )}
       >
         <div className="mx-auto max-w-7xl px-6 py-4 overflow-visible">
           <div className="flex items-center justify-between gap-4">
             {/* Left Logo */}
-            <button onClick={() => go("/")} className="flex items-center gap-4">
+            <button onClick={() => go("/")} className="flex items-center gap-4" type="button">
               <img
                 src={logo}
                 alt="Lal Institute of Paramedical Technology"
@@ -410,32 +395,36 @@ export default function App() {
         </div>
 
         {/* Nav bar */}
-        <div className="border-t border-slate-200 bg-amber-500/95 relative z-[9999] overflow-visible">
+        <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 overflow-visible">
             {/* ✅ Desktop Nav */}
             <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
               {nav.map((item) => {
+                // ✅ COURSES dropdown
                 if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div
                       key={item.path}
-                      className="relative overflow-visible"
+                      className="relative pb-3"
                       onMouseEnter={() => setOpenCourses(true)}
                       onMouseLeave={() => setOpenCourses(false)}
                     >
                       <button
                         onClick={() => go(item.path)}
                         className={cx("nav-btn flex items-center gap-2", isCoursesActive() ? "ring-2 ring-white/40" : "")}
+                        aria-haspopup="menu"
+                        aria-expanded={openCourses}
+                        type="button"
                       >
                         COURSES
                         <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
                       </button>
 
                       {openCourses && (
-                        <div className="absolute left-0 top-full z-[999999] pt-2 pointer-events-auto">
-                          <div className="dd w-64">
+                        <div className="absolute left-0 top-full z-[999999] mt-2">
+                          <div className="dd w-64 flex flex-col py-1">
                             {courseMenu.map((c) => (
-                              <button key={c.path} onClick={() => go(c.path)} className="dd-item">
+                              <button key={c.path} onClick={() => go(c.path)} className="dd-item" type="button">
                                 {c.label}
                               </button>
                             ))}
@@ -446,30 +435,31 @@ export default function App() {
                   );
                 }
 
+                // ✅ SERVICES dropdown
                 if (item.isDropdown && item.dropdownKey === "services") {
                   return (
                     <div
                       key={item.path}
-                      className="relative overflow-visible"
+                      className="relative pb-3"
                       onMouseEnter={() => setOpenServices(true)}
                       onMouseLeave={() => setOpenServices(false)}
                     >
                       <button
                         onClick={() => go(item.path)}
-                        className={cx(
-                          "nav-btn flex items-center gap-2",
-                          isServicesActive() ? "ring-2 ring-white/40" : ""
-                        )}
+                        className={cx("nav-btn flex items-center gap-2", isServicesActive() ? "ring-2 ring-white/40" : "")}
+                        aria-haspopup="menu"
+                        aria-expanded={openServices}
+                        type="button"
                       >
                         SERVICES
                         <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
                       </button>
 
                       {openServices && (
-                        <div className="absolute left-0 top-full z-[999999] pt-2 pointer-events-auto">
-                          <div className="dd w-72">
+                        <div className="absolute left-0 top-full z-[999999] mt-2">
+                          <div className="dd w-72 flex flex-col py-1">
                             {servicesMenu.map((s) => (
-                              <button key={s.path} onClick={() => go(s.path)} className="dd-item">
+                              <button key={s.path} onClick={() => go(s.path)} className="dd-item" type="button">
                                 {s.label}
                               </button>
                             ))}
@@ -480,6 +470,7 @@ export default function App() {
                   );
                 }
 
+                // ✅ normal links
                 return (
                   <button
                     key={item.path}
@@ -488,6 +479,7 @@ export default function App() {
                       "px-2 py-1 transition hover:opacity-90",
                       isActive(item.path) ? "underline underline-offset-8" : ""
                     )}
+                    type="button"
                   >
                     {item.label}
                   </button>
@@ -499,6 +491,7 @@ export default function App() {
               <button
                 onClick={() => go("/contact")}
                 className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
+                type="button"
               >
                 Apply Now →
               </button>
@@ -507,6 +500,7 @@ export default function App() {
                 className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900"
                 onClick={() => setMenu(true)}
                 aria-label="Open menu"
+                type="button"
               >
                 <Menu className="h-5 w-5" />
               </button>
@@ -521,7 +515,7 @@ export default function App() {
           <div className="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white p-6">
             <div className="flex items-center justify-between">
               <div className="font-bold">Menu</div>
-              <button onClick={() => setMenu(false)} aria-label="Close menu">
+              <button onClick={() => setMenu(false)} aria-label="Close menu" type="button">
                 <X className="h-5 w-5" />
               </button>
             </div>
@@ -537,6 +531,7 @@ export default function App() {
                           "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
                           isCoursesActive() ? "bg-slate-50" : ""
                         )}
+                        type="button"
                       >
                         <span>COURSES</span>
                         <span className="text-sm">{openCoursesMobile ? "−" : "+"}</span>
@@ -549,6 +544,7 @@ export default function App() {
                               key={c.path}
                               onClick={() => go(c.path)}
                               className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                              type="button"
                             >
                               {c.label}
                             </button>
@@ -568,6 +564,7 @@ export default function App() {
                           "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
                           isServicesActive() ? "bg-slate-50" : ""
                         )}
+                        type="button"
                       >
                         <span>SERVICES</span>
                         <span className="text-sm">{openServicesMobile ? "−" : "+"}</span>
@@ -580,6 +577,7 @@ export default function App() {
                               key={s.path}
                               onClick={() => go(s.path)}
                               className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                              type="button"
                             >
                               {s.label}
                             </button>
@@ -598,6 +596,7 @@ export default function App() {
                       "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50",
                       isActive(item.path) ? "bg-slate-50" : ""
                     )}
+                    type="button"
                   >
                     {item.label}
                   </button>
@@ -607,6 +606,7 @@ export default function App() {
               <button
                 onClick={() => go("/contact")}
                 className="mt-4 rounded-xl bg-sky-600 px-4 py-3 font-semibold text-white"
+                type="button"
               >
                 Apply Now
               </button>
@@ -632,7 +632,7 @@ export default function App() {
         <Route path="/services/gallery" element={<GalleryPage />} />
         <Route path="/services/practical" element={<PracticalPage />} />
         <Route path="/services/classroom" element={<ClassroomPage />} />
-        <Route path="/services/placement" element={<PlacementPage />} /> {/* ✅ FIXED */}
+        <Route path="/services/placement" element={<ServicesPage />} />
 
         {/* Others */}
         <Route path="/facilities" element={<FacilitiesPage />} />
