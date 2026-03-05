@@ -28,19 +28,17 @@ import PracticalPage from "./pages/PracticalPage.jsx";
 import ClassroomPage from "./pages/ClassroomPage.jsx";
 
 import CourseDetailPage from "./pages/CourseDetailPage.jsx";
+
+// ✅ NEW PAGES (ADDED)
+import DisclaimerPage from "./pages/DisclaimerPage.jsx";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage.jsx";
+import TermsPage from "./pages/TermsPage.jsx";
+import FaqsPage from "./pages/FaqsPage.jsx";
+
 import logo from "./assets/logo.png";
 
 function cx(...a) {
   return a.filter(Boolean).join(" ");
-}
-
-/* ✅ Scroll to top on route change */
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  }, [pathname]);
-  return null;
 }
 
 export default function App() {
@@ -64,6 +62,11 @@ export default function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // ✅ NEW: Scroll to top on every route change (fix: new page opens at old scroll position)
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname]);
 
   // ✅ Popup: Job Oriented Program -> after 5 sec Free Enquiry (same popup)
   const [showPopup, setShowPopup] = useState(false);
@@ -179,15 +182,12 @@ export default function App() {
   const isCoursesActive = () => location.pathname.startsWith("/courses");
   const isServicesActive = () => location.pathname.startsWith("/services");
 
-  // ✅ Footer only hide on these pages
+  // ✅ NEW: Hide footer ONLY on Facilities + Testimonials pages
   const hideFooterOn = ["/facilities", "/testimonials"];
-  const isFooterHidden = hideFooterOn.includes(location.pathname);
+  const shouldShowFooter = !hideFooterOn.includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      {/* ✅ Scroll Top Fix */}
-      <ScrollToTop />
-
       {/* ✅ Styles */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
@@ -464,6 +464,7 @@ export default function App() {
                         <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
                       </button>
 
+                      {/* hover bridge */}
                       <div className="absolute left-0 top-full h-3 w-full" />
 
                       {openCourses && (
@@ -515,6 +516,7 @@ export default function App() {
                         <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
                       </button>
 
+                      {/* hover bridge */}
                       <div className="absolute left-0 top-full h-3 w-full" />
 
                       {openServices && (
@@ -720,14 +722,83 @@ export default function App() {
         <Route path="/testimonials" element={<TestimonialsPage />} />
         <Route path="/brochure" element={<BrochurePage />} />
         <Route path="/contact" element={<ContactPage />} />
+
+        {/* ✅ NEW: Footer Pages */}
+        <Route path="/faqs" element={<FaqsPage />} />
+        <Route path="/disclaimer" element={<DisclaimerPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsPage />} />
+
         <Route path="*" element={<div style={{ padding: 40 }}>Page Not Found</div>} />
       </Routes>
 
-      {/* ================= FOOTER (ONLY hide on Facilities + Testimonials) ================= */}
-      {!isFooterHidden && (
+      {/* ================= FOOTER ================= */}
+      {shouldShowFooter && (
         <footer className="border-t border-slate-200 bg-white">
           <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-600">
-            © {new Date().getFullYear()} Lal Institute of Paramedical Technology. All rights reserved.
+            <div className="grid gap-6 md:grid-cols-3">
+              <div>
+                <div className="font-extrabold text-slate-900">LIPMT</div>
+                <div className="mt-2 text-slate-600">
+                  Centre 2759, Hansa Puri Road, Tri Nagar, Delhi-110035
+                  <div className="text-slate-500">(Near Punjab National Bank)</div>
+                </div>
+                <div className="mt-3 space-y-1">
+                  <div>info@lipmt.in</div>
+                  <div>+91-9811343520</div>
+                  <div>+91-9355342520</div>
+                  <div>011-41415029</div>
+                </div>
+                <div className="mt-4 inline-flex items-center gap-2 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-2 text-xs font-semibold text-slate-700">
+                  <span className="h-2 w-2 rounded-full bg-sky-600" />
+                  Office Hours: • 9:00 AM – 8:00 PM • 7 Days Working
+                </div>
+              </div>
+
+              <div>
+                <div className="font-extrabold text-slate-900">IMPORTANT LINKS</div>
+                <div className="mt-3 grid gap-2">
+                  <button onClick={() => go("/about")} className="text-left hover:underline" type="button">
+                    About
+                  </button>
+                  <button onClick={() => go("/courses")} className="text-left hover:underline" type="button">
+                    Courses
+                  </button>
+                  <button onClick={() => go("/facilities")} className="text-left hover:underline" type="button">
+                    Facilities
+                  </button>
+                  <button onClick={() => go("/testimonials")} className="text-left hover:underline" type="button">
+                    Testimonials
+                  </button>
+                  <button onClick={() => go("/contact")} className="text-left hover:underline" type="button">
+                    Contact
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <div className="font-extrabold text-slate-900">POLICIES</div>
+                <div className="mt-3 grid gap-2">
+                  {/* ✅ FAQ should be above Disclaimer */}
+                  <button onClick={() => go("/faqs")} className="text-left hover:underline" type="button">
+                    FAQs
+                  </button>
+                  <button onClick={() => go("/disclaimer")} className="text-left hover:underline" type="button">
+                    Disclaimer
+                  </button>
+                  <button onClick={() => go("/privacy-policy")} className="text-left hover:underline" type="button">
+                    Privacy Policy
+                  </button>
+                  <button onClick={() => go("/terms")} className="text-left hover:underline" type="button">
+                    Terms &amp; Conditions
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 border-t border-slate-200 pt-6 text-xs text-slate-500">
+              © {new Date().getFullYear()} Lal Institute of Paramedical Technology. All rights reserved.
+            </div>
           </div>
         </footer>
       )}
