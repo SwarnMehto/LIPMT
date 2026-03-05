@@ -2,6 +2,7 @@
 
 export const courses = [
   {
+    level: "Diploma",
     slug: "dmlt",
     title: "Diploma in Medical Laboratory Technology",
     category: "Lab",
@@ -22,10 +23,10 @@ export const courses = [
       "Report format & clinical correlation basics",
     ],
     jobs: [
-      "Medical Lab Technician",
-      "Phlebotomist / Sample Collection Technician",
+      "Medical Lab Technology",
+      "Phlebotomist / Sample Collection Technology",
       "Lab Assistant / Lab Executive",
-      "Pathology Lab Technician (Junior)",
+      "Pathology Lab Technology (Junior)",
       "Quality Control Assistant (Lab)",
     ],
     workAreas: [
@@ -44,6 +45,7 @@ export const courses = [
   },
 
   {
+    level: "Diploma",
     slug: "radiology-imaging",
     title: "Diploma in Radiology imaging Technology",
     category: "Imaging",
@@ -63,8 +65,8 @@ export const courses = [
       "Ethics & patient care in imaging",
     ],
     jobs: [
-      "Radiology Technician (Assistant/Junior)",
-      "X-Ray Technician (Junior)",
+      "Radiology Technology (Assistant/Junior)",
+      "X-Ray Technology (Junior)",
       "Imaging Center Assistant",
       "Diagnostic Imaging Support Staff",
     ],
@@ -83,14 +85,15 @@ export const courses = [
   },
 
   {
-    slug: "ot-technician",
-    title: "Diploma in OT Technician",
+    level: "Diploma",
+    slug: "ot-Technology",
+    title: "Diploma in OT Technology",
     category: "Surgery / OT",
     popular: true,
     duration: "1 Year",
     eligibility: "10+2",
     overview:
-      "OT Technician diploma prepares students for operation theatre assistance. Students learn sterilization, OT setup, surgical instruments handling, infection control and patient preparation.",
+      "OT Technology diploma prepares students for operation theatre assistance. Students learn sterilization, OT setup, surgical instruments handling, infection control and patient preparation.",
     whatYouStudy: [
       "OT protocols & discipline",
       "Sterilization techniques (autoclave basics)",
@@ -102,9 +105,9 @@ export const courses = [
       "Basic emergency support & teamwork",
     ],
     jobs: [
-      "OT Technician (Junior)",
+      "OT Technology (Junior)",
       "OT Assistant",
-      "Sterilization Technician (CSSD assistant)",
+      "Sterilization Technology (CSSD assistant)",
       "Surgical Support Staff",
     ],
     workAreas: [
@@ -122,8 +125,9 @@ export const courses = [
   },
 
   {
-    slug: "dialysis-technician",
-    title: "Diploma in Dialysis Technician",
+    level: "Diploma",
+    slug: "dialysis-Technology",
+    title: "Diploma in Dialysis Technology",
     category: "Dialysis",
     popular: true,
     duration: "1-2 Years",
@@ -140,9 +144,9 @@ export const courses = [
       "Emergency signs & immediate reporting",
     ],
     jobs: [
-      "Dialysis Technician (Junior)",
+      "Dialysis Technology (Junior)",
       "Dialysis Unit Assistant",
-      "Patient Care Technician (Dialysis support)",
+      "Patient Care Technology (Dialysis support)",
     ],
     workAreas: [
       "Hospitals (Dialysis Unit)",
@@ -158,14 +162,15 @@ export const courses = [
   },
 
   {
-    slug: "dental-technician",
-    title: "Diploma in Dental Technician",
+    level: "Diploma",
+    slug: "dental-Technology",
+    title: "Diploma in Dental Technology",
     category: "Dental",
     popular: false,
     duration: "2 Years",
     eligibility: "10+2",
     overview:
-      "Dental Technician course focuses on dental lab work and assisting dental procedures. Students learn dental material basics, impressions, dentures/crowns support and clinic workflow.",
+      "Dental Technology course focuses on dental lab work and assisting dental procedures. Students learn dental material basics, impressions, dentures/crowns support and clinic workflow.",
     whatYouStudy: [
       "Dental anatomy basics",
       "Dental materials & lab safety",
@@ -177,7 +182,7 @@ export const courses = [
       "Clinic record keeping & patient support",
     ],
     jobs: [
-      "Dental Technician (Junior)",
+      "Dental Technology (Junior)",
       "Dental Lab Assistant",
       "Dental Clinic Assistant",
       "Prosthetic Lab Support Staff",
@@ -197,8 +202,9 @@ export const courses = [
   },
 
   {
-    slug: "ophthalmic-technician",
-    title: "Diploma in ophthalmic Technician",
+    level: "Diploma",
+    slug: "ophthalmic-Technology",
+    title: "Diploma in ophthalmic Technology",
     category: "Eye Care",
     popular: false,
     duration: "2 Years",
@@ -215,9 +221,9 @@ export const courses = [
       "Patient counseling basics",
     ],
     jobs: [
-      "Ophthalmic Technician (Junior)",
+      "Ophthalmic Technology (Junior)",
       "Eye Clinic Assistant",
-      "Vision Testing Technician (Assistant)",
+      "Vision Testing Technology (Assistant)",
       "Optometry Assistant (basic support)",
     ],
     workAreas: [
@@ -235,6 +241,7 @@ export const courses = [
   },
 
   {
+    level: "Diploma",
     slug: "physiotherapy",
     title: "Diploma in Physiotherapy",
     category: "Physiotherapy",
@@ -273,14 +280,15 @@ export const courses = [
   },
 
   {
-    slug: "respiratory-technician",
-    title: "Diploma in Respiratory Technician",
+    level: "Diploma",
+    slug: "respiratory-Technology",
+    title: "Diploma in Respiratory Technology",
     category: "Respiratory",
     popular: false,
     duration: "2 Years",
     eligibility: "10+2 (Science preferred)",
     overview:
-      "Respiratory Technician course trains students to support respiratory care. Students learn oxygen therapy basics, breathing support devices basics and patient monitoring assistance.",
+      "Respiratory Technology course trains students to support respiratory care. Students learn oxygen therapy basics, breathing support devices basics and patient monitoring assistance.",
     whatYouStudy: [
       "Respiratory system basics",
       "Oxygen therapy basics",
@@ -292,7 +300,7 @@ export const courses = [
     ],
     jobs: [
       "Respiratory Care Assistant (Junior)",
-      "Respiratory Technician (Assistant)",
+      "Respiratory Technology (Assistant)",
       "ICU Respiratory Support Staff (basic)",
     ],
     workAreas: [
@@ -309,8 +317,9 @@ export const courses = [
   },
 
   {
-    slug: "neurophysiology-technician",
-    title: "Diploma in Neurophysiology Technician",
+    level: "Diploma",
+    slug: "neurophysiology-Technology",
+    title: "Diploma in Neurophysiology Technology",
     category: "Neuro",
     popular: false,
     duration: "2 Years",
@@ -326,7 +335,7 @@ export const courses = [
       "Infection control & ethical practices",
     ],
     jobs: [
-      "Neurophysiology Technician (Assistant/Junior)",
+      "Neurophysiology Technology (Assistant/Junior)",
       "Neuro Diagnostic Assistant",
       "Hospital Neurology Support Staff",
     ],
@@ -344,14 +353,15 @@ export const courses = [
   },
 
   {
-    slug: "ecg-technician",
-    title: "Diploma in ECG Technician",
+    level: "Diploma",
+    slug: "ecg-Technology",
+    title: "Diploma in ECG Technology",
     category: "Cardiology",
     popular: true,
     duration: "6 Months - 1 Year",
     eligibility: "10+2",
     overview:
-      "ECG Technician course trains students to record ECG and assist in basic cardiac diagnostic workflow. Students learn patient preparation, ECG lead placement and reporting process basics.",
+      "ECG Technology course trains students to record ECG and assist in basic cardiac diagnostic workflow. Students learn patient preparation, ECG lead placement and reporting process basics.",
     whatYouStudy: [
       "Basic heart anatomy & physiology",
       "ECG machine handling basics",
@@ -361,7 +371,7 @@ export const courses = [
       "Basic documentation & workflow",
     ],
     jobs: [
-      "ECG Technician",
+      "ECG Technology",
       "Cardiac Diagnostic Assistant (basic)",
       "Hospital OPD/Diagnostic Support Staff",
     ],
@@ -380,14 +390,15 @@ export const courses = [
   },
 
   {
-    slug: "cardio-technician",
-    title: "Diploma in Cardio Technician",
+    level: "Diploma",
+    slug: "cardio-Technology",
+    title: "Diploma in Cardio Technology",
     category: "Cardiology",
     popular: true,
     duration: "2 Years",
     eligibility: "10+2 (Science preferred)",
     overview:
-      "Cardio Technician diploma prepares students for cardiac diagnostic support and patient monitoring. Students learn cardiac testing workflow basics, patient handling and hospital cardiology support.",
+      "Cardio Technology diploma prepares students for cardiac diagnostic support and patient monitoring. Students learn cardiac testing workflow basics, patient handling and hospital cardiology support.",
     whatYouStudy: [
       "Heart anatomy & cardiac basics",
       "Patient monitoring (BP, pulse, symptoms)",
@@ -398,7 +409,7 @@ export const courses = [
       "Record keeping & documentation",
     ],
     jobs: [
-      "Cardio Technician (Junior)",
+      "Cardio Technology (Junior)",
       "Cardiac Care Assistant",
       "Diagnostic Support Staff (Cardiology)",
     ],

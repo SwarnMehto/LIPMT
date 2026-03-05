@@ -1,6 +1,6 @@
 // src/pages/CoursesPage.jsx
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { courses } from "../data/coursesData";
 
 // ✅ Existing images
@@ -11,7 +11,7 @@ import ecgImg from "../assets/courses/ecg.png";
 import dialysisImg from "../assets/courses/dialysis.png";
 import dentalImg from "../assets/courses/dental.png";
 
-// ✅ New images (as per your folder screenshot)
+// ✅ New images
 import cardioImg from "../assets/courses/Cardio.png";
 import neuroImg from "../assets/courses/Neurophysiology.png";
 import ophthalmicImg from "../assets/courses/Ophthalmic.png";
@@ -21,32 +21,41 @@ import respiratoryImg from "../assets/courses/Respiratory.png";
 const WHATSAPP_NUMBER = "919811343520"; // ✅ change if needed (without +)
 
 export default function CoursesPage() {
+  const location = useLocation();
+
+  // ✅ Detect which course page: /courses | /courses/certificate | /courses/diploma | /courses/degree
+  const pageLevel = useMemo(() => {
+    const p = (location.pathname || "").toLowerCase();
+    if (p.includes("/courses/certificate")) return "Certificate";
+    if (p.includes("/courses/diploma")) return "Diploma";
+    if (p.includes("/courses/degree")) return "Degree";
+    return "All";
+  }, [location.pathname]);
+
   const [q, setQ] = useState("");
   const [cat, setCat] = useState("All");
   const [openEnroll, setOpenEnroll] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   // ✅ Image map (slug -> image)
-  // IMPORTANT: slugs must match your coursesData.jsx
   const courseImageMap = useMemo(() => {
     return {
       // existing slugs
       dmlt: dmltImg,
-      "ot-technician": ottImg,
+      "ot-Technology": ottImg,
       "radiology-imaging": radiologyImg,
-      "ecg-technician": ecgImg,
-      "dialysis-technician": dialysisImg,
-      "dental-technician": dentalImg,
+      "ecg-Technology": ecgImg,
+      "dialysis-Technology": dialysisImg,
+      "dental-Technology": dentalImg,
 
-      // ✅ new slugs (make sure these match coursesData.jsx)
-      // ✅ correct slugs (must match coursesData.jsx)
-"cardio-technician": cardioImg,
-"neurophysiology-technician": neuroImg,
-"ophthalmic-technician": ophthalmicImg,
-physiotherapy: physioImg,
-"respiratory-technician": respiratoryImg,
+      // new slugs (match your coursesData.jsx)
+      "cardio-Technology": cardioImg,
+      "neurophysiology-Technology": neuroImg,
+      "ophthalmic-Technology": ophthalmicImg,
+      physiotherapy: physioImg,
+      "respiratory-Technology": respiratoryImg,
 
-      // optional title fallback (if any course doesn't have slug in some place)
+      // fallback by title (optional)
       "Diploma in Cardio Technology": cardioImg,
       "Diploma in Neurophysiology": neuroImg,
       "Diploma in Ophthalmic Technology": ophthalmicImg,
@@ -55,23 +64,61 @@ physiotherapy: physioImg,
     };
   }, []);
 
+  // ✅ Normalize level from ANY key (level/type/courseType/program/courseLevel etc.)
+  const normalizeLevel = (course) => {
+    const raw =
+      course?.level ??
+      course?.type ??
+      course?.courseType ??
+      course?.program ??
+      course?.courseLevel ??
+      course?.programType ??
+      "";
+
+    const s = String(raw).trim().toLowerCase();
+
+    // Exact / close matches
+    if (s.includes("cert")) return "Certificate";
+    if (s.includes("dip")) return "Diploma";
+    if (s.includes("deg")) return "Degree";
+
+    // Heuristic from title (if no level provided)
+    const t = String(course?.title || "").toLowerCase();
+    if (t.includes("certificate")) return "Certificate";
+    if (t.includes("diploma")) return "Diploma";
+    if (t.includes("degree") || t.includes("b.sc") || t.includes("bpt") || t.includes("bachelor"))
+      return "Degree";
+
+    // If still unknown, keep as "General"
+    return "General";
+  };
+
   const normalizedCourses = useMemo(() => {
     return (courses || []).map((c) => ({
       ...c,
       category: c.category || "General",
       popular: Boolean(c.popular),
+      levelNormalized: normalizeLevel(c),
       image: courseImageMap[c.slug] || courseImageMap[c.title] || null,
     }));
   }, [courseImageMap]);
 
+  // ✅ Filter by page level route
+  const levelFiltered = useMemo(() => {
+    if (pageLevel === "All") return normalizedCourses;
+    return normalizedCourses.filter(
+      (c) => String(c.levelNormalized).toLowerCase() === pageLevel.toLowerCase()
+    );
+  }, [normalizedCourses, pageLevel]);
+
   const categories = useMemo(() => {
-    const set = new Set(normalizedCourses.map((c) => c.category));
+    const set = new Set(levelFiltered.map((c) => c.category));
     return ["All", ...Array.from(set)];
-  }, [normalizedCourses]);
+  }, [levelFiltered]);
 
   const filtered = useMemo(() => {
     const query = q.trim().toLowerCase();
-    return normalizedCourses.filter((c) => {
+    return levelFiltered.filter((c) => {
       const matchCat = cat === "All" ? true : c.category === cat;
       const matchQ =
         query.length === 0
@@ -81,7 +128,7 @@ physiotherapy: physioImg,
               .includes(query);
       return matchCat && matchQ;
     });
-  }, [normalizedCourses, q, cat]);
+  }, [levelFiltered, q, cat]);
 
   function openEnrollModal(course) {
     setSelectedCourse(course);
@@ -97,6 +144,9 @@ physiotherapy: physioImg,
     window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${text}`, "_blank");
   }
 
+  const heading =
+    pageLevel === "All" ? "Our Paramedical Courses" : `${pageLevel} Courses`;
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-teal-50 text-slate-900">
       <div className="mx-auto max-w-7xl px-5 py-14">
@@ -105,9 +155,9 @@ physiotherapy: physioImg,
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1 text-xs font-semibold text-sky-700 shadow-sm">
               <span className="h-2 w-2 rounded-full bg-sky-500" />
-              Programs
+              Programs {pageLevel !== "All" ? `• ${pageLevel}` : ""}
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold">Our Paramedical Courses</h1>
+            <h1 className="mt-4 text-4xl font-extrabold">{heading}</h1>
             <p className="mt-2 text-slate-600">
               Search & filter courses. Click “View Details” or directly “Enroll”.
             </p>
@@ -166,10 +216,16 @@ physiotherapy: physioImg,
           <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
             <div>
               Showing <span className="font-semibold text-slate-900">{filtered.length}</span> courses
+              {pageLevel !== "All" && (
+                <>
+                  {" "}
+                  in <span className="font-semibold text-slate-900">{pageLevel}</span>
+                </>
+              )}
               {cat !== "All" && (
                 <>
                   {" "}
-                  in <span className="font-semibold text-slate-900">{cat}</span>
+                  • Category <span className="font-semibold text-slate-900">{cat}</span>
                 </>
               )}
             </div>
@@ -179,7 +235,11 @@ physiotherapy: physioImg,
         {/* Courses Grid */}
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((course) => (
-            <CourseCard key={course.slug} course={course} onEnroll={() => openEnrollModal(course)} />
+            <CourseCard
+              key={course.slug}
+              course={course}
+              onEnroll={() => openEnrollModal(course)}
+            />
           ))}
         </div>
 
@@ -232,8 +292,13 @@ function CourseCard({ course, onEnroll }) {
           </div>
         )}
 
-        <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
-          {course.category || "General"}
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-sky-50 px-3 py-1 text-xs font-semibold text-sky-800">
+            {course.category || "General"}
+          </div>
+          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700">
+            {course.levelNormalized || "General"}
+          </div>
         </div>
 
         <h3 className="mt-3 text-lg font-extrabold text-slate-900">{course.title}</h3>

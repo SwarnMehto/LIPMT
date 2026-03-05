@@ -17,7 +17,7 @@ const initialTestimonials = [
     type: "Student",
     rating: 5,
     review:
-      "Very professional environment and disciplined training. The OT Technician course gave me strong confidence.",
+      "Very professional environment and disciplined training. The OT Technology course gave me strong confidence.",
   },
   {
     name: "Amit Kumar",

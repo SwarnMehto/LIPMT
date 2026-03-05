@@ -21,6 +21,11 @@ import CoursesPage from "./pages/CoursesPage.jsx";
 import FacilitiesPage from "./pages/FacilitiesPage.jsx";
 import TestimonialsPage from "./pages/TestimonialsPage.jsx";
 import ContactPage from "./pages/ContactPage.jsx";
+import BrochurePage from "./pages/BrochurePage.jsx";
+import GalleryPage from "./pages/GalleryPage.jsx";
+import PracticalPage from "./pages/PracticalPage.jsx";
+import ClassroomPage from "./pages/ClassroomPage.jsx";
+import PlacementPage from "./pages/PlacementPage.jsx"; // ✅ ADDED
 
 import CourseDetailPage from "./pages/CourseDetailPage.jsx";
 import logo from "./assets/logo.png";
@@ -90,36 +95,54 @@ export default function App() {
     if (timerRef.current) window.clearTimeout(timerRef.current);
   };
 
-  // ✅ Nav (Courses dropdown on hover)
+  // ✅ Nav (Courses dropdown + Services dropdown)
   const nav = [
     { label: "HOME", path: "/" },
     { label: "ABOUT", path: "/about" },
-    { label: "COURSES", path: "/courses", isDropdown: true }, // ✅ dropdown
-    { label: "SERVICES", path: "/services" },
+
+    { label: "COURSES", path: "/courses", isDropdown: true, dropdownKey: "courses" },
+    { label: "SERVICES", path: "/services", isDropdown: true, dropdownKey: "services" },
+
     { label: "FACILITIES", path: "/facilities" },
     { label: "TESTIMONIALS", path: "/testimonials" },
+    { label: "BROCHURE", path: "/brochure" },
     { label: "CONTACT", path: "/contact" },
   ];
 
-  // ✅ Dropdown items (as you asked)
+  // ✅ Dropdown items: Courses
   const courseMenu = [
     { label: "Certificate Courses", path: "/courses/certificate" },
     { label: "Diploma Courses", path: "/courses/diploma" },
     { label: "Degree Courses", path: "/courses/degree" },
   ];
 
+  // ✅ Dropdown items: Services (✅ Placement ADDED)
+  const servicesMenu = [
+    { label: "Gallery & Lab Photos", path: "/services/gallery" },
+    { label: "Students Practical", path: "/services/practical" },
+    { label: "Classroom", path: "/services/classroom" },
+    { label: "Placement", path: "/services/placement" }, // ✅ FIXED
+  ];
+
   // ✅ Desktop dropdown state
   const [openCourses, setOpenCourses] = useState(false);
   const coursesRef = useRef(null);
 
+  const [openServices, setOpenServices] = useState(false);
+  const servicesRef = useRef(null);
+
   // ✅ Mobile submenu state
   const [openCoursesMobile, setOpenCoursesMobile] = useState(false);
+  const [openServicesMobile, setOpenServicesMobile] = useState(false);
 
   // ✅ outside click close (desktop)
   useEffect(() => {
     function handleOutside(e) {
       if (coursesRef.current && !coursesRef.current.contains(e.target)) {
         setOpenCourses(false);
+      }
+      if (servicesRef.current && !servicesRef.current.contains(e.target)) {
+        setOpenServices(false);
       }
     }
     document.addEventListener("mousedown", handleOutside);
@@ -129,26 +152,62 @@ export default function App() {
   // ✅ route change close dropdown
   useEffect(() => {
     setOpenCourses(false);
+    setOpenServices(false);
     setOpenCoursesMobile(false);
+    setOpenServicesMobile(false);
   }, [location.pathname]);
 
   const go = (path) => {
     setMenu(false);
     setOpenCourses(false);
+    setOpenServices(false);
     setOpenCoursesMobile(false);
+    setOpenServicesMobile(false);
     navigate(path);
   };
 
   const isActive = (path) => location.pathname === path;
-
   const isCoursesActive = () => location.pathname.startsWith("/courses");
+  const isServicesActive = () => location.pathname.startsWith("/services");
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      {/* ✅ Hide navbar scrollbar (white bar) */}
+      {/* ✅ Styles */}
       <style>{`
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .nav-btn{
+          border-radius: 10px;
+          border: 1px solid rgba(255,255,255,0.22);
+          background: rgba(15,23,42,0.08);
+          padding: 10px 14px;
+          font-weight: 800;
+          line-height: 1;
+        }
+        .nav-btn:hover{
+          background: rgba(15,23,42,0.12);
+        }
+
+        .dd{
+          border-radius: 12px;
+          overflow: hidden;
+          background: #073763;
+          border: 1px solid rgba(255,255,255,0.12);
+          box-shadow: 0 18px 40px rgba(2,8,23,0.28);
+        }
+        .dd-item{
+          width: 100%;
+          text-align: left;
+          padding: 12px 14px;
+          font-weight: 700;
+          font-size: 13px;
+          color: #fff;
+          background: transparent;
+        }
+        .dd-item:hover{
+          background: rgba(255,255,255,0.10);
+        }
       `}</style>
 
       {/* ================= WHATSAPP FLOATING ================= */}
@@ -177,9 +236,7 @@ export default function App() {
 
             <div className="bg-amber-500 px-6 py-4">
               <div className="text-center text-lg font-extrabold text-slate-900">
-                {popupStage === "program"
-                  ? "Job Oriented Program"
-                  : "Free Enquiry"}
+                {popupStage === "program" ? "Job Oriented Program" : "Free Enquiry"}
               </div>
               <div className="mt-1 text-center text-xs font-semibold text-slate-900/80">
                 Lal Institute of Paramedical Technology
@@ -198,8 +255,7 @@ export default function App() {
                         100% Practical + Career Support
                       </div>
                       <div className="mt-1 text-sm text-slate-600">
-                        Paramedical courses designed for job readiness with
-                        hands-on training.
+                        Paramedical courses designed for job readiness with hands-on training.
                       </div>
                     </div>
                   </div>
@@ -207,27 +263,19 @@ export default function App() {
                   <div className="mt-4 grid gap-3 sm:grid-cols-2">
                     <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                      <div className="text-sm font-semibold">
-                        Industry-relevant syllabus
-                      </div>
+                      <div className="text-sm font-semibold">Industry-relevant syllabus</div>
                     </div>
                     <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                      <div className="text-sm font-semibold">
-                        Internship / Placement help
-                      </div>
+                      <div className="text-sm font-semibold">Internship / Placement help</div>
                     </div>
                     <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
                       <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-                      <div className="text-sm font-semibold">
-                        Affordable fees
-                      </div>
+                      <div className="text-sm font-semibold">Affordable fees</div>
                     </div>
                     <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-3">
                       <Clock className="h-5 w-5 text-sky-700" />
-                      <div className="text-sm font-semibold">
-                        Next: Free enquiry in 5 sec
-                      </div>
+                      <div className="text-sm font-semibold">Next: Free enquiry in 5 sec</div>
                     </div>
                   </div>
 
@@ -303,39 +351,19 @@ export default function App() {
       {/* ================= TOP SOCIAL BAR ================= */}
       <div className="w-full bg-slate-900">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center sm:justify-end gap-2 px-6 py-2">
-          <a
-            href="#"
-            className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="Facebook"
-          >
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Facebook">
             <Facebook className="h-4 w-4" />
           </a>
-          <a
-            href="#"
-            className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="Instagram"
-          >
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Instagram">
             <Instagram className="h-4 w-4" />
           </a>
-          <a
-            href="#"
-            className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="Twitter"
-          >
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Twitter">
             <Twitter className="h-4 w-4" />
           </a>
-          <a
-            href="#"
-            className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="YouTube"
-          >
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="YouTube">
             <Youtube className="h-4 w-4" />
           </a>
-          <a
-            href="#"
-            className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20"
-            aria-label="LinkedIn"
-          >
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="LinkedIn">
             <Linkedin className="h-4 w-4" />
           </a>
         </div>
@@ -344,13 +372,11 @@ export default function App() {
       {/* ================= HEADER (sticky) ================= */}
       <header
         className={cx(
-          "sticky top-0 z-50 border-b transition",
-          scrolled
-            ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm"
-            : "border-slate-200 bg-white"
+          "sticky top-0 z-[9999] border-b transition overflow-visible",
+          scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
         )}
       >
-        <div className="mx-auto max-w-7xl px-6 py-4">
+        <div className="mx-auto max-w-7xl px-6 py-4 overflow-visible">
           <div className="flex items-center justify-between gap-4">
             {/* Left Logo */}
             <button onClick={() => go("/")} className="flex items-center gap-4">
@@ -360,9 +386,7 @@ export default function App() {
                 className="h-20 w-20 rounded-xl object-cover"
               />
               <div className="hidden sm:block leading-tight">
-                <div className="text-xs font-semibold text-slate-500">
-                  Skill • Training • Career
-                </div>
+                <div className="text-xs font-semibold text-slate-500">Skill • Training • Career</div>
               </div>
             </button>
 
@@ -371,6 +395,11 @@ export default function App() {
               <div className="text-[18px] sm:text-[28px] font-extrabold tracking-wide text-red-600 uppercase">
                 Lal Institute of Paramedical Technology
               </div>
+
+              <div className="mt-1 text-[11px] sm:text-[13px] font-extrabold text-slate-900">
+                REGD. OF DELHI GOVT. AS NO.: F/1375 • AN ISO 9001 : 2005 CERTIFIED
+              </div>
+
               <div className="mt-1 text-[10px] sm:text-[12px] font-semibold text-slate-600">
                 An institute with a glorious past of training para-medics
               </div>
@@ -380,43 +409,71 @@ export default function App() {
           </div>
         </div>
 
-        <div className="border-t border-slate-200 bg-amber-500/95">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2">
-            {/* ✅ Desktop Nav (COURSES hover dropdown) */}
-            <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 overflow-x-auto overflow-y-visible whitespace-nowrap max-w-[70%] sm:max-w-none">
+        {/* Nav bar */}
+        <div className="border-t border-slate-200 bg-amber-500/95 relative z-[9999] overflow-visible">
+          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 overflow-visible">
+            {/* ✅ Desktop Nav */}
+            <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
               {nav.map((item) => {
-                if (item.isDropdown) {
+                if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div
                       key={item.path}
-                      ref={coursesRef}
-                      className="relative"
+                      className="relative overflow-visible"
                       onMouseEnter={() => setOpenCourses(true)}
                       onMouseLeave={() => setOpenCourses(false)}
                     >
                       <button
-                        onClick={() => go(item.path)} // click -> /courses
-                        className={cx(
-                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-1",
-                          isCoursesActive() ? "underline underline-offset-8" : ""
-                        )}
-                        aria-haspopup="menu"
-                        aria-expanded={openCourses}
+                        onClick={() => go(item.path)}
+                        className={cx("nav-btn flex items-center gap-2", isCoursesActive() ? "ring-2 ring-white/40" : "")}
                       >
-                        COURSES <span className="text-[12px] font-extrabold">+</span>
+                        COURSES
+                        <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
                       </button>
 
                       {openCourses && (
-                        <div className="absolute left-0 top-full mt-2 w-64 rounded-2xl border border-slate-200 bg-white shadow-xl overflow-hidden z-[9999]">
-                          {courseMenu.map((c) => (
-                            <button
-                              key={c.path}
-                              onClick={() => go(c.path)}
-                              className="w-full text-left px-5 py-3 text-[13px] font-semibold text-slate-800 hover:bg-slate-50"
-                            >
-                              {c.label}
-                            </button>
-                          ))}
+                        <div className="absolute left-0 top-full z-[999999] pt-2 pointer-events-auto">
+                          <div className="dd w-64">
+                            {courseMenu.map((c) => (
+                              <button key={c.path} onClick={() => go(c.path)} className="dd-item">
+                                {c.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                if (item.isDropdown && item.dropdownKey === "services") {
+                  return (
+                    <div
+                      key={item.path}
+                      className="relative overflow-visible"
+                      onMouseEnter={() => setOpenServices(true)}
+                      onMouseLeave={() => setOpenServices(false)}
+                    >
+                      <button
+                        onClick={() => go(item.path)}
+                        className={cx(
+                          "nav-btn flex items-center gap-2",
+                          isServicesActive() ? "ring-2 ring-white/40" : ""
+                        )}
+                      >
+                        SERVICES
+                        <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
+                      </button>
+
+                      {openServices && (
+                        <div className="absolute left-0 top-full z-[999999] pt-2 pointer-events-auto">
+                          <div className="dd w-72">
+                            {servicesMenu.map((s) => (
+                              <button key={s.path} onClick={() => go(s.path)} className="dd-item">
+                                {s.label}
+                              </button>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -471,7 +528,7 @@ export default function App() {
 
             <div className="mt-6 flex flex-col gap-3">
               {nav.map((item) => {
-                if (item.isDropdown) {
+                if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div key={item.path} className="flex flex-col gap-2">
                       <button
@@ -482,9 +539,7 @@ export default function App() {
                         )}
                       >
                         <span>COURSES</span>
-                        <span className="text-sm">
-                          {openCoursesMobile ? "−" : "+"}
-                        </span>
+                        <span className="text-sm">{openCoursesMobile ? "−" : "+"}</span>
                       </button>
 
                       {openCoursesMobile && (
@@ -496,6 +551,37 @@ export default function App() {
                               className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
                             >
                               {c.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                if (item.isDropdown && item.dropdownKey === "services") {
+                  return (
+                    <div key={item.path} className="flex flex-col gap-2">
+                      <button
+                        onClick={() => setOpenServicesMobile((v) => !v)}
+                        className={cx(
+                          "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
+                          isServicesActive() ? "bg-slate-50" : ""
+                        )}
+                      >
+                        <span>SERVICES</span>
+                        <span className="text-sm">{openServicesMobile ? "−" : "+"}</span>
+                      </button>
+
+                      {openServicesMobile && (
+                        <div className="ml-3 flex flex-col gap-2">
+                          {servicesMenu.map((s) => (
+                            <button
+                              key={s.path}
+                              onClick={() => go(s.path)}
+                              className="rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50"
+                            >
+                              {s.label}
                             </button>
                           ))}
                         </div>
@@ -534,30 +620,32 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
 
-        {/* Base courses */}
+        {/* Courses */}
         <Route path="/courses" element={<CoursesPage />} />
-        <Route path="/courses/:slug" element={<CourseDetailPage />} />
-
-        {/* Dropdown routes (same CoursesPage for now) */}
         <Route path="/courses/certificate" element={<CoursesPage />} />
         <Route path="/courses/diploma" element={<CoursesPage />} />
         <Route path="/courses/degree" element={<CoursesPage />} />
+        <Route path="/courses/:slug" element={<CourseDetailPage />} />
 
+        {/* Services */}
         <Route path="/services" element={<ServicesPage />} />
+        <Route path="/services/gallery" element={<GalleryPage />} />
+        <Route path="/services/practical" element={<PracticalPage />} />
+        <Route path="/services/classroom" element={<ClassroomPage />} />
+        <Route path="/services/placement" element={<PlacementPage />} /> {/* ✅ FIXED */}
+
+        {/* Others */}
         <Route path="/facilities" element={<FacilitiesPage />} />
         <Route path="/testimonials" element={<TestimonialsPage />} />
+        <Route path="/brochure" element={<BrochurePage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route
-          path="*"
-          element={<div style={{ padding: 40 }}>Page Not Found</div>}
-        />
+        <Route path="*" element={<div style={{ padding: 40 }}>Page Not Found</div>} />
       </Routes>
 
       {/* ================= FOOTER ================= */}
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-6 py-10 text-sm text-slate-600">
-          © {new Date().getFullYear()} Lal Institute of Paramedical Technology.
-          All rights reserved.
+          © {new Date().getFullYear()} Lal Institute of Paramedical Technology. All rights reserved.
         </div>
       </footer>
     </div>

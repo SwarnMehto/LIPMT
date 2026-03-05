@@ -16,6 +16,17 @@ import slide3 from "../assets/slide3.png";
 import slide4 from "../assets/slide4.png";
 import slide5 from "../assets/slide5.png";
 
+// ✅ NEW assets (as per your folder)
+import bestMedical from "../assets/best_medical.png";
+import coverImg from "../assets/cover.png"; // ✅ using this for the REGD banner image
+import heroImg from "../assets/hero.png";
+import heroImg1 from "../assets/hero1.png";
+import heroImg2 from "../assets/hero2.png";
+import trustImg from "../assets/trust.png";
+import trust1 from "../assets/trust1.png";
+import trust2 from "../assets/trust2.png";
+import trust3 from "../assets/trust3.png";
+
 // ✅ Course images (make sure these exist in src/assets/courses/)
 import dmltImg from "../assets/courses/dmlt.png";
 import ottImg from "../assets/courses/ott.png";
@@ -235,11 +246,11 @@ export default function HomePage() {
   // ✅ Programs + Image (ONLY main 6 courses)
   const programs = [
     { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years", image: dmltImg },
-    { name: "Diploma in Operation Theatre Technician (OTT)", duration: "2 Years", image: ottImg },
-    { name: "Diploma in Radiology Technician", duration: "2 Years", image: radiologyImg },
-    { name: "Diploma in ECG Technician", duration: "1 Year", image: ecgImg },
-    { name: "Diploma in Dialysis Technician", duration: "2 Years", image: dialysisImg },
-    { name: "Diploma in Dental Technician", duration: "2 Years", image: dentalImg },
+    { name: "Diploma in Operation Theatre Technology (OTT)", duration: "2 Years", image: ottImg },
+    { name: "Diploma in Radiology Technology", duration: "2 Years", image: radiologyImg },
+    { name: "Diploma in ECG Technology", duration: "1 Year", image: ecgImg },
+    { name: "Diploma in Dialysis Technology", duration: "2 Years", image: dialysisImg },
+    { name: "Diploma in Dental Technology", duration: "2 Years", image: dentalImg },
   ];
 
   const features = [
@@ -269,6 +280,46 @@ export default function HomePage() {
     otherCourse: "",
     message: "",
   });
+
+  // ✅ Hero quick highlights (ONLY ADD)
+  const heroHighlights = [
+    "100% Practical Training",
+    "Experienced Faculty",
+    "Modern Laboratory Setup",
+    "Placement Guidance Support",
+  ];
+
+  // ✅ Why Choose Us (ONLY ADD)
+  const whyChoose = [
+    {
+      title: "Practical Skill Training",
+      desc: "Hands-on sessions with updated instruments and proper supervision.",
+      icon: "✅",
+    },
+    {
+      title: "Clinical Exposure",
+      desc: "Hospital workflow understanding, documentation & patient handling basics.",
+      icon: "🏥",
+    },
+    {
+      title: "Exam + Career Guidance",
+      desc: "Structured notes, doubt sessions, and interview preparation support.",
+      icon: "📘",
+    },
+    {
+      title: "Admission Support",
+      desc: "Fees, eligibility, documents & batch timing guidance for students.",
+      icon: "📞",
+    },
+  ];
+
+  // ✅ Placement section list (ONLY ADD)
+  const placementPoints = [
+    "Hospital / Diagnostic center internship guidance",
+    "Resume + interview preparation support",
+    "Career guidance for job-ready skills",
+    "Continuous student support & mentorship",
+  ];
 
   return (
     <div className="bg-slate-50 text-slate-900">
@@ -311,10 +362,32 @@ export default function HomePage() {
                   {slideData.subtitle}
                 </p>
 
+                {/* ✅ Hero Highlights */}
+                <div className="mt-5 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
+                  {heroHighlights.map((t) => (
+                    <div
+                      key={t}
+                      className="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur"
+                    >
+                      <span className="text-sky-200">✔</span>
+                      <span className="font-semibold">{t}</span>
+                    </div>
+                  ))}
+                </div>
+
                 <div className="mt-7 flex flex-wrap gap-3">
                   <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Apply</PrimaryBtn>
                   <GhostBtn onClick={() => go("courses")}>Explore Courses</GhostBtn>
                   <GhostBtn onClick={() => go("contact")}>Get Callback</GhostBtn>
+
+                  <a
+                    href="/brochure.pdf"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
+                  >
+                    Download Brochure
+                  </a>
                 </div>
 
                 <div className="mt-10 grid max-w-xl grid-cols-2 gap-3 md:grid-cols-4">
@@ -397,6 +470,15 @@ export default function HomePage() {
                 desc="We focus on practical skill-building, strong fundamentals, and clinical exposure. Our training model helps students become job-ready for hospitals, labs, and healthcare centers."
               />
 
+              {/* ✅ ADD: REGD banner under institute name */}
+              <div className="mt-4">
+                <img
+                  src={coverImg}
+                  alt="Registration / Certification"
+                  className="w-full max-w-xl rounded-xl border border-slate-200 bg-white p-2 shadow-sm"
+                />
+              </div>
+
               <div className="mt-6 grid gap-3">
                 {features.map((f) => (
                   <div
@@ -425,7 +507,7 @@ export default function HomePage() {
               <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
               <Card className="relative overflow-hidden">
                 <div className="aspect-[4/3] w-full">
-                  <img src={slide2} alt="About" className="h-full w-full object-cover" />
+                  <img src={heroImg1} alt="About" className="h-full w-full object-cover" />
                 </div>
 
                 <div className="p-6">
@@ -520,7 +602,6 @@ export default function HomePage() {
                 </motion.div>
               ))}
 
-              {/* ✅ NORMAL style button card */}
               <motion.div
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -573,6 +654,191 @@ export default function HomePage() {
         </Container>
       </section>
 
+      {/* ✅ WHY CHOOSE US */}
+      <section id="why" className="py-14 md:py-20">
+        <Container>
+          <div className="grid gap-10 md:grid-cols-2 md:items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              <SectionTitle
+                kicker="Why Choose Us"
+                title="Job-ready training with practical exposure"
+                desc="We focus on hands-on practicals, strong fundamentals, and student support to help you build a career in hospitals, labs & healthcare centers."
+              />
+
+              <div className="mt-6 grid gap-3">
+                {whyChoose.map((w) => (
+                  <div
+                    key={w.title}
+                    className="flex gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  >
+                    <div className="grid h-10 w-10 place-items-center rounded-xl bg-sky-50 text-lg">
+                      {w.icon}
+                    </div>
+                    <div>
+                      <div className="text-sm font-extrabold text-slate-900">{w.title}</div>
+                      <div className="mt-1 text-sm text-slate-600">{w.desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-8 grid grid-cols-2 gap-3 md:grid-cols-4">
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-xl font-extrabold text-slate-900">
+                    <CountUp to={500} suffix="+" />
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">Students Trained</div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-xl font-extrabold text-slate-900">
+                    <CountUp to={10} suffix="+" />
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">Courses</div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-xl font-extrabold text-slate-900">
+                    <CountUp to={50} suffix="+" />
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">Practical Sessions</div>
+                </div>
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-xl font-extrabold text-slate-900">
+                    <CountUp to={100} suffix="%" />
+                  </div>
+                  <div className="mt-1 text-xs text-slate-600">Student Support</div>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
+              <Card className="relative overflow-hidden">
+                <div className="aspect-[4/3] w-full">
+                  <img src={heroImg} alt="Why Choose Us" className="h-full w-full object-cover" />
+                </div>
+                <div className="p-6">
+                  <div className="text-sm font-extrabold text-slate-900">Quick Admission Help</div>
+                  <div className="mt-2 text-sm text-slate-600">
+                    Get details about eligibility, fees, documents & batch timings.
+                  </div>
+
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <PrimaryBtn onClick={() => setEnrollOpen(true)}>Apply Now</PrimaryBtn>
+                    <button
+                      onClick={() => go("contact")}
+                      className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                    >
+                      Contact Us
+                    </button>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ PLACEMENT */}
+      <section id="placement" className="py-14 md:py-20">
+        <Container>
+          <div className="grid gap-10 md:grid-cols-2 md:items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+            >
+              <SectionTitle
+                kicker="Career"
+                title="Placement Assistance & Career Support"
+                desc="We support students with career guidance, interview preparation and job-ready practical training."
+              />
+
+              <div className="mt-6 grid gap-3">
+                {placementPoints.map((t) => (
+                  <div
+                    key={t}
+                    className="flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+                  >
+                    <div className="mt-0.5 grid h-8 w-8 place-items-center rounded-xl bg-sky-50 text-sky-700">
+                      ✔
+                    </div>
+                    <div className="text-sm font-semibold text-slate-800">{t}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <PrimaryBtn onClick={() => setEnrollOpen(true)}>Get Placement Guidance</PrimaryBtn>
+                <button
+                  onClick={() => go("courses")}
+                  className="rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                >
+                  View Courses
+                </button>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
+              <Card className="relative overflow-hidden">
+                <div className="aspect-[4/3] w-full">
+                  <img src={bestMedical} alt="Placement" className="h-full w-full object-cover" />
+                </div>
+                <div className="p-6">
+                  <div className="text-sm font-extrabold text-slate-900">Career Growth Support</div>
+                  <div className="mt-2 text-sm text-slate-600">
+                    Guidance for internships, jobs and professional development.
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ CAMPUS / GALLERY (trust images) */}
+      <section id="gallery" className="py-14 md:py-20">
+        <Container>
+          <SectionTitle
+            kicker="Gallery"
+            title="Campus & Practical Training Glimpses"
+            desc="A quick look at our learning environment, labs and practical exposure."
+            align="center"
+          />
+
+          <div className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-white">
+            <div className="grid gap-3 p-4 md:grid-cols-3">
+              {[trust1, trust2, trust3].map((src, i) => (
+                <div key={i} className="relative overflow-hidden rounded-2xl">
+                  <img src={src} alt="Campus" className="h-[220px] w-full object-cover" />
+                  <div className="absolute bottom-3 left-3 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 backdrop-blur">
+                    Practical Training
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
       {/* ===== FACILITIES ===== */}
       <section id="facilities" className="py-14 md:py-20">
         <Container>
@@ -607,31 +873,31 @@ export default function HomePage() {
             align="center"
           />
 
-          <div className="mt-10 grid gap-4 md:grid-cols-3">
-            {testimonials.map((t, idx) => (
-              <motion.div
-                key={t.role}
-                initial={{ opacity: 0, y: 14 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.04 }}
-              >
-                <Card className="h-full p-6">
-                  <div className="text-sm font-semibold text-slate-600">{t.role}</div>
-                  <div className="mt-3 text-sm leading-relaxed text-slate-800">“{t.quote}”</div>
-                  <div className="mt-5 flex items-center gap-3">
-                    <div className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-50 text-sky-700">
-                      ★
-                    </div>
-                    <div>
-                      <div className="text-sm font-extrabold text-slate-900">{t.name}</div>
-                      <div className="text-xs text-slate-500">Verified Student</div>
-                    </div>
+        <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {testimonials.map((t, idx) => (
+            <motion.div
+              key={t.role}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.35, ease: "easeOut", delay: idx * 0.04 }}
+            >
+              <Card className="h-full p-6">
+                <div className="text-sm font-semibold text-slate-600">{t.role}</div>
+                <div className="mt-3 text-sm leading-relaxed text-slate-800">“{t.quote}”</div>
+                <div className="mt-5 flex items-center gap-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-2xl bg-sky-50 text-sky-700">
+                    ★
                   </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                  <div>
+                    <div className="text-sm font-extrabold text-slate-900">{t.name}</div>
+                    <div className="text-xs text-slate-500">Verified Student</div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
         </Container>
       </section>
 
