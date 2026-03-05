@@ -83,7 +83,7 @@ export default function ContactPage() {
               />
               <InfoRow label="Email" value="info@lipmt.in" />
               <InfoRow label="Landline" value="011-41415029" />
-              <InfoRow label="Hours" value="Mon–Sat • 10:00 AM – 6:00 PM" />
+              <InfoRow label="Hours" value="9:00 AM – 8:00 PM • 7 Days Working" />
             </div>
 
             {/* Buttons */}

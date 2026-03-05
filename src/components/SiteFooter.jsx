@@ -44,7 +44,7 @@ export default function SiteFooter() {
             <div className="mt-6 inline-flex items-center gap-2 rounded-2xl border border-sky-100 bg-sky-50 px-4 py-3 text-sm">
               <span className="h-2 w-2 rounded-full bg-sky-600" />
               <span className="font-semibold text-slate-900">Office Hours:</span>
-              <span className="text-slate-700">Mon–Sat • 10:00 AM – 6:00 PM</span>
+              <span className="text-slate-700"> • 9:00 AM – 8:00 PM • 7 Days Working</span>
             </div>
           </div>
 
