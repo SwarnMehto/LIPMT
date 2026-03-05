@@ -63,7 +63,7 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // ✅ NEW: Scroll to top on every route change (fix: new page opens at old scroll position)
+  // ✅ Scroll to top on every route change
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname]);
@@ -182,9 +182,11 @@ export default function App() {
   const isCoursesActive = () => location.pathname.startsWith("/courses");
   const isServicesActive = () => location.pathname.startsWith("/services");
 
-  // ✅ NEW: Hide footer ONLY on Facilities + Testimonials pages
-  const hideFooterOn = ["/facilities", "/testimonials"];
-  const shouldShowFooter = !hideFooterOn.includes(location.pathname);
+  // ✅ Hide footer on: Facilities, Testimonials, AND all Services pages (services + its subpages)
+  const shouldShowFooter =
+    location.pathname !== "/facilities" &&
+    location.pathname !== "/testimonials" &&
+    !location.pathname.startsWith("/services");
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
@@ -779,7 +781,7 @@ export default function App() {
               <div>
                 <div className="font-extrabold text-slate-900">POLICIES</div>
                 <div className="mt-3 grid gap-2">
-                  {/* ✅ FAQ should be above Disclaimer */}
+                  {/* ✅ FAQs added ABOVE Disclaimer (as you asked) */}
                   <button onClick={() => go("/faqs")} className="text-left hover:underline" type="button">
                     FAQs
                   </button>

@@ -8,7 +8,7 @@ export const courses = [
   {
     level: "Diploma",
     slug: "dmlt",
-    title: "Diploma in Medical Laboratory Technology",
+    title: "Diploma in Medical Laboratory Technology (DMLT)",
     category: "Lab",
     popular: true,
     duration: "2 Years",
