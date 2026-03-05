@@ -159,6 +159,7 @@ export default function App() {
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
+        /* NOTE: nav-btn kept for future use, but not used on dropdown buttons now */
         .nav-btn{
           border-radius: 10px;
           border: 1px solid rgba(255,255,255,0.22);
@@ -394,24 +395,27 @@ export default function App() {
           </div>
         </div>
 
-        {/* Nav bar */}
+      {/* Nav bar */}
         <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
           <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 overflow-visible">
             {/* ✅ Desktop Nav */}
             <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
               {nav.map((item) => {
-                // ✅ COURSES dropdown
+                // ✅ COURSES dropdown (now same look as others)
                 if (item.isDropdown && item.dropdownKey === "courses") {
                   return (
                     <div
                       key={item.path}
-                      className="relative pb-3"
+                      className="relative"
                       onMouseEnter={() => setOpenCourses(true)}
                       onMouseLeave={() => setOpenCourses(false)}
                     >
                       <button
                         onClick={() => go(item.path)}
-                        className={cx("nav-btn flex items-center gap-2", isCoursesActive() ? "ring-2 ring-white/40" : "")}
+                        className={cx(
+                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-2",
+                          isCoursesActive() ? "underline underline-offset-8" : ""
+                        )}
                         aria-haspopup="menu"
                         aria-expanded={openCourses}
                         type="button"
@@ -435,18 +439,21 @@ export default function App() {
                   );
                 }
 
-                // ✅ SERVICES dropdown
+                // ✅ SERVICES dropdown (now same look as others)
                 if (item.isDropdown && item.dropdownKey === "services") {
                   return (
                     <div
                       key={item.path}
-                      className="relative pb-3"
+                      className="relative"
                       onMouseEnter={() => setOpenServices(true)}
                       onMouseLeave={() => setOpenServices(false)}
                     >
                       <button
                         onClick={() => go(item.path)}
-                        className={cx("nav-btn flex items-center gap-2", isServicesActive() ? "ring-2 ring-white/40" : "")}
+                        className={cx(
+                          "px-2 py-1 transition hover:opacity-90 flex items-center gap-2",
+                          isServicesActive() ? "underline underline-offset-8" : ""
+                        )}
                         aria-haspopup="menu"
                         aria-expanded={openServices}
                         type="button"
