@@ -3,6 +3,7 @@
 // ✅ No header/footer here (App.jsx handles it)
 // ✅ Added: sticky mobile bottom bar (Call / WhatsApp / Apply)
 // ✅ Added: Trust proof strip, Google reviews CTA, Placement partners, FAQs
+// ✅ Added: SEO trust blocks + internal links + improved schema
 // ✅ Kept your existing logic & sections (no breaking)
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -116,7 +117,7 @@ function SectionTitle({ kicker, title, desc, align = "left" }) {
 /* ✅ FIX: Mobile par 0 na dikhaye — inView reliable + fallback start */
 function CountUp({ to = 100, suffix = "+", duration = 1.4 }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 }); // ✅ mobile friendly
+  const inView = useInView(ref, { once: true, amount: 0.2 });
   const mv = useMotionValue(0);
   const [val, setVal] = useState(0);
 
@@ -134,7 +135,6 @@ function CountUp({ to = 100, suffix = "+", duration = 1.4 }) {
 
     if (inView) start();
 
-    // ✅ fallback: if observer doesn't trigger on some mobiles
     const t = setTimeout(() => {
       if (!inView && val === 0) start();
     }, 600);
@@ -181,6 +181,7 @@ function Modal({ open, onClose, title, children }) {
               className="rounded-lg px-2 py-1 text-slate-500 hover:bg-slate-100"
               onClick={onClose}
               aria-label="Close"
+              type="button"
             >
               ✕
             </button>
@@ -204,7 +205,7 @@ function FAQ({ items }) {
             key={it.q}
             type="button"
             onClick={() => setOpen(isOpen ? -1 : idx)}
-            className="text-left rounded-2xl border border-slate-200 bg-white p-4 hover:bg-slate-50 transition"
+            className="rounded-2xl border border-slate-200 bg-white p-4 text-left transition hover:bg-slate-50"
           >
             <div className="flex items-center justify-between gap-4">
               <div className="text-sm font-extrabold text-slate-900">{it.q}</div>
@@ -226,7 +227,8 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
       <div className="mx-auto flex max-w-6xl gap-2 px-3 py-2">
         <a
           href={`tel:${phone}`}
-          className="flex-1 min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900 flex items-center justify-center"
+          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
+          aria-label="Call LIPMT"
         >
           📞 Call
         </a>
@@ -234,7 +236,8 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
           href={`https://wa.me/${wa}?text=${msg}`}
           target="_blank"
           rel="noreferrer"
-          className="flex-1 min-h-[44px] rounded-xl bg-green-600 px-3 py-2 text-sm font-extrabold text-white flex items-center justify-center"
+          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-sm font-extrabold text-white"
+          aria-label="Chat on WhatsApp"
         >
           💬 WhatsApp
         </a>
@@ -242,6 +245,7 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
           type="button"
           onClick={onApply}
           className="flex-1 min-h-[44px] rounded-xl bg-sky-600 px-3 py-2 text-sm font-extrabold text-white"
+          aria-label="Apply for admission"
         >
           ✅ Apply
         </button>
@@ -249,7 +253,257 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
     </div>
   );
 }
+function AdmissionChatbot({
+  onApply,
+  phone = "919811343520",
+  instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY",
+}) {
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      type: "bot",
+      text: `Hello 👋 Welcome to ${instituteName}. Ask me about courses, fees, eligibility, batches, admission or contact details.`,
+    },
+  ]);
 
+  const whatsappLink = (text) =>
+    `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+
+  const botReply = (input) => {
+    const m = input.toLowerCase().trim();
+
+    if (!m) {
+      return "Please type your question.";
+    }
+
+    if (
+      m.includes("fee") ||
+      m.includes("fees") ||
+      m.includes("price") ||
+      m.includes("cost")
+    ) {
+      return "Fees course-wise different hoti hai. Exact fee details ke liye Apply kare ya WhatsApp par message kare.";
+    }
+
+    if (
+      m.includes("course") ||
+      m.includes("courses") ||
+      m.includes("program") ||
+      m.includes("dmlt") ||
+      m.includes("ecg") ||
+      m.includes("radiology") ||
+      m.includes("dialysis") ||
+      m.includes("ott") ||
+      m.includes("dental")
+    ) {
+      return "Available popular courses: DMLT, Operation Theatre Technology, Radiology, ECG Technology, Dialysis Technology, Dental Technology. Detailed list ke liye Courses section dekhein.";
+    }
+
+    if (
+      m.includes("admission") ||
+      m.includes("apply") ||
+      m.includes("enroll") ||
+      m.includes("enrol")
+    ) {
+      return "Admissions open hain ✅ Aap Apply button par click karke form fill kar sakte hain ya WhatsApp par direct enquiry bhej sakte hain.";
+    }
+
+    if (
+      m.includes("eligibility") ||
+      m.includes("qualification") ||
+      m.includes("12th") ||
+      m.includes("10th")
+    ) {
+      return "Eligibility course par depend karti hai. Generally diploma courses ke liye 10+2 preferred hota hai. Exact eligibility ke liye specific course ka naam bhejein.";
+    }
+
+    if (
+      m.includes("batch") ||
+      m.includes("timing") ||
+      m.includes("class") ||
+      m.includes("start")
+    ) {
+      return "Batch timing aur start date seat availability par depend karti hai. Latest batch details ke liye admission team se contact karein.";
+    }
+
+    if (
+      m.includes("placement") ||
+      m.includes("job") ||
+      m.includes("career")
+    ) {
+      return "Institute practical training, interview guidance aur career support provide karta hai. Final placement student performance aur openings par depend karta hai.";
+    }
+
+    if (
+      m.includes("contact") ||
+      m.includes("phone") ||
+      m.includes("number") ||
+      m.includes("call")
+    ) {
+      return "Admission helpline: +91 9811343520. Aap Call ya WhatsApp dono kar sakte hain.";
+    }
+
+    if (
+      m.includes("address") ||
+      m.includes("location") ||
+      m.includes("where") ||
+      m.includes("map")
+    ) {
+      return "Institute location details ke liye Contact section aur Google Map dekh sakte hain. Chahein to main aapko WhatsApp enquiry bhi open karwa deta hoon.";
+    }
+
+    if (
+      m.includes("brochure") ||
+      m.includes("pdf") ||
+      m.includes("prospectus")
+    ) {
+      return "Brochure homepage se download ki ja sakti hai. Download Brochure button par click karein.";
+    }
+
+    if (
+      m.includes("hello") ||
+      m.includes("hi") ||
+      m.includes("hii") ||
+      m.includes("namaste")
+    ) {
+      return "Namaste 👋 Aap course, fees, admission, eligibility, batch ya contact ke baare me pooch sakte hain.";
+    }
+
+    return "Is question ke liye best rahega ki aap admission team se WhatsApp par baat karein. Main aapko direct connect kar deta hoon.";
+  };
+
+  const handleSend = () => {
+    if (!msg.trim()) return;
+
+    const userText = msg.trim();
+    const reply = botReply(userText);
+
+    setMessages((prev) => [
+      ...prev,
+      { type: "user", text: userText },
+      { type: "bot", text: reply },
+    ]);
+    setMsg("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSend();
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen((s) => !s)}
+        className="fixed bottom-24 left-5 z-[95] rounded-full bg-sky-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-sky-600/30 transition hover:bg-sky-700 md:bottom-6"
+        aria-label="Open admission chatbot"
+      >
+        💬 Ask LIPMT
+      </button>
+
+      {open && (
+        <div className="fixed bottom-40 left-4 z-[96] w-[92vw] max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.20)] md:bottom-24 md:left-6">
+          <div className="flex items-center justify-between bg-gradient-to-r from-sky-600 to-cyan-500 px-4 py-4 text-white">
+            <div>
+              <div className="text-sm font-extrabold">LIPMT Admission Help</div>
+              <div className="text-xs text-white/90">Online now</div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-white/10 px-2 py-1 text-sm font-bold hover:bg-white/20"
+              aria-label="Close chatbot"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="h-72 space-y-3 overflow-y-auto bg-slate-50 p-4">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`flex ${m.type === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={
+                    m.type === "user"
+                      ? "max-w-[85%] rounded-2xl rounded-br-md bg-sky-600 px-4 py-3 text-sm text-white"
+                      : "max-w-[85%] rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+                  }
+                >
+                  {m.text}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-slate-200 bg-white p-3">
+            <div className="mb-3 flex flex-wrap gap-2">
+              {["Fees", "Courses", "Admission", "Eligibility", "Contact"].map((q) => (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => {
+                    const reply = botReply(q);
+                    setMessages((prev) => [
+                      ...prev,
+                      { type: "user", text: q },
+                      { type: "bot", text: reply },
+                    ]);
+                  }}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <input
+                value={msg}
+                onChange={(e) => setMsg(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask about fees, course, batch..."
+                className="min-h-[44px] flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              />
+
+              <button
+                type="button"
+                onClick={handleSend}
+                className="min-h-[44px] rounded-xl bg-sky-600 px-4 py-3 text-sm font-bold text-white hover:bg-sky-700"
+              >
+                Send
+              </button>
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={onApply}
+                className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 hover:bg-slate-50"
+              >
+                🎓 Apply Now
+              </button>
+
+              <a
+                href={whatsappLink(
+                  "Hello LIPMT, I want admission details about courses, fees, eligibility and batches."
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-xs font-bold text-white hover:bg-green-700"
+              >
+                💬 WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
 export default function HomePage() {
   const instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY";
 
@@ -391,35 +645,133 @@ export default function HomePage() {
   // ✅ FAQs (ADD)
   const faqs = [
     {
-      q: "क्या fees / eligibility details WhatsApp पर मिल जाएगी?",
-      a: "Yes. Enquiry form submit करने के बाद आप WhatsApp पर भी details ले सकते हैं (fees, batches, documents).",
+      q: "क्या fees / eligibility details WhatsApp पर mil jayegi?",
+      a: "Yes. Enquiry form submit करने के बाद आप WhatsApp पर bhi details le sakte hain (fees, batches, documents).",
     },
     {
-      q: "Internship / hospital training मिलेगा?",
-      a: "We provide clinical exposure guidance + practical workflow training. Internship support availability batch-wise depend कर सकती है.",
+      q: "Internship / hospital training milega?",
+      a: "We provide clinical exposure guidance + practical workflow training. Internship support availability batch-wise depend kar sakti hai.",
     },
     {
-      q: "Documents कौन-कौन से लगेंगे?",
-      a: "10th/12th marksheet, ID proof, photos, and admission form. Exact list admissions team confirm करेगी.",
+      q: "Documents kaun-kaun se lagenge?",
+      a: "10th/12th marksheet, ID proof, photos, and admission form. Exact list admissions team confirm karegi.",
     },
     {
-      q: "Classes कब से start होंगी?",
-      a: "Batch timing seat availability के हिसाब से. Apply/Callback पर team आपको next batch date बता देगी.",
+      q: "Classes kab se start hongi?",
+      a: "Batch timing seat availability ke hisaab se. Apply/Callback par team aapko next batch date bata degi.",
     },
   ];
 
+  // ✅ Extra trust cards
+  const trustCards = [
+    {
+      title: "Trusted Learning Environment",
+      desc: "Students get structured training, practical exposure and direct admission guidance.",
+    },
+    {
+      title: "Focused on Job Readiness",
+      desc: "Our approach is based on practical skills, confidence building and career support.",
+    },
+    {
+      title: "Easy Student Support",
+      desc: "Call, WhatsApp and admission help available for course, fee and batch queries.",
+    },
+  ];
+
+  // ✅✅✅ SEO ADD
+  const siteUrl = "https://lipmt.in";
+  const pageUrl = `${siteUrl}/`;
+  const phone = "+919811343520";
+  const logoUrl = `${siteUrl}/logo.png`;
+
+  const orgSchema = {
+    "@context": "https://schema.org",
+    "@type": ["EducationalOrganization", "LocalBusiness"],
+    "@id": `${siteUrl}/#organization`,
+    name: instituteName,
+    url: siteUrl,
+    telephone: phone,
+    image: logoUrl,
+    logo: logoUrl,
+    areaServed: "India",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Centre 2759, Hansa Puri Road, Tri Nagar",
+      addressLocality: "Delhi",
+      postalCode: "110035",
+      addressCountry: "IN",
+    },
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        telephone: phone,
+        contactType: "admissions",
+        areaServed: "IN",
+        availableLanguage: ["English", "Hindi"],
+      },
+    ],
+    sameAs: [`${siteUrl}/about`, `${siteUrl}/courses`, `${siteUrl}/contact`],
+  };
+
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: siteUrl,
+    name: instituteName,
+    publisher: { "@id": `${siteUrl}/#organization` },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/?s={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
+  const webpageSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name: `${instituteName} | Paramedical Courses & Admissions`,
+    isPartOf: { "@id": `${siteUrl}/#website` },
+    about: { "@id": `${siteUrl}/#organization` },
+    primaryImageOfPage: logoUrl,
+    description:
+      "LIPMT offers paramedical diploma courses, practical labs, admission guidance, student support and career-focused training in Delhi.",
+  };
+
   return (
-    <div className="bg-slate-50 text-slate-900 pb-16 md:pb-0">
+    <div className="bg-slate-50 pb-16 text-slate-900 md:pb-0">
+      {/* ✅✅✅ SEO ADD: Schema JSON-LD */}
+      <script type="application/ld+json">{JSON.stringify(orgSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(websiteSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(webpageSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+
       {/* ✅ Mobile sticky bar */}
       <MobileStickyBar onApply={() => setEnrollOpen(true)} />
-
+      <AdmissionChatbot
+  onApply={() => setEnrollOpen(true)}
+  phone="919811343520"
+  instituteName={instituteName}
+/>
       {/* ===== HERO ===== */}
       <section id="home" className="relative overflow-hidden">
-        <div className="relative h-[78vh] min-h-[560px] w-full">
+        <div className="relative min-h-[980px] w-full md:h-[78vh] md:min-h-[560px]">
           <motion.img
             key={slideData.src}
             src={slideData.src}
-            alt="Hero Slide"
+            alt={`${slideData.title} - LIPMT`}
             className="absolute inset-0 h-full w-full object-cover"
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -434,7 +786,7 @@ export default function HomePage() {
             <div className="absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
           </div>
 
-          <Container className="relative flex h-full items-center">
+          <Container className="relative flex h-full items-start pt-8 md:items-center md:pt-0">
             <div className="max-w-2xl text-white">
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -443,12 +795,12 @@ export default function HomePage() {
               >
                 <Badge>Admissions Open • 2026–27</Badge>
 
-                <h1 className="mt-4 text-4xl font-extrabold leading-tight tracking-tight md:text-6xl">
+                <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-6xl">
                   {slideData.title}
                   <span className="text-sky-300">.</span>
                 </h1>
 
-                <p className="mt-4 max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
+                <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-lg">
                   {slideData.subtitle}
                 </p>
 
@@ -474,6 +826,7 @@ export default function HomePage() {
                     href="/brochure.pdf"
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="Download brochure"
                     className="min-h-[44px] rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
                   >
                     Download Brochure
@@ -507,7 +860,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                {/* ✅ TRUST STRIP (below stats) */}
+                {/* ✅ TRUST STRIP */}
                 <div className="mt-6 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
                   {trustProofs.map((t) => (
                     <div
@@ -523,7 +876,7 @@ export default function HomePage() {
             </div>
           </Container>
 
-          <div className="absolute bottom-6 left-0 right-0">
+          <div className="absolute bottom-[82px] left-0 right-0 md:bottom-6">
             <Container className="flex items-center justify-between">
               <div className="flex gap-2">
                 {heroSlides.map((_, i) => (
@@ -535,6 +888,7 @@ export default function HomePage() {
                       i === slide ? "bg-white" : "bg-white/35 hover:bg-white/60"
                     )}
                     aria-label={`Slide ${i + 1}`}
+                    type="button"
                   />
                 ))}
               </div>
@@ -542,12 +896,16 @@ export default function HomePage() {
                 <button
                   onClick={() => setSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)}
                   className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
+                  aria-label="Previous slide"
+                  type="button"
                 >
                   ←
                 </button>
                 <button
                   onClick={() => setSlide((s) => (s + 1) % heroSlides.length)}
                   className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
+                  aria-label="Next slide"
+                  type="button"
                 >
                   →
                 </button>
@@ -555,6 +913,51 @@ export default function HomePage() {
             </Container>
           </div>
         </div>
+      </section>
+
+      {/* ===== ADMISSION BANNER ===== */}
+      <section className="bg-gradient-to-r from-sky-600 to-cyan-500 py-4 text-center text-white">
+        <Container>
+          <div className="flex flex-col items-center justify-between gap-3 md:flex-row">
+            <div className="text-sm font-extrabold md:text-base">
+              🎓 Admissions Open for 2026 Session • Limited Seats Available
+            </div>
+
+            <div className="flex gap-3">
+              <a
+                href="tel:+919811343520"
+                className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-sky-700"
+              >
+                📞 Call
+              </a>
+
+              <button
+                onClick={() => setEnrollOpen(true)}
+                className="rounded-xl bg-slate-900 px-4 py-2 text-sm font-bold text-white"
+                type="button"
+              >
+                Apply Now
+              </button>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ TRUST MINI BAR */}
+      <section className="py-6">
+        <Container>
+          <div className="grid gap-4 md:grid-cols-3">
+            {trustCards.map((item) => (
+              <div
+                key={item.title}
+                className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
+              >
+                <div className="text-sm font-extrabold text-slate-900">{item.title}</div>
+                <div className="mt-2 text-sm leading-relaxed text-slate-600">{item.desc}</div>
+              </div>
+            ))}
+          </div>
+        </Container>
       </section>
 
       {/* ===== ABOUT ===== */}
@@ -573,11 +976,10 @@ export default function HomePage() {
                 desc="We focus on practical skill-building, strong fundamentals, and clinical exposure. Our training model helps students become job-ready for hospitals, labs, and healthcare centers."
               />
 
-              {/* ✅ REGD banner */}
               <div className="mt-4">
                 <img
                   src={coverImg}
-                  alt="Registration / Certification"
+                  alt="LIPMT registration and certification banner"
                   className="w-full max-w-xl rounded-xl border border-slate-200 bg-white p-2 shadow-sm"
                 />
               </div>
@@ -599,11 +1001,11 @@ export default function HomePage() {
                 ))}
               </div>
 
-              {/* ✅ TRUST buttons */}
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href="tel:+919811343520"
-                  className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                  aria-label="Call for admission"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
                 >
                   📞 Call Now
                 </a>
@@ -611,7 +1013,8 @@ export default function HomePage() {
                   href="https://wa.me/919811343520"
                   target="_blank"
                   rel="noreferrer"
-                  className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700"
+                  aria-label="WhatsApp for admission"
+                  className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-5 py-3 text-sm font-semibold text-white hover:bg-green-700"
                 >
                   💬 WhatsApp
                 </a>
@@ -628,7 +1031,7 @@ export default function HomePage() {
               <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
               <Card className="relative overflow-hidden">
                 <div className="aspect-[4/3] w-full">
-                  <img src={heroImg1} alt="About" className="h-full w-full object-cover" />
+                  <img src={heroImg1} alt="LIPMT campus and training" className="h-full w-full object-cover" />
                 </div>
 
                 <div className="p-6">
@@ -658,6 +1061,7 @@ export default function HomePage() {
                     <button
                       onClick={() => go("facilities")}
                       className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                      type="button"
                     >
                       View Facilities
                     </button>
@@ -709,12 +1113,14 @@ export default function HomePage() {
                         <button
                           onClick={() => setEnrollOpen(true)}
                           className="min-h-[44px] rounded-xl bg-sky-600 px-4 py-2 text-sm font-semibold text-white hover:bg-sky-700"
+                          type="button"
                         >
                           Enroll
                         </button>
                         <button
                           onClick={() => go("contact")}
                           className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                          type="button"
                         >
                           Ask Details
                         </button>
@@ -741,7 +1147,7 @@ export default function HomePage() {
                     <div className="mt-5">
                       <Link
                         to="/courses"
-                        className="min-h-[44px] inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                        className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
                       >
                         View All Courses →
                       </Link>
@@ -772,6 +1178,36 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ===== STUDENT SUCCESS ===== */}
+      <section className="py-14 md:py-20 bg-white">
+        <Container>
+          <SectionTitle
+            kicker="Student Success"
+            title="Students building careers in healthcare"
+            desc="Our students gain practical skills and confidence for hospitals, labs and healthcare centers."
+            align="center"
+          />
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            {[
+              { name: "Lab Technician", place: "Diagnostic Center" },
+              { name: "OT Assistant", place: "Hospital OT Department" },
+              { name: "Radiology Technician", place: "Imaging Center" },
+            ].map((s, i) => (
+              <Card key={i} className="p-6 text-center">
+                <div className="text-3xl">🎓</div>
+                <div className="mt-3 text-lg font-extrabold text-slate-900">{s.name}</div>
+                <div className="mt-1 text-sm text-slate-600">{s.place}</div>
+
+                <div className="mt-4 text-xs text-slate-500">
+                  LIPMT trained student working in healthcare field
+                </div>
+              </Card>
+            ))}
           </div>
         </Container>
       </section>
@@ -847,7 +1283,7 @@ export default function HomePage() {
               <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
               <Card className="relative overflow-hidden">
                 <div className="aspect-[4/3] w-full">
-                  <img src={heroImg} alt="Why Choose Us" className="h-full w-full object-cover" />
+                  <img src={heroImg} alt="Why choose LIPMT" className="h-full w-full object-cover" />
                 </div>
                 <div className="p-6">
                   <div className="text-sm font-extrabold text-slate-900">Quick Admission Help</div>
@@ -860,6 +1296,7 @@ export default function HomePage() {
                     <button
                       onClick={() => go("contact")}
                       className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                      type="button"
                     >
                       Contact Us
                     </button>
@@ -906,6 +1343,7 @@ export default function HomePage() {
                 <button
                   onClick={() => go("courses")}
                   className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 hover:bg-slate-50"
+                  type="button"
                 >
                   View Courses
                 </button>
@@ -922,7 +1360,7 @@ export default function HomePage() {
               <div className="absolute -inset-6 rounded-[28px] bg-gradient-to-br from-sky-200/35 via-cyan-200/20 to-transparent blur-2xl" />
               <Card className="relative overflow-hidden">
                 <div className="aspect-[4/3] w-full">
-                  <img src={bestMedical} alt="Placement" className="h-full w-full object-cover" />
+                  <img src={bestMedical} alt="Placement and career guidance" className="h-full w-full object-cover" />
                 </div>
                 <div className="p-6">
                   <div className="text-sm font-extrabold text-slate-900">Career Growth Support</div>
@@ -934,7 +1372,6 @@ export default function HomePage() {
             </motion.div>
           </div>
 
-          {/* ✅ Placement partners strip (trust booster) */}
           <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
             <div className="text-sm font-extrabold text-slate-900">Placement / Training Support</div>
             <div className="mt-1 text-sm text-slate-600">
@@ -954,6 +1391,29 @@ export default function HomePage() {
         </Container>
       </section>
 
+      {/* ===== PLACEMENT PARTNERS ===== */}
+      <section className="py-14 md:py-20 bg-slate-50">
+        <Container>
+          <SectionTitle
+            kicker="Placement Network"
+            title="Hospitals & labs where students get exposure"
+            desc="Students receive guidance for opportunities in hospitals, labs and healthcare centers."
+            align="center"
+          />
+
+          <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+            {["Hospital", "Diagnostic Lab", "Imaging Center", "Private Clinic"].map((p) => (
+              <div
+                key={p}
+                className="rounded-2xl border border-slate-200 bg-white px-4 py-6 text-center text-sm font-extrabold text-slate-700"
+              >
+                {p}
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
       {/* ✅ CAMPUS / GALLERY */}
       <section id="gallery" className="py-14 md:py-20">
         <Container>
@@ -968,7 +1428,7 @@ export default function HomePage() {
             <div className="grid gap-3 p-4 md:grid-cols-3">
               {[trust1, trust2, trust3].map((src, i) => (
                 <div key={i} className="relative overflow-hidden rounded-2xl">
-                  <img src={src} alt="Campus" className="h-[220px] w-full object-cover" loading="lazy" />
+                  <img src={src} alt={`Campus glimpse ${i + 1}`} className="h-[220px] w-full object-cover" loading="lazy" />
                   <div className="absolute bottom-3 left-3 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 backdrop-blur">
                     Practical Training
                   </div>
@@ -992,7 +1452,7 @@ export default function HomePage() {
             <div className="grid gap-3 p-4 md:grid-cols-3">
               {[slide3, slide4, slide5].map((src, i) => (
                 <div key={i} className="relative overflow-hidden rounded-2xl">
-                  <img src={src} alt="Facility" className="h-[220px] w-full object-cover" loading="lazy" />
+                  <img src={src} alt={`Facility ${i + 1}`} className="h-[220px] w-full object-cover" loading="lazy" />
                   <div className="absolute bottom-3 left-3 rounded-xl bg-white/90 px-3 py-2 text-xs font-semibold text-slate-900 backdrop-blur">
                     Practical Area
                   </div>
@@ -1039,7 +1499,6 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* ✅ Google reviews CTA (trust booster) */}
           <div className="mt-10 rounded-3xl border border-slate-200 bg-white p-6">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -1049,13 +1508,90 @@ export default function HomePage() {
                 </div>
               </div>
               <a
-                className="min-h-[44px] inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800"
                 href="https://www.google.com/search?q=LAL%20INSTITUTE%20OF%20PARA%20MEDICAL%20TECHNOLOGY%20reviews"
                 target="_blank"
                 rel="noreferrer"
+                aria-label="View Google Reviews"
               >
                 View Reviews →
               </a>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ EXTRA TRUST / INTERNAL LINKS */}
+      <section className="py-14 md:py-20">
+        <Container>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8">
+            <div className="grid gap-8 lg:grid-cols-[1.1fr_.9fr]">
+              <div>
+                <div className="inline-flex items-center rounded-full border border-sky-200 bg-sky-50 px-3 py-1 text-xs font-extrabold text-sky-700">
+                  Student Trust
+                </div>
+                <h2 className="mt-4 text-2xl font-extrabold text-slate-900 md:text-3xl">
+                  Why students and parents feel confident with LIPMT
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base">
+                  We focus on practical paramedical education, support for admission queries, clear
+                  guidance for courses and an easy communication process through phone and WhatsApp.
+                </p>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  {[
+                    "Admission guidance available",
+                    "Practical learning environment",
+                    "Structured faculty support",
+                    "Career-oriented training approach",
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800"
+                    >
+                      ✔ {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-sm font-extrabold uppercase tracking-wider text-slate-900">
+                  Important Pages
+                </div>
+                <div className="mt-4 grid gap-3">
+                  <Link
+                    to="/courses"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    View All Courses →
+                  </Link>
+                  <Link
+                    to="/facilities"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    Explore Facilities →
+                  </Link>
+                  <Link
+                    to="/testimonials"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    Read Student Testimonials →
+                  </Link>
+                  <Link
+                    to="/faqs"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    Frequently Asked Questions →
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 transition hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    Contact for Admission Help →
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </Container>
@@ -1091,12 +1627,32 @@ export default function HomePage() {
                   <div className="mt-1 text-sm text-slate-600">{instituteName}</div>
                 </div>
 
+                <div className="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div className="text-sm font-extrabold text-slate-900">Quick Help</div>
+                  <div className="mt-2 flex flex-wrap gap-3">
+                    <a
+                      href="tel:+919811343520"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
+                    >
+                      Call Admission Team
+                    </a>
+                    <a
+                      href="https://wa.me/919811343520"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-4 py-2 text-sm font-semibold text-white hover:bg-green-700"
+                    >
+                      WhatsApp Now
+                    </a>
+                  </div>
+                </div>
+
                 <div className="flex flex-wrap gap-3">
                   <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Callback</PrimaryBtn>
 
                   <a
                     href="mailto:info@lipmt.in?subject=Admission%20Enquiry%20-%20LIPMT&body=Hello%20LIPMT%20Team,%0A%0AI%20want%20details%20about%20admission%20(Fees,%20Batch%20Timing,%20Eligibility,%20Documents).%0A%0ACourse:%20%0AName:%20%0AMobile:%20%0ACity:%20%0A%0AThanks"
-                    className="min-h-[44px] inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-50 transition"
+                    className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-900 transition hover:bg-slate-50"
                   >
                     ✉ Email
                   </a>
@@ -1118,6 +1674,33 @@ export default function HomePage() {
                 />
               </div>
             </Card>
+          </div>
+        </Container>
+      </section>
+
+      {/* ✅ SEO TEXT BLOCK */}
+      <section className="pb-14 md:pb-20">
+        <Container>
+          <div className="rounded-3xl border border-slate-200 bg-white p-6 md:p-8">
+            <div className="flex items-start gap-4">
+              <img
+                src={logo}
+                alt="LIPMT logo"
+                className="h-14 w-14 rounded-2xl border border-slate-200 bg-white object-contain p-2"
+              />
+              <div>
+                <h2 className="text-xl font-extrabold text-slate-900 md:text-2xl">
+                  Best paramedical institute in Delhi for practical learning and career-focused training
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 md:text-base">
+                  LIPMT provides paramedical diploma programs with practical labs, clinical exposure,
+                  student support and admission guidance. Students looking for DMLT, ECG Technician,
+                  Radiology Technician, Dialysis Technician, Dental Technician and Operation Theatre
+                  Technology related training can explore our programs, facilities and contact support
+                  for details about eligibility, batches and admission process.
+                </p>
+              </div>
+            </div>
           </div>
         </Container>
       </section>

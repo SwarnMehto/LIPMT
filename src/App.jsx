@@ -253,6 +253,7 @@ export default function App() {
               onClick={closePopup}
               className="absolute right-4 top-4 rounded-lg p-1 text-slate-500 hover:text-red-500"
               aria-label="Close popup"
+              type="button"
             >
               <X className="h-5 w-5" />
             </button>
@@ -373,216 +374,213 @@ export default function App() {
         </div>
       )}
 
-      {/* ================= TOP SOCIAL BAR ================= */}
-      <div className="w-full bg-slate-900">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center sm:justify-end gap-2 px-6 py-2">
-          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Facebook">
-            <Facebook className="h-4 w-4" />
-          </a>
-          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Instagram">
-            <Instagram className="h-4 w-4" />
-          </a>
-          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Twitter">
-            <Twitter className="h-4 w-4" />
-          </a>
-          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="YouTube">
-            <Youtube className="h-4 w-4" />
-          </a>
-          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="LinkedIn">
-            <Linkedin className="h-4 w-4" />
-          </a>
+      {/* ================= FIXED TOP AREA ================= */}
+      <div className="fixed inset-x-0 top-0 z-[999999]">
+        {/* ================= TOP SOCIAL BAR ================= */}
+        <div className="w-full bg-slate-900">
+          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-6 py-2 sm:justify-end">
+            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Facebook">
+              <Facebook className="h-4 w-4" />
+            </a>
+            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Instagram">
+              <Instagram className="h-4 w-4" />
+            </a>
+            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Twitter">
+              <Twitter className="h-4 w-4" />
+            </a>
+            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="YouTube">
+              <Youtube className="h-4 w-4" />
+            </a>
+            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="LinkedIn">
+              <Linkedin className="h-4 w-4" />
+            </a>
+          </div>
         </div>
+
+        {/* ================= HEADER ================= */}
+        <header
+          className={cx(
+            "border-b transition overflow-visible",
+            scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
+          )}
+        >
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 sm:py-4 overflow-visible">
+            <div className="flex items-center justify-between gap-3 sm:gap-4">
+              <button onClick={() => go("/")} className="flex items-center gap-3 sm:gap-4" type="button">
+                <img
+                  src={logo}
+                  alt="Lal Institute of Paramedical Technology"
+                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl object-cover"
+                />
+                <div className="hidden sm:block leading-tight">
+                  <div className="text-xs font-semibold text-slate-500">Skill • Training • Career</div>
+                </div>
+              </button>
+
+              <div className="flex-1 text-center">
+                <div className="text-[16px] leading-tight sm:text-[28px] font-extrabold tracking-wide text-red-600 uppercase">
+                  Lal Institute of Paramedical Technology
+                </div>
+
+                <div className="mt-1 text-[10px] leading-tight sm:text-[13px] font-extrabold text-slate-900">
+                  REGD. OF DELHI GOVT. AS NO.: F/1375 • AN ISO 9001 : 2005 CERTIFIED
+                </div>
+
+                <div className="mt-1 text-[9px] leading-tight sm:text-[12px] font-semibold text-slate-600">
+                  An institute with a glorious past of training para-medics
+                </div>
+              </div>
+
+              <div className="w-[52px] sm:w-[92px]" />
+            </div>
+          </div>
+
+          <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-2 overflow-visible">
+              <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
+                {nav.map((item) => {
+                  if (item.isDropdown && item.dropdownKey === "courses") {
+                    return (
+                      <div
+                        key={item.path}
+                        ref={coursesWrapRef}
+                        className="relative"
+                        onMouseEnter={() => setOpenCourses(true)}
+                        onMouseLeave={() => setOpenCourses(false)}
+                      >
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenCourses((v) => !v);
+                            setOpenServices(false);
+                          }}
+                          className={cx("nav-btn", isCoursesActive() ? "ring-2 ring-white/40" : "")}
+                          aria-haspopup="menu"
+                          aria-expanded={openCourses}
+                          type="button"
+                        >
+                          COURSES
+                          <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
+                        </button>
+
+                        <div className="absolute left-0 top-full h-3 w-full" />
+
+                        {openCourses && (
+                          <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
+                            <div className="dd w-64 flex flex-col py-1">
+                              <button onClick={() => go("/courses")} className="dd-item" type="button">
+                                All Courses
+                              </button>
+                              {courseMenu.map((c) => (
+                                <button
+                                  key={c.path}
+                                  onClick={() => go(c.path)}
+                                  className="dd-item"
+                                  type="button"
+                                >
+                                  {c.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  if (item.isDropdown && item.dropdownKey === "services") {
+                    return (
+                      <div
+                        key={item.path}
+                        ref={servicesWrapRef}
+                        className="relative"
+                        onMouseEnter={() => setOpenServices(true)}
+                        onMouseLeave={() => setOpenServices(false)}
+                      >
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            setOpenServices((v) => !v);
+                            setOpenCourses(false);
+                          }}
+                          className={cx("nav-btn", isServicesActive() ? "ring-2 ring-white/40" : "")}
+                          aria-haspopup="menu"
+                          aria-expanded={openServices}
+                          type="button"
+                        >
+                          SERVICES
+                          <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
+                        </button>
+
+                        <div className="absolute left-0 top-full h-3 w-full" />
+
+                        {openServices && (
+                          <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
+                            <div className="dd w-72 flex flex-col py-1">
+                              <button onClick={() => go("/services")} className="dd-item" type="button">
+                                All Services
+                              </button>
+                              {servicesMenu.map((s) => (
+                                <button
+                                  key={s.path}
+                                  onClick={() => go(s.path)}
+                                  className="dd-item"
+                                  type="button"
+                                >
+                                  {s.label}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <button
+                      key={item.path}
+                      onClick={() => go(item.path)}
+                      className={cx("nav-btn", isActive(item.path) ? "ring-2 ring-white/40" : "")}
+                      type="button"
+                    >
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </nav>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => go("/contact")}
+                  className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
+                  type="button"
+                >
+                  Apply Now →
+                </button>
+
+                <button
+                  className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900"
+                  onClick={() => setMenu(true)}
+                  aria-label="Open menu"
+                  type="button"
+                >
+                  <Menu className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </header>
       </div>
 
-      {/* ================= HEADER (sticky) ================= */}
-      <header
-        className={cx(
-          "sticky top-0 z-[999999] border-b transition overflow-visible",
-          scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
-        )}
-      >
-        <div className="mx-auto max-w-7xl px-6 py-4 overflow-visible">
-          <div className="flex items-center justify-between gap-4">
-            {/* Left Logo */}
-            <button onClick={() => go("/")} className="flex items-center gap-4" type="button">
-              <img
-                src={logo}
-                alt="Lal Institute of Paramedical Technology"
-                className="h-20 w-20 rounded-xl object-cover"
-              />
-              <div className="hidden sm:block leading-tight">
-                <div className="text-xs font-semibold text-slate-500">Skill • Training • Career</div>
-              </div>
-            </button>
-
-            {/* Center Title */}
-            <div className="flex-1 text-center">
-              <div className="text-[18px] sm:text-[28px] font-extrabold tracking-wide text-red-600 uppercase">
-                Lal Institute of Paramedical Technology
-              </div>
-
-              <div className="mt-1 text-[11px] sm:text-[13px] font-extrabold text-slate-900">
-                REGD. OF DELHI GOVT. AS NO.: F/1375 • AN ISO 9001 : 2005 CERTIFIED
-              </div>
-
-              <div className="mt-1 text-[10px] sm:text-[12px] font-semibold text-slate-600">
-                An institute with a glorious past of training para-medics
-              </div>
-            </div>
-
-            <div className="w-[70px] sm:w-[92px]" />
-          </div>
-        </div>
-
-        {/* Nav bar */}
-        <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
-          <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-2 overflow-visible">
-            {/* ✅ Desktop Nav */}
-            <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
-              {nav.map((item) => {
-                // ✅ COURSES dropdown
-                if (item.isDropdown && item.dropdownKey === "courses") {
-                  return (
-                    <div
-                      key={item.path}
-                      ref={coursesWrapRef}
-                      className="relative"
-                      onMouseEnter={() => setOpenCourses(true)}
-                      onMouseLeave={() => setOpenCourses(false)}
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setOpenCourses((v) => !v);
-                          setOpenServices(false);
-                        }}
-                        className={cx("nav-btn", isCoursesActive() ? "ring-2 ring-white/40" : "")}
-                        aria-haspopup="menu"
-                        aria-expanded={openCourses}
-                        type="button"
-                      >
-                        COURSES
-                        <span className={cx("transition", openCourses ? "rotate-180" : "")}>▼</span>
-                      </button>
-
-                      {/* hover bridge */}
-                      <div className="absolute left-0 top-full h-3 w-full" />
-
-                      {openCourses && (
-                        <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
-                          <div className="dd w-64 flex flex-col py-1">
-                            <button onClick={() => go("/courses")} className="dd-item" type="button">
-                              All Courses
-                            </button>
-                            {courseMenu.map((c) => (
-                              <button
-                                key={c.path}
-                                onClick={() => go(c.path)}
-                                className="dd-item"
-                                type="button"
-                              >
-                                {c.label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-
-                // ✅ SERVICES dropdown
-                if (item.isDropdown && item.dropdownKey === "services") {
-                  return (
-                    <div
-                      key={item.path}
-                      ref={servicesWrapRef}
-                      className="relative"
-                      onMouseEnter={() => setOpenServices(true)}
-                      onMouseLeave={() => setOpenServices(false)}
-                    >
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          setOpenServices((v) => !v);
-                          setOpenCourses(false);
-                        }}
-                        className={cx("nav-btn", isServicesActive() ? "ring-2 ring-white/40" : "")}
-                        aria-haspopup="menu"
-                        aria-expanded={openServices}
-                        type="button"
-                      >
-                        SERVICES
-                        <span className={cx("transition", openServices ? "rotate-180" : "")}>▼</span>
-                      </button>
-
-                      {/* hover bridge */}
-                      <div className="absolute left-0 top-full h-3 w-full" />
-
-                      {openServices && (
-                        <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
-                          <div className="dd w-72 flex flex-col py-1">
-                            <button onClick={() => go("/services")} className="dd-item" type="button">
-                              All Services
-                            </button>
-                            {servicesMenu.map((s) => (
-                              <button
-                                key={s.path}
-                                onClick={() => go(s.path)}
-                                className="dd-item"
-                                type="button"
-                              >
-                                {s.label}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  );
-                }
-
-                // ✅ normal links
-                return (
-                  <button
-                    key={item.path}
-                    onClick={() => go(item.path)}
-                    className={cx("nav-btn", isActive(item.path) ? "ring-2 ring-white/40" : "")}
-                    type="button"
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-            </nav>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => go("/contact")}
-                className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
-                type="button"
-              >
-                Apply Now →
-              </button>
-
-              <button
-                className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900"
-                onClick={() => setMenu(true)}
-                aria-label="Open menu"
-                type="button"
-              >
-                <Menu className="h-5 w-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
+      {/* ✅ Header spacer so content does not go under fixed header */}
+      <div className="h-[430px] sm:h-[210px]" />
 
       {/* ================= MOBILE DRAWER ================= */}
       {menu && (
-        <div className="fixed inset-0 z-[60] bg-black/40">
+        <div className="fixed inset-0 z-[1000000] bg-black/40">
           <div className="absolute right-0 top-0 h-full w-[80%] max-w-sm bg-white p-6">
             <div className="flex items-center justify-between">
               <div className="font-bold">Menu</div>
@@ -781,7 +779,6 @@ export default function App() {
               <div>
                 <div className="font-extrabold text-slate-900">POLICIES</div>
                 <div className="mt-3 grid gap-2">
-                  {/* ✅ FAQs added ABOVE Disclaimer (as you asked) */}
                   <button onClick={() => go("/faqs")} className="text-left hover:underline" type="button">
                     FAQs
                   </button>

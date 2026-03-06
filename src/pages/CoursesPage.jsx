@@ -168,116 +168,198 @@ export default function CoursesPage() {
 
   const heading = pageLevel === "All" ? "Our Paramedical Courses" : `${pageLevel} Courses`;
 
+  // ✅ SEO ADD START
+  const siteUrl = "https://lipmt.in";
+  const cleanPath = (location.pathname || "/courses").toLowerCase();
+  const pageUrl = `${siteUrl}${cleanPath}`;
+
+  const breadcrumbName =
+    pageLevel === "All" ? "Courses" : `${pageLevel} Courses`;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: breadcrumbName,
+        item: pageUrl,
+      },
+    ],
+  };
+
+  const coursesPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${pageUrl}#webpage`,
+    url: pageUrl,
+    name:
+      pageLevel === "All"
+        ? "Paramedical Courses | LIPMT"
+        : `${pageLevel} Paramedical Courses | LIPMT`,
+    description:
+      pageLevel === "All"
+        ? "Explore paramedical diploma, certificate and degree courses at LIPMT including DMLT, OTT, ECG, Radiology, Dialysis and Dental Technology."
+        : `Explore ${pageLevel.toLowerCase()} paramedical courses at LIPMT with course details, eligibility, duration and admission support.`,
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+    },
+  };
+
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name:
+      pageLevel === "All"
+        ? "Paramedical Courses at LIPMT"
+        : `${pageLevel} Courses at LIPMT`,
+    itemListElement: levelFiltered.map((course, index) => ({
+      "@type": "Course",
+      position: index + 1,
+      name: course.title,
+      description:
+        course.overview ||
+        `${course.title} course at LIPMT with practical training, eligibility guidance and admission support.`,
+      provider: {
+        "@type": "EducationalOrganization",
+        name: "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY",
+        sameAs: siteUrl,
+      },
+    })),
+  };
+  // ✅ SEO ADD END
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-teal-50 text-slate-900">
-      <div className="mx-auto max-w-7xl px-5 py-14">
-        {/* Heading */}
-        <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1 text-xs font-semibold text-sky-700 shadow-sm">
-              <span className="h-2 w-2 rounded-full bg-sky-500" />
-              Programs {pageLevel !== "All" ? `• ${pageLevel}` : ""}
+    <>
+      {/* ✅ SEO Schema */}
+      <script type="application/ld+json">
+        {JSON.stringify(breadcrumbSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(coursesPageSchema)}
+      </script>
+      <script type="application/ld+json">
+        {JSON.stringify(itemListSchema)}
+      </script>
+
+      <div className="min-h-screen bg-gradient-to-b from-sky-50 via-white to-teal-50 text-slate-900">
+        <div className="mx-auto max-w-7xl px-5 py-14">
+          {/* Heading */}
+          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <div className="inline-flex items-center gap-2 rounded-full border border-sky-100 bg-white px-3 py-1 text-xs font-semibold text-sky-700 shadow-sm">
+                <span className="h-2 w-2 rounded-full bg-sky-500" />
+                Programs {pageLevel !== "All" ? `• ${pageLevel}` : ""}
+              </div>
+              <h1 className="mt-4 text-4xl font-extrabold">{heading}</h1>
+              <p className="mt-2 text-slate-600">
+                Search & filter courses. Click “View Details” or directly “Enroll”.
+              </p>
             </div>
-            <h1 className="mt-4 text-4xl font-extrabold">{heading}</h1>
-            <p className="mt-2 text-slate-600">
-              Search & filter courses. Click “View Details” or directly “Enroll”.
-            </p>
+
+            <a
+              href="tel:+919811343520"
+              className="inline-flex items-center justify-center rounded-xl bg-sky-600 text-white px-4 py-2 text-sm font-semibold hover:bg-sky-700 transition"
+            >
+              Admission Helpline
+            </a>
           </div>
 
-          <a
-            href="tel:+919811343520"
-            className="inline-flex items-center justify-center rounded-xl bg-sky-600 text-white px-4 py-2 text-sm font-semibold hover:bg-sky-700 transition"
-          >
-            Admission Helpline
-          </a>
-        </div>
+          {/* Filters */}
+          <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_26px_rgba(15,23,42,0.06)]">
+            <div className="grid gap-3 md:grid-cols-3">
+              {/* Search */}
+              <div className="md:col-span-2">
+                <label className="text-xs font-semibold text-slate-700">Search Course</label>
+                <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
+                  <span className="text-slate-400">🔎</span>
+                  <input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="Search by name, duration, eligibility..."
+                    className="w-full text-sm outline-none"
+                  />
+                  {q?.length > 0 && (
+                    <button
+                      onClick={() => setQ("")}
+                      className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs hover:bg-slate-50"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+              </div>
 
-        {/* Filters */}
-        <div className="mt-8 rounded-2xl border border-slate-200 bg-white p-4 shadow-[0_10px_26px_rgba(15,23,42,0.06)]">
-          <div className="grid gap-3 md:grid-cols-3">
-            {/* Search */}
-            <div className="md:col-span-2">
-              <label className="text-xs font-semibold text-slate-700">Search Course</label>
-              <div className="mt-2 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2">
-                <span className="text-slate-400">🔎</span>
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  placeholder="Search by name, duration, eligibility..."
-                  className="w-full text-sm outline-none"
-                />
-                {q?.length > 0 && (
-                  <button
-                    onClick={() => setQ("")}
-                    className="rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs hover:bg-slate-50"
-                  >
-                    Clear
-                  </button>
-                )}
+              {/* Category */}
+              <div>
+                <label className="text-xs font-semibold text-slate-700">Category</label>
+                <select
+                  value={cat}
+                  onChange={(e) => setCat(e.target.value)}
+                  className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none hover:bg-slate-50"
+                >
+                  {categories.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
-            {/* Category */}
-            <div>
-              <label className="text-xs font-semibold text-slate-700">Category</label>
-              <select
-                value={cat}
-                onChange={(e) => setCat(e.target.value)}
-                className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none hover:bg-slate-50"
-              >
-                {categories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+            <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
+              <div>
+                Showing <span className="font-semibold text-slate-900">{filtered.length}</span> courses
+                {pageLevel !== "All" && (
+                  <>
+                    {" "}
+                    in <span className="font-semibold text-slate-900">{pageLevel}</span>
+                  </>
+                )}
+                {cat !== "All" && (
+                  <>
+                    {" "}
+                    • Category <span className="font-semibold text-slate-900">{cat}</span>
+                  </>
+                )}
+              </div>
             </div>
           </div>
 
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3 text-xs text-slate-600">
-            <div>
-              Showing <span className="font-semibold text-slate-900">{filtered.length}</span> courses
-              {pageLevel !== "All" && (
-                <>
-                  {" "}
-                  in <span className="font-semibold text-slate-900">{pageLevel}</span>
-                </>
-              )}
-              {cat !== "All" && (
-                <>
-                  {" "}
-                  • Category <span className="font-semibold text-slate-900">{cat}</span>
-                </>
-              )}
+          {/* Courses Grid */}
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((course) => (
+              <CourseCard key={course.slug} course={course} onEnroll={() => openEnrollModal(course)} />
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-700">
+              <div className="text-lg font-extrabold">No courses found</div>
+              <div className="mt-2 text-sm text-slate-600">Try changing search keywords or category.</div>
             </div>
-          </div>
+          )}
         </div>
 
-        {/* Courses Grid */}
-        <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {filtered.map((course) => (
-            <CourseCard key={course.slug} course={course} onEnroll={() => openEnrollModal(course)} />
-          ))}
-        </div>
-
-        {filtered.length === 0 && (
-          <div className="mt-10 rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-700">
-            <div className="text-lg font-extrabold">No courses found</div>
-            <div className="mt-2 text-sm text-slate-600">Try changing search keywords or category.</div>
-          </div>
+        {openEnroll && (
+          <EnrollModal
+            course={selectedCourse}
+            onClose={() => setOpenEnroll(false)}
+            onWhatsApp={(name, phone, city) => whatsappEnroll(selectedCourse, name, phone, city)}
+          />
         )}
+
+        <WhatsAppFloat />
       </div>
-
-      {openEnroll && (
-        <EnrollModal
-          course={selectedCourse}
-          onClose={() => setOpenEnroll(false)}
-          onWhatsApp={(name, phone, city) => whatsappEnroll(selectedCourse, name, phone, city)}
-        />
-      )}
-
-      <WhatsAppFloat />
-    </div>
+    </>
   );
 }
 

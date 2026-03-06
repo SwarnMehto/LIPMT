@@ -7,6 +7,7 @@ export default function SiteFooter() {
     <footer className="mt-14 border-t border-slate-200 bg-white">
       <div className="mx-auto max-w-7xl px-5 py-12">
         <div className="grid gap-10 lg:grid-cols-3">
+
           {/* LEFT: Brand + Address */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3">
@@ -64,6 +65,7 @@ export default function SiteFooter() {
 
               <div className="mt-4 border-t border-slate-200 pt-4" />
 
+              <FooterLink to="/faqs">FAQs</FooterLink>
               <FooterLink to="/disclaimer">Disclaimer</FooterLink>
               <FooterLink to="/privacy-policy">Privacy Policy</FooterLink>
               <FooterLink to="/terms">Terms & Conditions</FooterLink>
@@ -94,10 +96,76 @@ export default function SiteFooter() {
           </div>
         </div>
 
-        {/* <div className="mt-10 flex flex-col gap-2 border-t border-slate-200 pt-6 text-xs text-slate-500 md:flex-row md:items-center md:justify-between">
-          <div>© {new Date().getFullYear()} LIPMT. All rights reserved.</div>
-          <div className="text-slate-500">Designed for a clean hospital vibe.</div>
-        </div> */}
+        {/* ⭐ SEO + TRUST SECTION (NEW ADDED) */}
+        <div className="mt-12 border-t border-slate-200 pt-8">
+
+          <div className="grid gap-6 md:grid-cols-3">
+
+            {/* Student Trust */}
+            <div>
+              <div className="font-bold text-slate-900">Student Trust</div>
+              <div className="mt-3 space-y-2 text-sm text-slate-700">
+                <div>✔ Practical Based Training</div>
+                <div>✔ Experienced Faculty</div>
+                <div>✔ Career Guidance Support</div>
+                <div>✔ Modern Medical Labs</div>
+              </div>
+            </div>
+
+            {/* Google Reviews */}
+            <div>
+              <div className="font-bold text-slate-900">Student Reviews</div>
+              <div className="mt-3 text-sm text-slate-700">
+                ⭐ Rated by students on Google
+              </div>
+
+              <a
+                href="https://www.google.com/search?q=lal+institute+of+para+medical+technology+reviews"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-block text-sky-700 hover:underline text-sm font-semibold"
+              >
+                View Google Reviews →
+              </a>
+            </div>
+
+            {/* Admission CTA */}
+            <div>
+              <div className="font-bold text-slate-900">
+                Start Your Paramedical Career
+              </div>
+
+              <div className="mt-3 text-sm text-slate-700">
+                Apply for admission or talk to our counsellor.
+              </div>
+
+              <div className="mt-3 flex gap-3">
+                <a
+                  href="tel:+919811343520"
+                  className="rounded-lg bg-sky-600 px-4 py-2 text-white text-sm font-semibold hover:bg-sky-700"
+                >
+                  Call Now
+                </a>
+
+                <a
+                  href="https://wa.me/919811343520"
+                  className="rounded-lg border border-sky-600 px-4 py-2 text-sky-700 text-sm font-semibold hover:bg-sky-50"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            </div>
+
+          </div>
+
+          {/* SEO Keyword line */}
+          <div className="mt-8 text-xs text-slate-500 text-center">
+            Best Paramedical Institute in Delhi for DMLT, ECG Technician,
+            Radiology Technician and Dialysis Technician Courses.
+          </div>
+
+        </div>
+
       </div>
     </footer>
   );
