@@ -166,7 +166,7 @@ function Modal({ open, onClose, title, children }) {
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[100]">
+    <div className="fixed inset-0 z-[1000001]">
       <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center p-4">
         <motion.div
@@ -223,11 +223,11 @@ function FAQ({ items }) {
 function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520" }) {
   const msg = encodeURIComponent("Hello LIPMT, I want admission details (fees, batches & process).");
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur md:hidden">
-      <div className="mx-auto flex max-w-6xl gap-2 px-3 py-2">
+    <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur shadow-[0_-8px_30px_rgba(15,23,42,0.08)] md:hidden">
+      <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-3 py-2">
         <a
           href={`tel:${phone}`}
-          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
+          className="flex min-h-[46px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
           aria-label="Call LIPMT"
         >
           📞 Call
@@ -236,7 +236,7 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
           href={`https://wa.me/${wa}?text=${msg}`}
           target="_blank"
           rel="noreferrer"
-          className="flex min-h-[44px] flex-1 items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-sm font-extrabold text-white"
+          className="flex min-h-[46px] items-center justify-center rounded-2xl bg-green-600 px-3 py-2 text-sm font-extrabold text-white"
           aria-label="Chat on WhatsApp"
         >
           💬 WhatsApp
@@ -244,7 +244,7 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
         <button
           type="button"
           onClick={onApply}
-          className="flex-1 min-h-[44px] rounded-xl bg-sky-600 px-3 py-2 text-sm font-extrabold text-white"
+          className="min-h-[46px] rounded-2xl bg-sky-600 px-3 py-2 text-sm font-extrabold text-white"
           aria-label="Apply for admission"
         >
           ✅ Apply
@@ -759,7 +759,7 @@ export default function HomePage() {
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
 
       {/* ✅ Mobile sticky bar */}
-      <MobileStickyBar onApply={() => setEnrollOpen(true)} />
+      <AdmissionChatbot onApply={() => setEnrollOpen(true)} />
       <AdmissionChatbot
   onApply={() => setEnrollOpen(true)}
   phone="919811343520"
@@ -767,7 +767,7 @@ export default function HomePage() {
 />
       {/* ===== HERO ===== */}
       <section id="home" className="relative overflow-hidden">
-        <div className="relative min-h-[980px] w-full md:h-[78vh] md:min-h-[560px]">
+        <div className="relative min-h-[860px] w-full md:h-[78vh] md:min-h-[560px]">
           <motion.img
             key={slideData.src}
             src={slideData.src}
@@ -786,7 +786,7 @@ export default function HomePage() {
             <div className="absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
           </div>
 
-          <Container className="relative flex h-full items-start pt-8 md:items-center md:pt-0">
+          <Container className="relative flex h-full items-start pt-4 md:items-center md:pt-0">
             <div className="max-w-2xl text-white">
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -795,12 +795,12 @@ export default function HomePage() {
               >
                 <Badge>Admissions Open • 2026–27</Badge>
 
-                <h1 className="mt-4 text-3xl font-extrabold leading-tight tracking-tight md:text-6xl">
+                <h1 className="mt-4 text-[28px] font-extrabold leading-[1.1] tracking-tight md:text-6xl">
                   {slideData.title}
                   <span className="text-sky-300">.</span>
                 </h1>
 
-                <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/85 md:text-lg">
+                <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-white/85 md:text-lg">
                   {slideData.subtitle}
                 </p>
 
@@ -876,7 +876,7 @@ export default function HomePage() {
             </div>
           </Container>
 
-          <div className="absolute bottom-[82px] left-0 right-0 md:bottom-6">
+          <div className="absolute bottom-[90px] left-0 right-0 md:bottom-6">
             <Container className="flex items-center justify-between">
               <div className="flex gap-2">
                 {heroSlides.map((_, i) => (

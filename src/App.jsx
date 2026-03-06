@@ -247,7 +247,7 @@ export default function App() {
 
       {/* ================= POPUP ================= */}
       {showPopup && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
+        <div className="fixed inset-0 z-[1000001] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
           <div className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl">
             <button
               onClick={closePopup}
@@ -404,13 +404,13 @@ export default function App() {
             scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
           )}
         >
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 py-3 sm:py-4 overflow-visible">
-            <div className="flex items-center justify-between gap-3 sm:gap-4">
+          <div className="mx-auto max-w-7xl px-3 sm:px-6 py-2 sm:py-4 overflow-visible">
+            <div className="flex items-center justify-between gap-2 sm:gap-4">
               <button onClick={() => go("/")} className="flex items-center gap-3 sm:gap-4" type="button">
                 <img
                   src={logo}
                   alt="Lal Institute of Paramedical Technology"
-                  className="h-16 w-16 sm:h-20 sm:w-20 rounded-xl object-cover"
+                  className="h-12 w-12 sm:h-20 sm:w-20 rounded-xl object-cover"
                 />
                 <div className="hidden sm:block leading-tight">
                   <div className="text-xs font-semibold text-slate-500">Skill • Training • Career</div>
@@ -418,25 +418,25 @@ export default function App() {
               </button>
 
               <div className="flex-1 text-center">
-                <div className="text-[16px] leading-tight sm:text-[28px] font-extrabold tracking-wide text-red-600 uppercase">
+                <div className="text-[11px] leading-[1.2] sm:text-[28px] font-extrabold tracking-normal sm:tracking-wide text-red-600 uppercase">
                   Lal Institute of Paramedical Technology
                 </div>
 
-                <div className="mt-1 text-[10px] leading-tight sm:text-[13px] font-extrabold text-slate-900">
+                <div className="mt-1 text-[8px] leading-[1.25] sm:text-[13px] font-extrabold text-slate-900">
                   REGD. OF DELHI GOVT. AS NO.: F/1375 • AN ISO 9001 : 2005 CERTIFIED
                 </div>
 
-                <div className="mt-1 text-[9px] leading-tight sm:text-[12px] font-semibold text-slate-600">
+                <div className="mt-1 text-[7px] leading-[1.25] sm:text-[12px] font-semibold text-slate-600">
                   An institute with a glorious past of training para-medics
                 </div>
               </div>
 
-              <div className="w-[52px] sm:w-[92px]" />
+              <div className="w-[40px] sm:w-[92px]" />
             </div>
           </div>
 
           <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-2 overflow-visible">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-6 py-2 overflow-visible">
               <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
                 {nav.map((item) => {
                   if (item.isDropdown && item.dropdownKey === "courses") {
@@ -555,14 +555,14 @@ export default function App() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={() => go("/contact")}
-                  className="rounded-full bg-white px-3 py-2 text-sm font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
+                  className="rounded-full bg-white px-3 py-2 text-[13px] font-extrabold text-slate-900 hover:bg-white/90 sm:px-4"
                   type="button"
                 >
                   Apply Now →
                 </button>
 
                 <button
-                  className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900"
+                  className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900 shrink-0"
                   onClick={() => setMenu(true)}
                   aria-label="Open menu"
                   type="button"
@@ -576,7 +576,7 @@ export default function App() {
       </div>
 
       {/* ✅ Header spacer so content does not go under fixed header */}
-      <div className="h-[430px] sm:h-[210px]" />
+      <div className="h-[235px] sm:h-[210px]" />
 
       {/* ================= MOBILE DRAWER ================= */}
       {menu && (
