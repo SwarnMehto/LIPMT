@@ -13,6 +13,10 @@ import {
   Briefcase,
   Clock,
   CheckCircle2,
+  Phone,
+  Send,
+  Download,
+  MapPin,
 } from "lucide-react";
 
 import HomePage from "./pages/HomePage.jsx";
@@ -26,7 +30,7 @@ import BrochurePage from "./pages/BrochurePage.jsx";
 import GalleryPage from "./pages/GalleryPage.jsx";
 import PracticalPage from "./pages/PracticalPage.jsx";
 import ClassroomPage from "./pages/ClassroomPage.jsx";
-
+import AdmissionChatbot from "./components/AdmissionChatbot";
 import CourseDetailPage from "./pages/CourseDetailPage.jsx";
 
 // ✅ NEW PAGES (ADDED)
@@ -63,6 +67,15 @@ export default function App() {
       text: "Hello 👋 Welcome to LIPMT. Ask me about courses, fees, admission, eligibility, batches or contact details.",
     },
   ]);
+
+  const quickQuestions = [
+    "Fees",
+    "Courses",
+    "Admission",
+    "Eligibility",
+    "Contact",
+    "Brochure",
+  ];
 
   const chatBodyRef = useRef(null);
 
@@ -358,10 +371,13 @@ export default function App() {
 
       {open && (
         <div className="fixed bottom-36 left-4 right-4 z-[96] w-auto max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.20)] md:bottom-24 md:left-6 md:right-auto">
+          {/* Header */}
           <div className="flex items-center justify-between bg-gradient-to-r from-sky-600 to-cyan-500 px-4 py-4 text-white">
             <div>
               <div className="text-sm font-extrabold">LIPMT Admission Help</div>
-              <div className="text-xs text-white/90">Online now</div>
+              <div className="text-xs text-white/90">
+                Ask about courses, fees, brochure & contact
+              </div>
             </div>
 
             <button
@@ -374,7 +390,11 @@ export default function App() {
             </button>
           </div>
 
-          <div ref={chatBodyRef} className="h-72 space-y-3 overflow-y-auto bg-slate-50 p-4">
+          {/* Messages */}
+          <div
+            ref={chatBodyRef}
+            className="min-h-[320px] max-h-[380px] space-y-3 overflow-y-auto bg-slate-50 p-4"
+          >
             {messages.map((m, i) => (
               <div
                 key={i}
@@ -391,22 +411,76 @@ export default function App() {
                 </div>
               </div>
             ))}
+
+            {/* Quick Questions */}
+            <div className="pt-1">
+              <div className="mb-2 text-xs font-semibold text-slate-500">
+                Quick Questions
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {quickQuestions.map((q) => (
+                  <button
+                    key={q}
+                    type="button"
+                    onClick={() => handleQuickQuestion(q)}
+                    className="rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
+          {/* Bottom */}
           <div className="border-t border-slate-200 bg-white p-3">
-            <div className="mb-3 flex flex-wrap gap-2">
-              {["Fees", "Courses", "Admission", "Eligibility", "Contact", "Brochure"].map((q) => (
-                <button
-                  key={q}
-                  type="button"
-                  onClick={() => handleQuickQuestion(q)}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
-                >
-                  {q}
-                </button>
-              ))}
+            {/* CTA buttons */}
+            <div className="mb-3 grid grid-cols-2 gap-2">
+              <a
+                href="tel:+918700116436"
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-sky-600 px-3 py-2 text-xs font-bold text-white hover:bg-sky-700"
+              >
+                <Phone className="h-4 w-4" />
+                Call Now
+              </a>
+
+              <a
+                href={buildWhatsAppLink(
+                  "Hello LIPMT, I want admission details about courses, fees, eligibility and batches."
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-xs font-bold text-white hover:bg-green-700"
+              >
+                💬 WhatsApp
+              </a>
+
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/brochure");
+                  setOpen(false);
+                }}
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 hover:bg-slate-50"
+              >
+                <Download className="h-4 w-4" />
+                Brochure
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  navigate("/contact");
+                  setOpen(false);
+                }}
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 hover:bg-slate-50"
+              >
+                <MapPin className="h-4 w-4" />
+                Contact
+              </button>
             </div>
 
+            {/* Input */}
             <div className="flex gap-2">
               <input
                 value={msg}
@@ -419,12 +493,14 @@ export default function App() {
               <button
                 type="button"
                 onClick={handleSend}
-                className="min-h-[44px] rounded-xl bg-sky-600 px-4 py-3 text-sm font-bold text-white hover:bg-sky-700"
+                className="flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl bg-sky-600 px-4 py-3 text-sm font-bold text-white hover:bg-sky-700"
+                aria-label="Send"
               >
-                Send
+                <Send className="h-4 w-4" />
               </button>
             </div>
 
+            {/* Bottom actions */}
             <div className="mt-3 grid grid-cols-2 gap-2">
               <button
                 type="button"
@@ -440,9 +516,9 @@ export default function App() {
                 )}
                 target="_blank"
                 rel="noreferrer"
-                className="flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-xs font-bold text-white hover:bg-green-700"
+                className="flex min-h-[44px] items-center justify-center rounded-xl bg-emerald-600 px-3 py-2 text-xs font-bold text-white hover:bg-emerald-700"
               >
-                💬 WhatsApp
+                Chat on WhatsApp
               </a>
             </div>
           </div>
