@@ -52,7 +52,7 @@ export default function App() {
   const [menu, setMenu] = useState(false);
 
   // ✅ WhatsApp (CHANGE NUMBER HERE)
-  const WHATSAPP_NUMBER = "91+91 98113 42520";
+  const WHATSAPP_NUMBER = "9198113 42520";
   const whatsappText = encodeURIComponent(
     "Hi Lal Institute of Paramedical Technology, I want details about admission."
   );
@@ -437,7 +437,7 @@ export default function App() {
             {/* CTA buttons */}
             {/* <div className="mb-3 grid grid-cols-2 gap-2">
               <a
-                href="tel:+91+91 98113 42520"
+                href="tel:+9198113 42520"
                 className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-sky-600 px-3 py-2 text-xs font-bold text-white hover:bg-sky-700"
               >
                 <Phone className="h-4 w-4" />
