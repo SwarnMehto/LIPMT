@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView, useMotionValue, animate } from "framer-motion";
 import { Hospital, Microscope, ScanLine, Stethoscope } from "lucide-react";
+
 // ✅ Assets
 import logo from "../assets/logo.png";
 import slide1 from "../assets/slide1.png";
@@ -224,7 +225,7 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
   const msg = encodeURIComponent("Hello LIPMT, I want admission details (fees, batches & process).");
   return (
     <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur shadow-[0_-6px_20px_rgba(15,23,42,0.06)] md:hidden">
-  <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-2 py-2">
+      <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-2 py-2">
         <a
           href={`tel:${phone}`}
           className="flex min-h-[42px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
@@ -253,6 +254,7 @@ function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520"
     </div>
   );
 }
+
 function AdmissionChatbot({
   onApply,
   phone = "919811343520",
@@ -393,8 +395,6 @@ function AdmissionChatbot({
 
   return (
     <>
-      
-
       {open && (
         <div className="fixed bottom-40 left-4 z-[96] w-[92vw] max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.20)] md:bottom-24 md:left-6">
           <div className="flex items-center justify-between bg-gradient-to-r from-sky-600 to-cyan-500 px-4 py-4 text-white">
@@ -497,6 +497,7 @@ function AdmissionChatbot({
     </>
   );
 }
+
 export default function HomePage() {
   const instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY";
 
@@ -752,116 +753,126 @@ export default function HomePage() {
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
 
       {/* ✅ Mobile sticky bar */}
-      <AdmissionChatbot onApply={() => setEnrollOpen(true)} />
       <AdmissionChatbot
-  onApply={() => setEnrollOpen(true)}
-  phone="919811343520"
-  instituteName={instituteName}
-/>
+        onApply={() => setEnrollOpen(true)}
+        phone="919811343520"
+        instituteName={instituteName}
+      />
+
       {/* ===== HERO ===== */}
       <section id="home" className="relative overflow-hidden">
-        <div className="relative min-h-[860px] w-full md:h-[78vh] md:min-h-[560px]">
+        <div className="relative h-[620px] w-full sm:h-[700px] md:h-[760px] lg:h-[820px]">
           <motion.img
             key={slideData.src}
             src={slideData.src}
             alt={`${slideData.title} - LIPMT`}
-            className="absolute inset-0 h-full w-full object-cover"
+            className="absolute inset-0 h-full w-full object-cover object-center"
             initial={{ opacity: 0, scale: 1.03 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
 
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/45 to-slate-950/15" />
+          <div className="absolute inset-0 bg-slate-950/45" />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/70 via-slate-950/45 to-sky-950/20" />
 
           <div className="absolute inset-0">
-            <div className="absolute inset-0 opacity-[0.18] [background-image:linear-gradient(to_right,rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.22)_1px,transparent_1px)] [background-size:36px_36px]" />
-            <div className="absolute -left-40 top-24 h-72 w-72 rounded-full bg-sky-500/25 blur-3xl" />
-            <div className="absolute -right-40 bottom-0 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
+            <div className="absolute inset-0 opacity-[0.12] [background-image:linear-gradient(to_right,rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.22)_1px,transparent_1px)] [background-size:40px_40px]" />
+            <div className="absolute -left-40 top-20 h-72 w-72 rounded-full bg-sky-500/20 blur-3xl" />
+            <div className="absolute -right-40 bottom-10 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
           </div>
 
-          <Container className="relative flex h-full items-start pt-4 md:items-center md:pt-0">
-            <div className="max-w-2xl text-white">
+          <Container className="relative z-10 flex h-full items-center">
+            <div className="w-full max-w-3xl pt-10 sm:pt-12 md:pt-0">
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
+                className="text-white"
               >
                 <Badge>Admissions Open • 2026–27</Badge>
 
-                <h1 className="mt-4 text-[28px] font-extrabold leading-[1.1] tracking-tight md:text-6xl">
+                <h1 className="mt-5 max-w-2xl text-[34px] font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                   {slideData.title}
                   <span className="text-sky-300">.</span>
                 </h1>
 
-                <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-white/85 md:text-lg">
+                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
                   {slideData.subtitle}
                 </p>
 
-                {/* ✅ Hero Highlights */}
-                <div className="mt-5 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
                   {heroHighlights.map((t) => (
                     <div
                       key={t}
-                      className="flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-4 py-2 text-sm text-white/90 backdrop-blur"
+                      className="flex items-center gap-3 rounded-2xl border border-white/15 bg-white/10 px-4 py-3 text-sm text-white/90 backdrop-blur"
                     >
-                      <span className="text-sky-200">✔</span>
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-300">
+                        ✔
+                      </span>
                       <span className="font-semibold">{t}</span>
                     </div>
                   ))}
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-3">
-                  <PrimaryBtn onClick={() => setEnrollOpen(true)}>Enroll / Apply</PrimaryBtn>
-                  <GhostBtn onClick={() => go("courses")}>Explore Courses</GhostBtn>
-                  <GhostBtn onClick={() => go("contact")}>Get Callback</GhostBtn>
+                  <PrimaryBtn onClick={() => setEnrollOpen(true)} className="rounded-2xl px-6">
+                    Enroll / Apply
+                  </PrimaryBtn>
+
+                  <GhostBtn onClick={() => go("courses")} className="rounded-2xl px-6">
+                    Explore Courses
+                  </GhostBtn>
+
+                  <GhostBtn onClick={() => go("contact")} className="rounded-2xl px-6">
+                    Get Callback
+                  </GhostBtn>
 
                   <a
                     href="/brochure.pdf"
                     target="_blank"
                     rel="noreferrer"
                     aria-label="Download brochure"
-                    className="min-h-[44px] rounded-xl border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
+                    className="inline-flex min-h-[44px] items-center justify-center rounded-2xl border border-white/40 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20 active:scale-[0.99]"
                   >
                     Download Brochure
                   </a>
                 </div>
 
-                <div className="mt-10 grid max-w-xl grid-cols-2 gap-3 md:grid-cols-4">
-                  <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                    <div className="text-2xl font-extrabold">
+                <div className="mt-8 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
+                  <div className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                    <div className="text-2xl font-extrabold sm:text-3xl">
                       <CountUp to={10} suffix="+" />
                     </div>
                     <div className="mt-1 text-xs text-white/70">Years Experience</div>
                   </div>
-                  <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                    <div className="text-2xl font-extrabold">
+                  <div className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                    <div className="text-2xl font-extrabold sm:text-3xl">
                       <CountUp to={12} suffix="+" />
                     </div>
                     <div className="mt-1 text-xs text-white/70">Labs & Units</div>
                   </div>
-                  <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                    <div className="text-2xl font-extrabold">
+                  <div className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                    <div className="text-2xl font-extrabold sm:text-3xl">
                       <CountUp to={25} suffix="+" />
                     </div>
                     <div className="mt-1 text-xs text-white/70">Courses / Modules</div>
                   </div>
-                  <div className="rounded-2xl border border-white/15 bg-white/10 p-4 backdrop-blur">
-                    <div className="text-2xl font-extrabold">
+                  <div className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
+                    <div className="text-2xl font-extrabold sm:text-3xl">
                       <CountUp to={100} suffix="%" />
                     </div>
                     <div className="mt-1 text-xs text-white/70">Guidance Support</div>
                   </div>
                 </div>
 
-                {/* ✅ TRUST STRIP */}
-                <div className="mt-6 grid max-w-xl grid-cols-1 gap-2 sm:grid-cols-2">
+                <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
                   {trustProofs.map((t) => (
                     <div
                       key={t.k}
-                      className="rounded-2xl border border-white/15 bg-white/10 px-4 py-3 backdrop-blur"
+                      className="rounded-2xl border border-white/15 bg-white/10 px-4 py-4 backdrop-blur"
                     >
-                      <div className="text-xs font-extrabold text-white">{t.k}</div>
-                      <div className="mt-1 text-xs text-white/80">{t.v}</div>
+                      <div className="text-sm font-extrabold text-white">{t.k}</div>
+                      <div className="mt-1 text-sm text-white/80">{t.v}</div>
                     </div>
                   ))}
                 </div>
@@ -869,7 +880,7 @@ export default function HomePage() {
             </div>
           </Container>
 
-          <div className="absolute bottom-[90px] left-0 right-0 md:bottom-6">
+          <div className="absolute bottom-[94px] left-0 right-0 sm:bottom-[100px] md:bottom-8">
             <Container className="flex items-center justify-between">
               <div className="flex gap-2">
                 {heroSlides.map((_, i) => (
@@ -888,7 +899,7 @@ export default function HomePage() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setSlide((s) => (s - 1 + heroSlides.length) % heroSlides.length)}
-                  className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
+                  className="rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
                   aria-label="Previous slide"
                   type="button"
                 >
@@ -896,7 +907,7 @@ export default function HomePage() {
                 </button>
                 <button
                   onClick={() => setSlide((s) => (s + 1) % heroSlides.length)}
-                  className="rounded-xl border border-white/20 bg-white/10 px-3 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
+                  className="rounded-2xl border border-white/20 bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur hover:bg-white/20"
                   aria-label="Next slide"
                   type="button"
                 >
@@ -1385,114 +1396,100 @@ export default function HomePage() {
       </section>
 
       {/* ===== PLACEMENT PARTNERS ===== */}
-{/* ===== PLACEMENT PARTNERS ===== */}
-<section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
-  <Container>
-    <SectionTitle
-      kicker="Placement Network"
-      title="Hospitals & labs where students get exposure"
-      desc="Students receive guidance for opportunities in hospitals, labs and healthcare centers."
-      align="center"
-    />
+      <section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
+        <Container>
+          <SectionTitle
+            kicker="Placement Network"
+            title="Hospitals & labs where students get exposure"
+            desc="Students receive guidance for opportunities in hospitals, labs and healthcare centers."
+            align="center"
+          />
 
-    {/* Top premium cards */}
-    <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
-
-      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <Hospital className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
-        <div className="text-sm font-bold text-slate-800">Hospital</div>
-      </div>
-
-      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <Microscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
-        <div className="text-sm font-bold text-slate-800">Diagnostic Lab</div>
-      </div>
-
-      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <ScanLine className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
-        <div className="text-sm font-bold text-slate-800">Imaging Center</div>
-      </div>
-
-      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
-        <Stethoscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
-        <div className="text-sm font-bold text-slate-800">Private Clinic</div>
-      </div>
-
-    </div>
-
-    {/* Auto sliding placement strip */}
-    <div className="mt-14 rounded-3xl border border-sky-100 bg-white p-6 shadow-sm">
-
-      <div className="text-center mb-6">
-        <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-1 text-xs font-bold uppercase tracking-wide text-sky-700">
-          Training / Placement Support
-        </div>
-
-        <p className="mt-3 text-sm text-slate-600 max-w-2xl mx-auto">
-          Students may receive exposure and opportunity guidance across hospitals,
-          labs, imaging centers and clinics.
-        </p>
-      </div>
-
-      <div className="relative overflow-hidden">
-
-        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-white to-transparent"/>
-        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-white to-transparent"/>
-
-        <div className="flex w-max animate-[scroll_26s_linear_infinite] gap-4">
-
-          {[
-            "Apollo Hospital",
-            "Fortis Healthcare",
-            "Max Hospital",
-            "Medanta",
-            "Dr Lal PathLabs",
-            "SRL Diagnostics",
-            "Narayana Health",
-            "Private Clinics",
-            "Imaging Centers",
-            "Diagnostic Labs",
-
-            "Apollo Hospital",
-            "Fortis Healthcare",
-            "Max Hospital",
-            "Medanta",
-            "Dr Lal PathLabs",
-            "SRL Diagnostics",
-            "Narayana Health",
-            "Private Clinics",
-            "Imaging Centers",
-            "Diagnostic Labs",
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-sky-50 hover:border-sky-200"
-            >
-              {item}
+          <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+            <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <Hospital className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+              <div className="text-sm font-bold text-slate-800">Hospital</div>
             </div>
-          ))}
 
-        </div>
+            <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <Microscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+              <div className="text-sm font-bold text-slate-800">Diagnostic Lab</div>
+            </div>
 
-      </div>
-    </div>
+            <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <ScanLine className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+              <div className="text-sm font-bold text-slate-800">Imaging Center</div>
+            </div>
 
-    {/* Note */}
-    <p className="mt-6 text-center text-xs text-slate-500 max-w-2xl mx-auto">
-      Placement / training support depends on availability, student performance,
-      practical exposure and institute guidance.
-    </p>
+            <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+              <Stethoscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+              <div className="text-sm font-bold text-slate-800">Private Clinic</div>
+            </div>
+          </div>
 
-    {/* Keyframes */}
-    <style>{`
-      @keyframes scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-    `}</style>
+          <div className="mt-14 rounded-3xl border border-sky-100 bg-white p-6 shadow-sm">
+            <div className="text-center mb-6">
+              <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-1 text-xs font-bold uppercase tracking-wide text-sky-700">
+                Training / Placement Support
+              </div>
 
-  </Container>
-</section>
+              <p className="mt-3 text-sm text-slate-600 max-w-2xl mx-auto">
+                Students may receive exposure and opportunity guidance across hospitals,
+                labs, imaging centers and clinics.
+              </p>
+            </div>
+
+            <div className="relative overflow-hidden">
+              <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-white to-transparent" />
+              <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-white to-transparent" />
+
+              <div className="flex w-max animate-[scroll_26s_linear_infinite] gap-4">
+                {[
+                  "Apollo Hospital",
+                  "Fortis Healthcare",
+                  "Max Hospital",
+                  "Medanta",
+                  "Dr Lal PathLabs",
+                  "SRL Diagnostics",
+                  "Narayana Health",
+                  "Private Clinics",
+                  "Imaging Centers",
+                  "Diagnostic Labs",
+                  "Apollo Hospital",
+                  "Fortis Healthcare",
+                  "Max Hospital",
+                  "Medanta",
+                  "Dr Lal PathLabs",
+                  "SRL Diagnostics",
+                  "Narayana Health",
+                  "Private Clinics",
+                  "Imaging Centers",
+                  "Diagnostic Labs",
+                ].map((item, i) => (
+                  <div
+                    key={i}
+                    className="whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-sky-50 hover:border-sky-200"
+                  >
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <p className="mt-6 text-center text-xs text-slate-500 max-w-2xl mx-auto">
+            Placement / training support depends on availability, student performance,
+            practical exposure and institute guidance.
+          </p>
+
+          <style>{`
+            @keyframes scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
+        </Container>
+      </section>
 
       {/* ✅ CAMPUS / GALLERY */}
       <section id="gallery" className="py-14 md:py-20">
