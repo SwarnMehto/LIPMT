@@ -90,7 +90,7 @@ export default function AboutPage() {
 
                   <div className="mt-5 flex flex-wrap gap-2">
                     <Badge>10+ Years Experience</Badge>
-                    <Badge>1000+ Students Trained</Badge>
+                    <Badge>500+ Students Trained</Badge>
                     <Badge>12+ Labs</Badge>
                     <Badge>Placement Guidance</Badge>
                   </div>

@@ -392,7 +392,7 @@ export default function TestimonialsPage() {
 
                 <div className="md:col-span-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                   <div className="text-xs text-slate-500">
-                    Note: Reviews saved on this device (LocalStorage) — refresh par bhi nahi hatega ✅
+                   
                   </div>
 
                   <button

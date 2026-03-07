@@ -1386,7 +1386,7 @@ export default function HomePage() {
 
       {/* ===== PLACEMENT PARTNERS ===== */}
 {/* ===== PLACEMENT PARTNERS ===== */}
-<section className="py-14 md:py-20 bg-slate-50 overflow-hidden">
+<section className="py-16 md:py-24 bg-slate-50 overflow-hidden">
   <Container>
     <SectionTitle
       kicker="Placement Network"
@@ -1396,44 +1396,51 @@ export default function HomePage() {
     />
 
     {/* Top premium cards */}
-    <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-      <div className="group rounded-2xl border border-slate-200 bg-white px-4 py-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
-        <Hospital className="mx-auto mb-3 h-7 w-7 text-sky-600 transition duration-300 group-hover:scale-110" />
-        <div className="text-sm font-extrabold text-slate-700">Hospital</div>
+    <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+
+      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Hospital className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+        <div className="text-sm font-bold text-slate-800">Hospital</div>
       </div>
 
-      <div className="group rounded-2xl border border-slate-200 bg-white px-4 py-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
-        <Microscope className="mx-auto mb-3 h-7 w-7 text-sky-600 transition duration-300 group-hover:scale-110" />
-        <div className="text-sm font-extrabold text-slate-700">Diagnostic Lab</div>
+      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Microscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+        <div className="text-sm font-bold text-slate-800">Diagnostic Lab</div>
       </div>
 
-      <div className="group rounded-2xl border border-slate-200 bg-white px-4 py-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
-        <ScanLine className="mx-auto mb-3 h-7 w-7 text-sky-600 transition duration-300 group-hover:scale-110" />
-        <div className="text-sm font-extrabold text-slate-700">Imaging Center</div>
+      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <ScanLine className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+        <div className="text-sm font-bold text-slate-800">Imaging Center</div>
       </div>
 
-      <div className="group rounded-2xl border border-slate-200 bg-white px-4 py-6 text-center shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-md">
-        <Stethoscope className="mx-auto mb-3 h-7 w-7 text-sky-600 transition duration-300 group-hover:scale-110" />
-        <div className="text-sm font-extrabold text-slate-700">Private Clinic</div>
+      <div className="group rounded-2xl border border-slate-200 bg-white px-6 py-8 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
+        <Stethoscope className="mx-auto mb-4 h-8 w-8 text-sky-600 transition group-hover:scale-110" />
+        <div className="text-sm font-bold text-slate-800">Private Clinic</div>
       </div>
+
     </div>
 
     {/* Auto sliding placement strip */}
-    <div className="mt-12 rounded-3xl border border-sky-100 bg-white/80 p-4 md:p-5 shadow-sm">
-      <div className="mb-4 text-center">
+    <div className="mt-14 rounded-3xl border border-sky-100 bg-white p-6 shadow-sm">
+
+      <div className="text-center mb-6">
         <div className="inline-flex rounded-full border border-sky-200 bg-sky-50 px-4 py-1 text-xs font-bold uppercase tracking-wide text-sky-700">
           Training / Placement Support
         </div>
-        <p className="mt-3 text-sm text-slate-600">
-          Students may receive exposure and opportunity guidance across hospitals, labs, imaging centers and clinics.
+
+        <p className="mt-3 text-sm text-slate-600 max-w-2xl mx-auto">
+          Students may receive exposure and opportunity guidance across hospitals,
+          labs, imaging centers and clinics.
         </p>
       </div>
 
       <div className="relative overflow-hidden">
-        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-10 bg-gradient-to-r from-white to-transparent md:w-20" />
-        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-10 bg-gradient-to-l from-white to-transparent md:w-20" />
 
-        <div className="flex w-max animate-[scroll_24s_linear_infinite] gap-4">
+        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-12 bg-gradient-to-r from-white to-transparent"/>
+        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-12 bg-gradient-to-l from-white to-transparent"/>
+
+        <div className="flex w-max animate-[scroll_26s_linear_infinite] gap-4">
+
           {[
             "Apollo Hospital",
             "Fortis Healthcare",
@@ -1459,31 +1466,31 @@ export default function HomePage() {
           ].map((item, i) => (
             <div
               key={i}
-              className="whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-bold text-slate-700 shadow-sm"
+              className="whitespace-nowrap rounded-full border border-slate-200 bg-slate-50 px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-sky-50 hover:border-sky-200"
             >
               {item}
             </div>
           ))}
+
         </div>
+
       </div>
     </div>
 
     {/* Note */}
-    <p className="mt-4 text-center text-xs leading-6 text-slate-500">
-      Placement / training support depends on availability, student performance, practical exposure and institute guidance.
+    <p className="mt-6 text-center text-xs text-slate-500 max-w-2xl mx-auto">
+      Placement / training support depends on availability, student performance,
+      practical exposure and institute guidance.
     </p>
 
-    {/* Local keyframes */}
+    {/* Keyframes */}
     <style>{`
       @keyframes scroll {
-        0% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(-50%);
-        }
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
       }
     `}</style>
+
   </Container>
 </section>
 
