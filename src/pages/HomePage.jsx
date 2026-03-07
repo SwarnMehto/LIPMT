@@ -223,11 +223,11 @@ function FAQ({ items }) {
 function MobileStickyBar({ onApply, phone = "+919811343520", wa = "919811343520" }) {
   const msg = encodeURIComponent("Hello LIPMT, I want admission details (fees, batches & process).");
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur shadow-[0_-8px_30px_rgba(15,23,42,0.08)] md:hidden">
-      <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-3 py-2">
+    <div className="fixed bottom-0 left-0 right-0 z-[90] border-t border-slate-200 bg-white/95 backdrop-blur shadow-[0_-6px_20px_rgba(15,23,42,0.06)] md:hidden">
+  <div className="mx-auto grid max-w-6xl grid-cols-3 gap-2 px-2 py-2">
         <a
           href={`tel:${phone}`}
-          className="flex min-h-[46px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
+          className="flex min-h-[42px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-extrabold text-slate-900"
           aria-label="Call LIPMT"
         >
           📞 Call
@@ -393,14 +393,7 @@ function AdmissionChatbot({
 
   return (
     <>
-      <button
-        type="button"
-        onClick={() => setOpen((s) => !s)}
-        className="fixed bottom-24 left-5 z-[95] rounded-full bg-sky-600 px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-sky-600/30 transition hover:bg-sky-700 md:bottom-6"
-        aria-label="Open admission chatbot"
-      >
-        💬 Ask LIPMT
-      </button>
+      
 
       {open && (
         <div className="fixed bottom-40 left-4 z-[96] w-[92vw] max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.20)] md:bottom-24 md:left-6">

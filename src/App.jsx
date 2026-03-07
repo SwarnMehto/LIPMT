@@ -54,6 +54,98 @@ export default function App() {
   );
   const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}`;
 
+  // ✅ Global Ask LIPMT Chatbot
+  const [open, setOpen] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [messages, setMessages] = useState([
+    {
+      type: "bot",
+      text: "Hello 👋 Welcome to LIPMT. Ask me about courses, fees, admission, eligibility, batches or contact details.",
+    },
+  ]);
+
+  const chatBodyRef = useRef(null);
+
+  const buildWhatsAppLink = (text) =>
+    `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(text)}`;
+
+  const onApply = () => {
+    navigate("/contact");
+    setOpen(false);
+  };
+
+  const botReply = (text) => {
+    const q = text.toLowerCase();
+
+    if (q.includes("fee") || q.includes("fees")) {
+      return "Fees course ke according alag hoti hain. Exact fee details ke liye Contact page par enquiry bhejiye ya WhatsApp par message kariye.";
+    }
+
+    if (q.includes("course") || q.includes("courses")) {
+      return "LIPMT me certificate, diploma aur degree level paramedical courses available hain. Aap Courses section me full details dekh sakte hain.";
+    }
+
+    if (q.includes("admission") || q.includes("apply")) {
+      return "Admission ke liye aap Apply Now ya Contact page se enquiry submit kar sakte hain. Hamari team aapko guide karegi.";
+    }
+
+    if (q.includes("eligibility")) {
+      return "Eligibility course par depend karti hai. Kuch courses 10th base par aur kuch 10+2 base par hote hain.";
+    }
+
+    if (q.includes("batch") || q.includes("timing")) {
+      return "Batch timing aur new sessions ki exact details ke liye institute se direct contact karna best rahega.";
+    }
+
+    if (
+      q.includes("contact") ||
+      q.includes("phone") ||
+      q.includes("number") ||
+      q.includes("whatsapp")
+    ) {
+      return "Aap Contact page par institute ke phone number, address aur enquiry options dekh sakte hain. WhatsApp option bhi available hai.";
+    }
+
+    if (q.includes("location") || q.includes("address")) {
+      return "Institute ka address aur map details Contact page par available hain.";
+    }
+
+    if (q.includes("brochure")) {
+      return "Aap Brochure page par jaakar institute brochure dekh ya download kar sakte hain.";
+    }
+
+    return "Main aapki help courses, fees, admission, eligibility, batches, brochure aur contact details ke baare me kar sakta hoon. Aap short question pooch sakte hain.";
+  };
+
+  const handleSend = () => {
+    if (!msg.trim()) return;
+
+    const userText = msg.trim();
+    const reply = botReply(userText);
+
+    setMessages((prev) => [
+      ...prev,
+      { type: "user", text: userText },
+      { type: "bot", text: reply },
+    ]);
+    setMsg("");
+  };
+
+  const handleQuickQuestion = (text) => {
+    const reply = botReply(text);
+    setMessages((prev) => [
+      ...prev,
+      { type: "user", text },
+      { type: "bot", text: reply },
+    ]);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSend();
+    }
+  };
+
   // Sticky effect (for header shadow/backdrop)
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
@@ -67,6 +159,23 @@ export default function App() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname]);
+
+  // ✅ Close menu/dropdowns/chat on route change
+  useEffect(() => {
+    setMenu(false);
+    setOpenCourses(false);
+    setOpenServices(false);
+    setOpenCoursesMobile(false);
+    setOpenServicesMobile(false);
+    setOpen(false);
+  }, [location.pathname]);
+
+  // ✅ Auto scroll chatbot body
+  useEffect(() => {
+    if (chatBodyRef.current) {
+      chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+    }
+  }, [messages, open]);
 
   // ✅ Popup: Job Oriented Program -> after 5 sec Free Enquiry (same popup)
   const [showPopup, setShowPopup] = useState(false);
@@ -147,14 +256,6 @@ export default function App() {
   // ✅ Mobile submenu state
   const [openCoursesMobile, setOpenCoursesMobile] = useState(false);
   const [openServicesMobile, setOpenServicesMobile] = useState(false);
-
-  // ✅ route change close dropdown
-  useEffect(() => {
-    setOpenCourses(false);
-    setOpenServices(false);
-    setOpenCoursesMobile(false);
-    setOpenServicesMobile(false);
-  }, [location.pathname]);
 
   // ✅ close dropdown when click outside (desktop)
   useEffect(() => {
@@ -238,12 +339,115 @@ export default function App() {
         href={whatsappLink}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-6 right-6 z-[90] flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500 shadow-xl hover:bg-emerald-600"
+        className="fixed bottom-6 right-6 z-[90] hidden h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500 shadow-xl hover:bg-emerald-600 md:flex"
         aria-label="Chat on WhatsApp"
         title="WhatsApp"
       >
         <MessageCircle className="h-7 w-7 text-white" />
       </a>
+
+      {/* ================= GLOBAL ASK LIPMT CHATBOT ================= */}
+      <button
+        type="button"
+        onClick={() => setOpen((s) => !s)}
+        className="fixed bottom-4 right-4 z-[95] flex min-h-[54px] items-center justify-center rounded-full bg-yellow-400 px-5 py-3 text-sm font-extrabold text-slate-900 shadow-[0_14px_32px_rgba(0,0,0,0.18)] transition hover:scale-[1.02] hover:bg-yellow-300 md:bottom-6 md:left-6 md:right-auto"
+        aria-label="Open admission chatbot"
+      >
+        💬 Ask LIPMT
+      </button>
+
+      {open && (
+        <div className="fixed bottom-36 left-4 right-4 z-[96] w-auto max-w-sm overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_60px_rgba(15,23,42,0.20)] md:bottom-24 md:left-6 md:right-auto">
+          <div className="flex items-center justify-between bg-gradient-to-r from-sky-600 to-cyan-500 px-4 py-4 text-white">
+            <div>
+              <div className="text-sm font-extrabold">LIPMT Admission Help</div>
+              <div className="text-xs text-white/90">Online now</div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="rounded-lg bg-white/10 px-2 py-1 text-sm font-bold hover:bg-white/20"
+              aria-label="Close chatbot"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div ref={chatBodyRef} className="h-72 space-y-3 overflow-y-auto bg-slate-50 p-4">
+            {messages.map((m, i) => (
+              <div
+                key={i}
+                className={`flex ${m.type === "user" ? "justify-end" : "justify-start"}`}
+              >
+                <div
+                  className={
+                    m.type === "user"
+                      ? "max-w-[85%] rounded-2xl rounded-br-md bg-sky-600 px-4 py-3 text-sm text-white"
+                      : "max-w-[85%] rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700"
+                  }
+                >
+                  {m.text}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t border-slate-200 bg-white p-3">
+            <div className="mb-3 flex flex-wrap gap-2">
+              {["Fees", "Courses", "Admission", "Eligibility", "Contact", "Brochure"].map((q) => (
+                <button
+                  key={q}
+                  type="button"
+                  onClick={() => handleQuickQuestion(q)}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 hover:bg-sky-50 hover:text-sky-700"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-2">
+              <input
+                value={msg}
+                onChange={(e) => setMsg(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask about fees, course, batch..."
+                className="min-h-[44px] flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none focus:border-sky-400"
+              />
+
+              <button
+                type="button"
+                onClick={handleSend}
+                className="min-h-[44px] rounded-xl bg-sky-600 px-4 py-3 text-sm font-bold text-white hover:bg-sky-700"
+              >
+                Send
+              </button>
+            </div>
+
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={onApply}
+                className="min-h-[44px] rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-bold text-slate-900 hover:bg-slate-50"
+              >
+                🎓 Apply Now
+              </button>
+
+              <a
+                href={buildWhatsAppLink(
+                  "Hello LIPMT, I want admission details about courses, fees, eligibility and batches."
+                )}
+                target="_blank"
+                rel="noreferrer"
+                className="flex min-h-[44px] items-center justify-center rounded-xl bg-green-600 px-3 py-2 text-xs font-bold text-white hover:bg-green-700"
+              >
+                💬 WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ================= POPUP ================= */}
       {showPopup && (
@@ -374,29 +578,29 @@ export default function App() {
         </div>
       )}
 
-      {/* ================= FIXED TOP AREA ================= */}
-      <div className="fixed inset-x-0 top-0 z-[999999]">
-        {/* ================= TOP SOCIAL BAR ================= */}
-        <div className="w-full bg-slate-900">
-          <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-6 py-2 sm:justify-end">
-            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Facebook">
-              <Facebook className="h-4 w-4" />
-            </a>
-            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Instagram">
-              <Instagram className="h-4 w-4" />
-            </a>
-            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Twitter">
-              <Twitter className="h-4 w-4" />
-            </a>
-            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="YouTube">
-              <Youtube className="h-4 w-4" />
-            </a>
-            <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="LinkedIn">
-              <Linkedin className="h-4 w-4" />
-            </a>
-          </div>
+      {/* ================= TOP SOCIAL BAR (SCROLL AWAY) ================= */}
+      <div className="w-full bg-slate-900">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-2 px-6 py-2 sm:justify-end">
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Facebook">
+            <Facebook className="h-4 w-4" />
+          </a>
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Instagram">
+            <Instagram className="h-4 w-4" />
+          </a>
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Twitter">
+            <Twitter className="h-4 w-4" />
+          </a>
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="YouTube">
+            <Youtube className="h-4 w-4" />
+          </a>
+          <a href="#" className="rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="LinkedIn">
+            <Linkedin className="h-4 w-4" />
+          </a>
         </div>
+      </div>
 
+      {/* ================= STICKY HEADER ONLY ================= */}
+      <div className="sticky top-0 z-[999999]">
         {/* ================= HEADER ================= */}
         <header
           className={cx(
@@ -404,29 +608,29 @@ export default function App() {
             scrolled ? "border-slate-200 bg-white/95 backdrop-blur shadow-sm" : "border-slate-200 bg-white"
           )}
         >
-          <div className="mx-auto max-w-7xl px-3 sm:px-6 py-2 sm:py-4 overflow-visible">
+          <div className="mx-auto max-w-7xl px-3 py-2 sm:px-6 sm:py-4 overflow-visible">
             <div className="flex items-center justify-between gap-2 sm:gap-4">
               <button onClick={() => go("/")} className="flex items-center gap-3 sm:gap-4" type="button">
                 <img
                   src={logo}
                   alt="Lal Institute of Paramedical Technology"
-                  className="h-12 w-12 sm:h-20 sm:w-20 rounded-xl object-cover"
+                  className="h-12 w-12 rounded-xl object-cover sm:h-20 sm:w-20"
                 />
-                <div className="hidden sm:block leading-tight">
+                <div className="hidden leading-tight sm:block">
                   <div className="text-xs font-semibold text-slate-500">Skill • Training • Career</div>
                 </div>
               </button>
 
-              <div className="flex-1 text-center">
-                <div className="text-[11px] leading-[1.2] sm:text-[28px] font-extrabold tracking-normal sm:tracking-wide text-red-600 uppercase">
+              <div className="min-w-0 flex-1 text-center">
+                <div className="truncate text-[11px] font-extrabold uppercase leading-[1.2] tracking-normal text-red-600 sm:text-[28px] sm:tracking-wide">
                   Lal Institute of Paramedical Technology
                 </div>
 
-                <div className="mt-1 text-[8px] leading-[1.25] sm:text-[13px] font-extrabold text-slate-900">
+                <div className="mt-1 text-[8px] font-extrabold leading-[1.25] text-slate-900 sm:text-[13px]">
                   REGD. OF DELHI GOVT. AS NO.: F/1375 • AN ISO 9001 : 2005 CERTIFIED
                 </div>
 
-                <div className="mt-1 text-[7px] leading-[1.25] sm:text-[12px] font-semibold text-slate-600">
+                <div className="mt-1 text-[7px] font-semibold leading-[1.25] text-slate-600 sm:text-[12px]">
                   An institute with a glorious past of training para-medics
                 </div>
               </div>
@@ -435,9 +639,9 @@ export default function App() {
             </div>
           </div>
 
-          <div className="border-t border-slate-200 bg-amber-500/95 relative z-[999999] overflow-visible">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-3 sm:px-6 py-2 overflow-visible">
-              <nav className="no-scrollbar hidden sm:flex items-center gap-4 text-[13px] font-bold text-slate-900 whitespace-nowrap max-w-[70%] sm:max-w-none overflow-visible">
+          <div className="relative z-[999999] border-t border-slate-200 bg-amber-500/95 overflow-visible">
+            <div className="mx-auto flex max-w-7xl items-center justify-between px-3 py-2 sm:px-6 overflow-visible">
+              <nav className="no-scrollbar hidden max-w-[70%] items-center gap-4 overflow-visible whitespace-nowrap text-[13px] font-bold text-slate-900 sm:flex sm:max-w-none">
                 {nav.map((item) => {
                   if (item.isDropdown && item.dropdownKey === "courses") {
                     return (
@@ -468,7 +672,7 @@ export default function App() {
 
                         {openCourses && (
                           <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
-                            <div className="dd w-64 flex flex-col py-1">
+                            <div className="dd flex w-64 flex-col py-1">
                               <button onClick={() => go("/courses")} className="dd-item" type="button">
                                 All Courses
                               </button>
@@ -518,7 +722,7 @@ export default function App() {
 
                         {openServices && (
                           <div className="absolute left-0 top-full z-[999999] mt-0 pt-2">
-                            <div className="dd w-72 flex flex-col py-1">
+                            <div className="dd flex w-72 flex-col py-1">
                               <button onClick={() => go("/services")} className="dd-item" type="button">
                                 All Services
                               </button>
@@ -562,7 +766,7 @@ export default function App() {
                 </button>
 
                 <button
-                  className="sm:hidden rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900 shrink-0"
+                  className="shrink-0 rounded-xl border border-white/30 bg-white/10 p-2 text-slate-900 sm:hidden"
                   onClick={() => setMenu(true)}
                   aria-label="Open menu"
                   type="button"
@@ -574,9 +778,6 @@ export default function App() {
           </div>
         </header>
       </div>
-
-      {/* ✅ Header spacer so content does not go under fixed header */}
-      <div className="h-[235px] sm:h-[210px]" />
 
       {/* ================= MOBILE DRAWER ================= */}
       {menu && (
@@ -597,7 +798,7 @@ export default function App() {
                       <button
                         onClick={() => setOpenCoursesMobile((v) => !v)}
                         className={cx(
-                          "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
+                          "flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50",
                           isCoursesActive() ? "bg-slate-50" : ""
                         )}
                         type="button"
@@ -637,7 +838,7 @@ export default function App() {
                       <button
                         onClick={() => setOpenServicesMobile((v) => !v)}
                         className={cx(
-                          "rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50 flex items-center justify-between",
+                          "flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3 text-left font-semibold hover:bg-slate-50",
                           isServicesActive() ? "bg-slate-50" : ""
                         )}
                         type="button"
