@@ -275,16 +275,9 @@ function AdmissionChatbot({
   const botReply = (input) => {
     const m = input.toLowerCase().trim();
 
-    if (!m) {
-      return "Please type your question.";
-    }
+    if (!m) return "Please type your question.";
 
-    if (
-      m.includes("fee") ||
-      m.includes("fees") ||
-      m.includes("price") ||
-      m.includes("cost")
-    ) {
+    if (m.includes("fee") || m.includes("fees") || m.includes("price") || m.includes("cost")) {
       return "Fees course-wise different hoti hai. Exact fee details ke liye Apply kare ya WhatsApp par message kare.";
     }
 
@@ -302,73 +295,35 @@ function AdmissionChatbot({
       return "Available popular courses: DMLT, Operation Theatre Technology, Radiology, ECG Technology, Dialysis Technology, Dental Technology. Detailed list ke liye Courses section dekhein.";
     }
 
-    if (
-      m.includes("admission") ||
-      m.includes("apply") ||
-      m.includes("enroll") ||
-      m.includes("enrol")
-    ) {
+    if (m.includes("admission") || m.includes("apply") || m.includes("enroll") || m.includes("enrol")) {
       return "Admissions open hain ✅ Aap Apply button par click karke form fill kar sakte hain ya WhatsApp par direct enquiry bhej sakte hain.";
     }
 
-    if (
-      m.includes("eligibility") ||
-      m.includes("qualification") ||
-      m.includes("12th") ||
-      m.includes("10th")
-    ) {
+    if (m.includes("eligibility") || m.includes("qualification") || m.includes("12th") || m.includes("10th")) {
       return "Eligibility course par depend karti hai. Generally diploma courses ke liye 10+2 preferred hota hai. Exact eligibility ke liye specific course ka naam bhejein.";
     }
 
-    if (
-      m.includes("batch") ||
-      m.includes("timing") ||
-      m.includes("class") ||
-      m.includes("start")
-    ) {
+    if (m.includes("batch") || m.includes("timing") || m.includes("class") || m.includes("start")) {
       return "Batch timing aur start date seat availability par depend karti hai. Latest batch details ke liye admission team se contact karein.";
     }
 
-    if (
-      m.includes("placement") ||
-      m.includes("job") ||
-      m.includes("career")
-    ) {
+    if (m.includes("placement") || m.includes("job") || m.includes("career")) {
       return "Institute practical training, interview guidance aur career support provide karta hai. Final placement student performance aur openings par depend karta hai.";
     }
 
-    if (
-      m.includes("contact") ||
-      m.includes("phone") ||
-      m.includes("number") ||
-      m.includes("call")
-    ) {
+    if (m.includes("contact") || m.includes("phone") || m.includes("number") || m.includes("call")) {
       return "Admission helpline: +91 9811343520. Aap Call ya WhatsApp dono kar sakte hain.";
     }
 
-    if (
-      m.includes("address") ||
-      m.includes("location") ||
-      m.includes("where") ||
-      m.includes("map")
-    ) {
+    if (m.includes("address") || m.includes("location") || m.includes("where") || m.includes("map")) {
       return "Institute location details ke liye Contact section aur Google Map dekh sakte hain. Chahein to main aapko WhatsApp enquiry bhi open karwa deta hoon.";
     }
 
-    if (
-      m.includes("brochure") ||
-      m.includes("pdf") ||
-      m.includes("prospectus")
-    ) {
+    if (m.includes("brochure") || m.includes("pdf") || m.includes("prospectus")) {
       return "Brochure homepage se download ki ja sakti hai. Download Brochure button par click karein.";
     }
 
-    if (
-      m.includes("hello") ||
-      m.includes("hi") ||
-      m.includes("hii") ||
-      m.includes("namaste")
-    ) {
+    if (m.includes("hello") || m.includes("hi") || m.includes("hii") || m.includes("namaste")) {
       return "Namaste 👋 Aap course, fees, admission, eligibility, batch ya contact ke baare me pooch sakte hain.";
     }
 
@@ -501,7 +456,6 @@ function AdmissionChatbot({
 export default function HomePage() {
   const instituteName = "LAL INSTITUTE OF PARA MEDICAL TECHNOLOGY";
 
-  // ✅ Apps Script Web App URL
   const WEB_APP_URL =
     "https://script.google.com/macros/s/AKfycbzglTlOE7xVwMmbzEuj8AcMUYYu9ZfRR_xwhczcvx-Rame0u5macQZzhfE3CSlOsH2i/exec";
 
@@ -550,7 +504,6 @@ export default function HomePage() {
     el.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
-  // ✅ Programs + Image (ONLY main 6 courses)
   const programs = [
     { name: "Diploma in Medical Lab Technology (DMLT)", duration: "2 Years", image: dmltImg },
     { name: "Diploma in Operation Theatre Technology (OTT)", duration: "2 Years", image: ottImg },
@@ -578,7 +531,6 @@ export default function HomePage() {
 
   const slideData = heroSlides[slide];
 
-  // ✅ Form state
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -588,7 +540,6 @@ export default function HomePage() {
     message: "",
   });
 
-  // ✅ Hero quick highlights
   const heroHighlights = [
     "100% Practical Training",
     "Experienced Faculty",
@@ -596,7 +547,6 @@ export default function HomePage() {
     "Placement Guidance Support",
   ];
 
-  // ✅ Why Choose Us
   const whyChoose = [
     {
       title: "Practical Skill Training",
@@ -620,7 +570,6 @@ export default function HomePage() {
     },
   ];
 
-  // ✅ Placement section list
   const placementPoints = [
     "Hospital / Diagnostic center internship guidance",
     "Resume + interview preparation support",
@@ -628,7 +577,6 @@ export default function HomePage() {
     "Continuous student support & mentorship",
   ];
 
-  // ✅ Trust proof strip (ADD)
   const trustProofs = [
     { k: "REGD / ISO", v: "Verified institute details" },
     { k: "Practical Labs", v: "Hands-on training" },
@@ -636,7 +584,6 @@ export default function HomePage() {
     { k: "Support", v: "Quick response on WhatsApp" },
   ];
 
-  // ✅ FAQs (ADD)
   const faqs = [
     {
       q: "क्या fees / eligibility details WhatsApp पर mil jayegi?",
@@ -656,7 +603,6 @@ export default function HomePage() {
     },
   ];
 
-  // ✅ Extra trust cards
   const trustCards = [
     {
       title: "Trusted Learning Environment",
@@ -672,7 +618,6 @@ export default function HomePage() {
     },
   ];
 
-  // ✅✅✅ SEO ADD
   const siteUrl = "https://lipmt.in";
   const pageUrl = `${siteUrl}/`;
   const phone = "+919811343520";
@@ -746,13 +691,11 @@ export default function HomePage() {
 
   return (
     <div className="bg-slate-50 pb-16 text-slate-900 md:pb-0">
-      {/* ✅✅✅ SEO ADD: Schema JSON-LD */}
       <script type="application/ld+json">{JSON.stringify(orgSchema)}</script>
       <script type="application/ld+json">{JSON.stringify(websiteSchema)}</script>
       <script type="application/ld+json">{JSON.stringify(webpageSchema)}</script>
       <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
 
-      {/* ✅ Mobile sticky bar */}
       <AdmissionChatbot
         onApply={() => setEnrollOpen(true)}
         phone="919811343520"
@@ -781,8 +724,8 @@ export default function HomePage() {
             <div className="absolute -right-40 bottom-10 h-72 w-72 rounded-full bg-cyan-400/20 blur-3xl" />
           </div>
 
-          <Container className="relative z-10 flex h-full items-center">
-            <div className="w-full max-w-3xl pt-10 sm:pt-12 md:pt-0">
+          <Container className="relative z-10 flex h-full items-start pt-24 sm:pt-28 md:items-center md:pt-0">
+            <div className="w-full max-w-3xl pt-8 sm:pt-10 md:pt-0">
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -791,16 +734,16 @@ export default function HomePage() {
               >
                 <Badge>Admissions Open • 2026–27</Badge>
 
-                <h1 className="mt-5 max-w-2xl text-[34px] font-extrabold leading-[1.05] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+                <h1 className="mt-3 max-w-2xl text-[26px] font-extrabold leading-[1.08] tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
                   {slideData.title}
                   <span className="text-sky-300">.</span>
                 </h1>
 
-                <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:text-base md:text-lg">
+                <p className="mt-2 max-w-2xl text-[13px] leading-relaxed text-white/85 sm:text-base md:text-lg">
                   {slideData.subtitle}
                 </p>
 
-                <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="mt-5 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
                   {heroHighlights.map((t) => (
                     <div
                       key={t}
@@ -814,7 +757,7 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                <div className="mt-7 flex flex-wrap gap-3">
+                <div className="mt-6 flex flex-wrap gap-3">
                   <PrimaryBtn onClick={() => setEnrollOpen(true)} className="rounded-2xl px-6">
                     Enroll / Apply
                   </PrimaryBtn>
@@ -838,7 +781,7 @@ export default function HomePage() {
                   </a>
                 </div>
 
-                <div className="mt-8 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
+                <div className="mt-6 grid max-w-3xl grid-cols-2 gap-3 md:grid-cols-4">
                   <div className="rounded-3xl border border-white/15 bg-white/10 p-4 backdrop-blur">
                     <div className="text-2xl font-extrabold sm:text-3xl">
                       <CountUp to={10} suffix="+" />
@@ -864,23 +807,11 @@ export default function HomePage() {
                     <div className="mt-1 text-xs text-white/70">Guidance Support</div>
                   </div>
                 </div>
-
-                {/* <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
-                  {trustProofs.map((t) => (
-                    <div
-                      key={t.k}
-                      className="rounded-2xl border border-white/15 bg-white/10 px-4 py-4 backdrop-blur"
-                    >
-                      <div className="text-sm font-extrabold text-white">{t.k}</div>
-                      <div className="mt-1 text-sm text-white/80">{t.v}</div>
-                    </div>
-                  ))}
-                </div> */}
               </motion.div>
             </div>
           </Container>
 
-          <div className="absolute bottom-[94px] left-0 right-0 sm:bottom-[100px] md:bottom-8">
+          <div className="absolute bottom-[78px] left-0 right-0 sm:bottom-[84px] md:bottom-6">
             <Container className="flex items-center justify-between">
               <div className="flex gap-2">
                 {heroSlides.map((_, i) => (
