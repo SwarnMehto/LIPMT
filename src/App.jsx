@@ -435,7 +435,7 @@ export default function App() {
           {/* Bottom */}
           <div className="border-t border-slate-200 bg-white p-3">
             {/* CTA buttons */}
-            <div className="mb-3 grid grid-cols-2 gap-2">
+            {/* <div className="mb-3 grid grid-cols-2 gap-2">
               <a
                 href="tel:+918700116436"
                 className="flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-sky-600 px-3 py-2 text-xs font-bold text-white hover:bg-sky-700"
@@ -478,7 +478,7 @@ export default function App() {
                 <MapPin className="h-4 w-4" />
                 Contact
               </button>
-            </div>
+            </div> */}
 
             {/* Input */}
             <div className="flex gap-2">
