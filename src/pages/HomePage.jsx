@@ -761,7 +761,7 @@ export default function HomePage() {
 
       {/* ===== HERO ===== */}
       <section id="home" className="relative overflow-hidden">
-        <div className="relative h-[620px] w-full sm:h-[700px] md:h-[760px] lg:h-[820px]">
+        <div className="relative h-[540px] w-full sm:h-[600px] md:h-[660px] lg:h-[700px]">
           <motion.img
             key={slideData.src}
             src={slideData.src}
@@ -865,7 +865,7 @@ export default function HomePage() {
                   </div>
                 </div>
 
-                <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+                {/* <div className="mt-6 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
                   {trustProofs.map((t) => (
                     <div
                       key={t.k}
@@ -875,7 +875,7 @@ export default function HomePage() {
                       <div className="mt-1 text-sm text-white/80">{t.v}</div>
                     </div>
                   ))}
-                </div>
+                </div> */}
               </motion.div>
             </div>
           </Container>
