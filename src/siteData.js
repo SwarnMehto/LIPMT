@@ -11,7 +11,7 @@ export const BRAND = {
   phone: "+91 87001 16436",
   email: "admission@lipmt.in",
   address: "Delhi, India",
-  whatsapp: "9198113 42520", // no +
+  whatsapp: "919811342520", // no +
 
   topPhones: "+91 9811343520, +91 9355342520",
   topEmail: "info@lipmt.in",
