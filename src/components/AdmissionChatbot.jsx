@@ -104,7 +104,7 @@ function getBotReply(message) {
     msg.includes("phone") ||
     msg.includes("call")
   ) {
-    return `Contact ke liye aap is number par baat kar sakte hain:\n\n+91 8700116436\n\nAgar chaho to WhatsApp par bhi inquiry kar sakte ho.`;
+    return `Contact ke liye aap is number par baat kar sakte hain:\n\n+91 +91 98113 42520\n\nAgar chaho to WhatsApp par bhi inquiry kar sakte ho.`;
   }
 
   if (
@@ -164,7 +164,7 @@ export default function AdmissionChatbot() {
   }, [messages, open]);
 
   const whatsappLink = useMemo(() => {
-    const phone = "918700116436";
+    const phone = "91+91 98113 42520";
     const text = encodeURIComponent(
       "Hello LIPMT, mujhe admission ke baare me jankari chahiye."
     );

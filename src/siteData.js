@@ -11,7 +11,7 @@ export const BRAND = {
   phone: "+91 87001 16436",
   email: "admission@lipmt.in",
   address: "Delhi, India",
-  whatsapp: "918700116436", // no +
+  whatsapp: "91+91 98113 42520", // no +
 
   topPhones: "+91 9811343520, +91 9355342520",
   topEmail: "info@lipmt.in",
@@ -29,7 +29,7 @@ export const HERO_SLIDES = [
 
 export const COURSES = [
   { title: "DMLT", desc: "Lab Technology course with practical training", duration: "1–2 Years" },
-  { title: "X-Ray Technology", desc: "X-ray basics & machine handling", duration: "1–2 Years" },
+  { title: "X-Ray Technology", desc: "Radiology basics & machine handling", duration: "1–2 Years" },
   { title: "OT Technology", desc: "Operation theatre assisting & protocols", duration: "1 Year" },
   { title: "Nursing Assistant", desc: "Clinical support & patient care", duration: "6–12 Months" },
 ];

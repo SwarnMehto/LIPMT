@@ -99,7 +99,7 @@ export default function PlacementPage() {
           {/* CTA */}
           <div className="mt-8 flex flex-col sm:flex-row gap-3">
             <a
-              href="https://wa.me/918700116436?text=Hi%20Lal%20Institute,%20I%20want%20placement%20details."
+              href="https://wa.me/91+91 98113 42520?text=Hi%20Lal%20Institute,%20I%20want%20placement%20details."
               target="_blank"
               rel="noreferrer"
               className="w-full sm:w-auto rounded-xl bg-sky-600 px-6 py-3 text-center text-sm font-extrabold text-white hover:bg-sky-700"

@@ -23,7 +23,7 @@ export default function ServicesPage() {
   const location = useLocation();
   const path = location.pathname;
 
-  const WHATSAPP_NUMBER = "918700116436";
+  const WHATSAPP_NUMBER = "91+91 98113 42520";
   const whatsappText = encodeURIComponent(
     "Hi Lal Institute of Paramedical Technology, I want details about services / placement."
   );
