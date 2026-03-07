@@ -98,7 +98,7 @@ export default function AboutPage() {
 
                 {/* Quick Stats */}
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <StatCard title="Students Trained" value="1000+" sub="Skilled & job-ready learners" />
+                  <StatCard title="Students Trained" value="500+" sub="Skilled & job-ready learners" />
                   <StatCard title="Placement Support" value="Almost 100%" sub="Strong guidance & preparation" />
                   <StatCard title="Modern Labs" value="12+ Labs" sub="Hands-on practical learning" />
                   <StatCard title="Institute Legacy" value="10+ Years" sub="Trusted education journey" />
